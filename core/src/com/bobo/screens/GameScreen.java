@@ -20,7 +20,7 @@ public class GameScreen extends AbstractGameScreen {
 	@Override
 	public void render(float delta) {
 	
-		Gdx.gl.glClearColor(146.0f / 255.0f, 144.0f / 255.0f, 255.0f / 255.0f, 1);
+		Gdx.gl.glClearColor(107.0f / 255.0f, 140.0f / 255.0f, 255.0f / 255.0f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
 		batch.begin();
