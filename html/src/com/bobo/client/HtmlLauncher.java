@@ -3,7 +3,7 @@ package com.bobo.client;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.backends.gwt.GwtApplication;
 import com.badlogic.gdx.backends.gwt.GwtApplicationConfiguration;
-import com.bobo.BoboMain;
+import com.bobo.game.BoboMain;
 
 public class HtmlLauncher extends GwtApplication {
 

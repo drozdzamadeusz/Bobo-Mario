@@ -4,35 +4,35 @@ size: 256,32
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-block_bonus
+block
   rotate: false
   xy: 35, 9
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
-block_borwn
+block_bonus
   rotate: false
   xy: 53, 9
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
-block_borwn_top
+block_disabled
   rotate: false
   xy: 71, 9
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
-block_disabled
+block_stairs
   rotate: false
   xy: 89, 9
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
-block_stairs
+block_top
   rotate: false
   xy: 107, 9
   size: 16, 16
@@ -81,7 +81,7 @@ cloud_right
   orig: 8, 24
   offset: 0, 0
   index: -1
-ground_brown
+ground
   rotate: false
   xy: 181, 9
   size: 16, 16

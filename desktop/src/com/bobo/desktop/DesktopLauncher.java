@@ -4,12 +4,12 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker.Settings;
-import com.bobo.BoboMain;
+import com.bobo.game.BoboMain;
 
 public class DesktopLauncher {
 
 	private static boolean rebuildAtlas = false;
-	private static boolean drawDebugOutline = true;
+	private static boolean drawDebugOutline = false;
 
 	public static void main(String[] arg) {
 
