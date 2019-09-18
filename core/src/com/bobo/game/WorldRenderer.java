@@ -55,13 +55,13 @@ public class WorldRenderer implements Disposable {
 		batch.begin();
 
 		
-		for (int i = 0; i < 20; i++) {
+		/*for (int i = 0; i < 20; i++) {
 			batch.draw(textures.random(), i, 0, 1, 1);
 			batch.draw(textures.random(), -(i+1), 0, 1, 1);
 			batch.draw(textures.random(), 0, i+1, 1, 1);
 			batch.draw(textures.random(), 0, -(i+1), 1, 1);
-		}
-		
+		}*/
+		worldController.level.render(batch);
 		
 		batch.end();
 	}
