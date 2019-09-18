@@ -1,2 +1,2 @@
 # Bobo-Mario
-Its gonna be amazing
+Super Mario Bobos
