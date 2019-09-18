@@ -87,7 +87,7 @@ public class Assets implements Disposable, AssetErrorListener {
 			cloudMiddle = atlas.findRegion("cloud_middle");
 			cloudLeft  = atlas.findRegion("cloud_left");
 			
-			ground = atlas.findRegion("gorund");
+			ground = atlas.findRegion("ground");
 			
 			tube = atlas.findRegion("tube");
 			tubeTop = atlas.findRegion("tube_top");
@@ -100,8 +100,7 @@ public class Assets implements Disposable, AssetErrorListener {
 	
 	@Override
 	public void error(AssetDescriptor asset, Throwable throwable) {
-		// TODO Auto-generated method stub
-
+		Gdx.app.error(TAG, "Couldn't load asset '" + asset.fileName + "'", (Exception) throwable);
 	}
 
 	@Override

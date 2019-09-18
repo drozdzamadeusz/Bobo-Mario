@@ -1,7 +1,12 @@
 package com.bobo.game;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.ui.List;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.bobo.utils.Constants;
 
@@ -23,6 +28,8 @@ public class WorldRenderer implements Disposable {
 		init();
 	}
 	
+	Array<TextureRegion> textures;
+	
 	public void init() {
 		
 		batch = new SpriteBatch();
@@ -30,7 +37,14 @@ public class WorldRenderer implements Disposable {
 		camera.position.set(0, 0, 0);
 		camera.update();
 		
+		textures = new Array<TextureRegion>();
+		textures.add(Assets.instance.tilesetAssets.blockBouns);
+		textures.add(Assets.instance.tilesetAssets.ground);
+		textures.add(Assets.instance.tilesetAssets.blockDisbaled);
+		
 		renderWorld(batch);
+		
+
 		
 	}
 	
@@ -40,7 +54,14 @@ public class WorldRenderer implements Disposable {
 
 		batch.begin();
 
-		batch.draw(Assets.instance.tilesetAssets.blockTop, 0, 0, 1, 1);
+		
+		for (int i = 0; i < 20; i++) {
+			batch.draw(textures.random(), i, 0, 1, 1);
+			batch.draw(textures.random(), -(i+1), 0, 1, 1);
+			batch.draw(textures.random(), 0, i+1, 1, 1);
+			batch.draw(textures.random(), 0, -(i+1), 1, 1);
+		}
+		
 		
 		batch.end();
 	}
