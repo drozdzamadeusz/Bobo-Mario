@@ -62,8 +62,8 @@ public abstract class DirectedGame implements ApplicationListener {
 			
 			if (screenTransition != null)
 				duration = screenTransition.getDuration();
-			// update progress of ongoing transition
 			
+			// update progress of ongoing transition
 			time = Math.min(time + deltaTime, duration);
 			
 			if (screenTransition == null || time >= duration) {

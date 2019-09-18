@@ -13,7 +13,7 @@ public abstract class AbstractGameScreen implements Screen {
 		this.game = game;
 	}
 
-	public abstract void render(float delta);
+	public abstract void render(float deltaTime);
 
 	public abstract void resize(int width, int height);
 

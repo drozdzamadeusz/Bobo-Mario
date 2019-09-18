@@ -1,5 +1,6 @@
 package com.bobo.game;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.utils.Disposable;
 import com.bobo.screens.DirectedGame;
@@ -20,7 +21,8 @@ public class WorldController extends InputAdapter implements Disposable {
 
 	
 	public void init() {
-		
+		Gdx.input.setInputProcessor(this);
+		cameraHelper = new CameraHelper();
 	}
 	
 	public void update(float deltaTime) {

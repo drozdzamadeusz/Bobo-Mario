@@ -6,7 +6,7 @@ public class Level {
 	public static final String TAG = Level.class.getCanonicalName();
 
 	public enum BLOCK_TYPE {
-		GROUND(156, 74, 0); // green
+		GROUND(156, 74, 0); // ground
 		
 		
 		private int color;
