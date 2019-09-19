@@ -8,8 +8,8 @@ public class Mario extends AbstractGameObject{
 
 	public static final String TAG = Mario.class.getCanonicalName();
 	
-	private final float JUMP_TIME_MAX = 0.34f;
-	private final float JUMP_TIME_MIN = 0.08f;
+	public final float JUMP_TIME_MAX = 0.34f;
+	public final float JUMP_TIME_MIN = 0.08f;
 	
 	
 	public enum VIEW_DIRECTION {

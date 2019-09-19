@@ -26,8 +26,8 @@ public class CameraHelper {
 	public void update(float deltaTime) {
 		if(!hasTarget()) return;
 		
-		position.x = target.position.x + target.origin.x;
-		position.y = target.position.y + target.origin.y;
+		position.x =  Math.max(target.position.x + target.origin.x, position.x);
+		//position.y = target.position.y + target.origin.y;
 		
 		//position.lerp(target.position, FOLLOW_SPEED * deltaTime);
 		
