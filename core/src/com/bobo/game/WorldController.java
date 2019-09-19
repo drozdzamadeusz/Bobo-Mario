@@ -62,24 +62,20 @@ public class WorldController extends InputAdapter implements Disposable {
 		float heightDifference = Math.abs(mario.position.y - (ground.position.y + ground.bounds.height));
 		float widthDifference = Math.abs(mario.position.x - (ground.position.x));
 		
-		Gdx.app.debug(TAG, "height diff: "+heightDifference + "width diff: "+widthDifference);
-	
-		if (widthDifference < 0.4f && heightDifference > 1.5f) {
 		
+		//hit from below
+		if (widthDifference < 0.5f && heightDifference > 1.5f) {
 			mario.position.y = (ground.position.y - ground.bounds.height);
 			
 			mario.timeJumping = mario.JUMP_TIME_MAX+1;
 			mario.velocity.y = -mario.terminalVelocity.y;
 			
-			return;
-			
+			return;	
 		}
 		
-		
+		//hit from right or left side
 		if (heightDifference > 0.45f) {
-			
-			boolean hitRightEdge = mario.position.x > (ground.position.x + ground.bounds.width / 2.0f);
-			
+			boolean hitRightEdge = mario.position.x > (ground.position.x + ground.bounds.width / 2.0f);	
 		 
 			if (hitRightEdge) {
 				mario.position.x = ground.position.x + ground.bounds.width;
@@ -87,12 +83,11 @@ public class WorldController extends InputAdapter implements Disposable {
 				mario.position.x = ground.position.x - mario.bounds.width;
 			}
 			
-			
 			return;
 			
 		}
 		
-		if (widthDifference < 0.95f) 
+		if (widthDifference < 0.91f) 
 		
 			switch (mario.jumpState) {
 				case GROUNDED:
@@ -112,7 +107,7 @@ public class WorldController extends InputAdapter implements Disposable {
 		r1.set(level.mario.position.x, level.mario.position.y, level.mario.bounds.width,
 				level.mario.bounds.height);
 		
-		// Test collision: Bunny Head <-> Rocks
+		// Test collision: Mario <-> Blocks
 		for (Ground g : level.gorundBlocks) {
 			r2.set(g.position.x, g.position.y, g.bounds.width, g.bounds.height);
 			
@@ -130,20 +125,20 @@ public class WorldController extends InputAdapter implements Disposable {
 	private void handleInputGame(float deltaTime) {
 		if (cameraHelper.hasTarget(level.mario)) {
 			
-			// Player Movement
+			// Mario Movement
 			if (Gdx.input.isKeyPressed(Keys.LEFT)) {
-				level.mario.velocity.x = -level.mario.terminalVelocity.x;
+				level.mario.setWalking(deltaTime, false);
 			} else if (Gdx.input.isKeyPressed(Keys.RIGHT)) {
-				level.mario.velocity.x = level.mario.terminalVelocity.x;
+				level.mario.setWalking(deltaTime, true);
 			} else {
 				
 			}
 			
 			// Mario Jump
 			if (Gdx.input.isKeyPressed(Keys.SPACE)) {
-				level.mario.setJumping(true);
+				level.mario.setJumping(deltaTime, true);
 			} else {
-				level.mario.setJumping(false);
+				level.mario.setJumping(deltaTime, false);
 			}
 		}
 	}
@@ -188,7 +183,6 @@ public class WorldController extends InputAdapter implements Disposable {
 
 	@Override
 	public void dispose() {
-		// TODO Auto-generated method stub
 
 	}
 

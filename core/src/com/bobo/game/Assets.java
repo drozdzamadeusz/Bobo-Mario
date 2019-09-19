@@ -32,7 +32,7 @@ public class Assets implements Disposable, AssetErrorListener {
 		
 		assetManager.finishLoading();
 		
-		Gdx.app.debug(TAG, "# of assets loaded" + assetManager.getAssetNames().size);
+		Gdx.app.debug(TAG, assetManager.getAssetNames().size+" of assets loaded");
 
 		for (String a : assetManager.getAssetNames()) {
 			Gdx.app.debug(TAG, "asset: " + a);
