@@ -27,7 +27,9 @@ public class DesktopLauncher {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.width = 512;
 		config.height = 448;
-		config.foregroundFPS= 60;
+		config.vSyncEnabled = true; // Setting to false disables vertical sync
+		config.foregroundFPS = 0; // Setting to 0 disables foreground fps throttling
+		config.backgroundFPS = 0; // Setting to 0 disables background fps throttling
 		new LwjglApplication(new BoboMain(), config);
 	}
 }

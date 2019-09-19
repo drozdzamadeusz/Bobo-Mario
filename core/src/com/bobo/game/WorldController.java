@@ -62,20 +62,21 @@ public class WorldController extends InputAdapter implements Disposable {
 		float heightDifference = Math.abs(mario.position.y - (ground.position.y + ground.bounds.height));
 		float widthDifference = Math.abs(mario.position.x - (ground.position.x));
 		
-		Gdx.app.debug(TAG, "width diff: "+heightDifference + " "+widthDifference);
+		Gdx.app.debug(TAG, "height diff: "+heightDifference + "width diff: "+widthDifference);
 	
-		if (widthDifference < 0.4f && heightDifference > 1.85f) {
+		if (widthDifference < 0.4f && heightDifference > 1.5f) {
 		
 			mario.position.y = (ground.position.y - ground.bounds.height);
 			
-			mario.timeJumping = mario.JUMP_TIME_MAX;
+			mario.timeJumping = mario.JUMP_TIME_MAX+1;
+			mario.velocity.y = -mario.terminalVelocity.y;
 			
 			return;
 			
 		}
 		
 		
-		if (heightDifference > 0.25f) {
+		if (heightDifference > 0.45f) {
 			
 			boolean hitRightEdge = mario.position.x > (ground.position.x + ground.bounds.width / 2.0f);
 			
