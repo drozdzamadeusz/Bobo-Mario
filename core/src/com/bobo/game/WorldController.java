@@ -92,7 +92,7 @@ public class WorldController extends InputAdapter implements Disposable {
 			
 		}
 		
-		if (widthDifference < 0.9f) 
+		if (widthDifference < 0.95f) 
 		
 			switch (mario.jumpState) {
 				case GROUNDED:
