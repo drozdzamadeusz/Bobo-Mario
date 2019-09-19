@@ -40,7 +40,7 @@ public class WorldController extends InputAdapter implements Disposable {
 	}
 	
 	public void update(float deltaTime) {
-		handleDebugInput(deltaTime);
+		//handleDebugInput(deltaTime);
 		
 		handleInputGame(deltaTime);
 		
@@ -80,7 +80,7 @@ public class WorldController extends InputAdapter implements Disposable {
 			
 			boolean hitRightEdge = mario.position.x > (ground.position.x + ground.bounds.width / 2.0f);
 			
-		
+		 
 			if (hitRightEdge) {
 				mario.position.x = ground.position.x + ground.bounds.width;
 			} else {
@@ -92,20 +92,20 @@ public class WorldController extends InputAdapter implements Disposable {
 			
 		}
 		
-		if (widthDifference < 1) 
+		if (widthDifference < 0.9f) 
 		
-		switch (mario.jumpState) {
-			case GROUNDED:
-				break;
-			case FALLING:
-			case JUMP_FALLING:
-				mario.position.y = ground.position.y + mario.bounds.height;
-				mario.jumpState = JUMP_STATE.GROUNDED;
-				break;
-			case JUMP_RISING:
-				mario.position.y = ground.position.y + mario.bounds.height;
-				
-		}
+			switch (mario.jumpState) {
+				case GROUNDED:
+					break;
+				case FALLING:
+				case JUMP_FALLING:
+					mario.position.y = ground.position.y + mario.bounds.height;
+					mario.jumpState = JUMP_STATE.GROUNDED;
+					break;
+				case JUMP_RISING:
+					mario.position.y = ground.position.y + mario.bounds.height;
+					
+			}
 	}
 	
 	private void testCollisions() {
@@ -139,8 +139,8 @@ public class WorldController extends InputAdapter implements Disposable {
 				
 			}
 			
-			// Bunny Jump
-			if (Gdx.input.isTouched() || Gdx.input.isKeyPressed(Keys.SPACE)) {
+			// Mario Jump
+			if (Gdx.input.isKeyPressed(Keys.SPACE)) {
 				level.mario.setJumping(true);
 			} else {
 				level.mario.setJumping(false);

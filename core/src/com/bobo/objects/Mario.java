@@ -8,8 +8,8 @@ public class Mario extends AbstractGameObject{
 
 	public static final String TAG = Mario.class.getCanonicalName();
 	
-	public final float JUMP_TIME_MAX = 0.18f;
-	public final float JUMP_TIME_MIN = 0.005f;
+	public final float JUMP_TIME_MAX = 0.20f;
+	public final float JUMP_TIME_MIN = 0.01f;
 	
 	
 	public enum VIEW_DIRECTION {
@@ -43,8 +43,8 @@ public class Mario extends AbstractGameObject{
 		
 		// Set physics values
 		terminalVelocity.set(6.0f, 17.0f);
-		friction.set(25.0f, 10.0f);
-		acceleration.set(0.0f, -110.0f);
+		friction.set(27.0f, 10.0f);
+		acceleration.set(0, -110.0f);
 		
 		// View direction
 		viewDirection = VIEW_DIRECTION.RIGHT;
