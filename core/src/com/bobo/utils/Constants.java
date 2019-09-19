@@ -13,9 +13,13 @@ public class Constants {
 	
 	public static final float VIEWPORT_WIDTH = 16.0f;
 
-	public static final float VIEWPORT_HEIGHT = 16.0f;
+	public static final float VIEWPORT_HEIGHT = 14.0f;
+	
+	//Sprites
 	
 	public static final String TILESET_TEXTURE_ATLAS_OBJECTS = "images/tileset.pack.atlas";
+	
+	public static final String CHARACTERS_TEXTURE_ATLAS_OBJECTS = "images/characters.pack.atlas";
 	
 	//Worlds
 	

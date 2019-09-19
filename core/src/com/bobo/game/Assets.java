@@ -20,6 +20,7 @@ public class Assets implements Disposable, AssetErrorListener {
 	
 	
 	public TilesetAssets tilesetAssets;
+	public CharactersAssets charactersAssets;
 	
 	public void init(AssetManager assetManager) {
 		
@@ -27,6 +28,7 @@ public class Assets implements Disposable, AssetErrorListener {
 		assetManager.setErrorListener(this);
 
 		assetManager.load(Constants.getPath(Constants.TILESET_TEXTURE_ATLAS_OBJECTS), TextureAtlas.class);
+		assetManager.load(Constants.getPath(Constants.CHARACTERS_TEXTURE_ATLAS_OBJECTS), TextureAtlas.class);
 		
 		assetManager.finishLoading();
 		
@@ -36,13 +38,19 @@ public class Assets implements Disposable, AssetErrorListener {
 			Gdx.app.debug(TAG, "asset: " + a);
 		}
 
-		TextureAtlas atlas = assetManager.get(Constants.getPath(Constants.TILESET_TEXTURE_ATLAS_OBJECTS));
+		TextureAtlas tilesetAtlas = assetManager.get(Constants.getPath(Constants.TILESET_TEXTURE_ATLAS_OBJECTS));
+		TextureAtlas charactersAtlas = assetManager.get(Constants.getPath(Constants.CHARACTERS_TEXTURE_ATLAS_OBJECTS));
 
-		for (Texture t : atlas.getTextures()) {
-			t.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
-		}
 		
-		tilesetAssets = new TilesetAssets(atlas);
+		for (Texture t : tilesetAtlas.getTextures())
+			t.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+	
+		for (Texture t : charactersAtlas.getTextures())
+			t.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+		
+		
+		tilesetAssets = new TilesetAssets(tilesetAtlas);
+		charactersAssets = new CharactersAssets(charactersAtlas);
 		
 		
 	}
@@ -96,6 +104,13 @@ public class Assets implements Disposable, AssetErrorListener {
 		
 	}
 	
+	public class CharactersAssets{
+		public final AtlasRegion marioStanding;
+		
+		public CharactersAssets(TextureAtlas atlas) {
+			marioStanding = atlas.findRegion("mario_standing");
+		}
+	}
 	
 	
 	@Override

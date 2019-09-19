@@ -20,13 +20,14 @@ public class DesktopLauncher {
 			settings.duplicatePadding = true;
 			settings.debug = drawDebugOutline;
 			
-			TexturePacker.process(settings, "assets-raw/images/tileset", "../android/assets/images", "tileset.pack");
-			
+			TexturePacker.process(settings, "assets-raw/images/Tileset", "../android/assets/images", "tileset.pack");
+			TexturePacker.process(settings, "assets-raw/images/Characters", "../android/assets/images", "characters.pack");
 		}
 
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.width = 512;
-		config.height = 512;
+		config.height = 448;
+		config.foregroundFPS= 60;
 		new LwjglApplication(new BoboMain(), config);
 	}
 }
