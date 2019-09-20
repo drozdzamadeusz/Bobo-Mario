@@ -1,12 +1,9 @@
 package com.bobo.game;
 
-import java.util.ArrayList;
-
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.ui.List;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.bobo.utils.Constants;
 
@@ -28,7 +25,6 @@ public class WorldRenderer implements Disposable {
 		init();
 	}
 	
-	Array<TextureRegion> textures;
 	
 	public void init() {
 		
@@ -37,15 +33,17 @@ public class WorldRenderer implements Disposable {
 		camera.position.set(0, 0, 0);
 		camera.update();
 		
-		textures = new Array<TextureRegion>();
-		textures.add(Assets.instance.tilesetAssets.blockBouns);
-		textures.add(Assets.instance.tilesetAssets.ground);
-		textures.add(Assets.instance.tilesetAssets.blockDisbaled);
+		cameraGUI = new OrthographicCamera(Constants.VIEWPORT_GUI_WIDTH, Constants.VIEWPORT_GUI_HEIGHT);
+		cameraGUI.position.set(0, 0, 0);
+		cameraGUI.setToOrtho(true);
+		// flip y-axis
+		cameraGUI.update();
 		
+	}
+	
+	public void render() {
 		renderWorld(batch);
-		
-
-		
+		renderGui(batch);
 	}
 	
 	private void renderWorld(SpriteBatch batch) {
@@ -53,26 +51,41 @@ public class WorldRenderer implements Disposable {
 		batch.setProjectionMatrix(camera.combined);
 
 		batch.begin();
-
-		
-		/*for (int i = 0; i < 20; i++) {
-			batch.draw(textures.random(), i, 0, 1, 1);
-			batch.draw(textures.random(), -(i+1), 0, 1, 1);
-			batch.draw(textures.random(), 0, i+1, 1, 1);
-			batch.draw(textures.random(), 0, -(i+1), 1, 1);
-		}*/
 		worldController.level.render(batch);
-		
 		batch.end();
 	}
 
-	public void render() {
-		renderWorld(batch);
+
+	private void renderGui(SpriteBatch batch) {
+		batch.setProjectionMatrix(cameraGUI.combined);
+		batch.begin();
+		
+		renderGuiFpsCounter(batch);
+		
+		batch.end();
+		
 	}
+	
+	
+	private void renderGuiFpsCounter(SpriteBatch batch) {
+		float x = cameraGUI.viewportWidth - 115f;
+		float y = 10f;
+		int fps = Gdx.graphics.getFramesPerSecond();
+		BitmapFont fpsFont = Assets.instance.fonts.defaultNormal;
+		fpsFont.setColor(1, 1, 1, 1); // white
+		fpsFont.draw(batch, "FPS: " + fps, x, y);
+		
+	}
+	
 	
 	public void resize(int width, int height) {
 		camera.viewportWidth = (Constants.VIEWPORT_HEIGHT / (float) height) * (float) width;
 		camera.update();
+		
+		cameraGUI.viewportHeight = Constants.VIEWPORT_GUI_HEIGHT;
+		cameraGUI.viewportWidth = (Constants.VIEWPORT_GUI_HEIGHT / (float) height) * (float) width;
+		cameraGUI.position.set(cameraGUI.viewportWidth / 2, cameraGUI.viewportHeight / 2, 0);
+		cameraGUI.update();
 	}
 	
 	

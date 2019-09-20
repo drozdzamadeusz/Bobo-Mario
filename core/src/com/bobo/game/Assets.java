@@ -6,8 +6,11 @@ import com.badlogic.gdx.assets.AssetErrorListener;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.bobo.utils.Constants;
 
@@ -21,6 +24,8 @@ public class Assets implements Disposable, AssetErrorListener {
 	
 	public TilesetAssets tilesetAssets;
 	public CharactersAssets charactersAssets;
+	
+	public AssetFonts fonts;
 	
 	public void init(AssetManager assetManager) {
 		
@@ -52,11 +57,22 @@ public class Assets implements Disposable, AssetErrorListener {
 		tilesetAssets = new TilesetAssets(tilesetAtlas);
 		charactersAssets = new CharactersAssets(charactersAtlas);
 		
+		fonts = new AssetFonts();
 		
 	}
+
+	public class AssetFonts {
+		public final BitmapFont defaultNormal;
+
+		public AssetFonts() {			
+			defaultNormal = new BitmapFont(Gdx.files.internal(Constants.getPath(Constants.FONT_DEFAULT_NORMAL)), true);			
+			defaultNormal.getData().setScale(1.0f);			
+			defaultNormal.getRegion().getTexture().setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+		}
+	}
+	
 	
 	public class TilesetAssets{
-		
 		public final AtlasRegion block;
 		public final AtlasRegion blockTop;
 		
@@ -107,12 +123,21 @@ public class Assets implements Disposable, AssetErrorListener {
 	public class CharactersAssets{
 		public final AtlasRegion marioStanding;
 		
+		public final Animation<?> marioWalking;
+		
 		public CharactersAssets(TextureAtlas atlas) {
 			marioStanding = atlas.findRegion("mario_standing");
+			
+			Array<AtlasRegion> regions = null;
+			
+			// Animation: Player walking
+			regions = atlas.findRegions("mario_walking");
+			marioWalking = new Animation<Object>(1.0f / 13.0f, regions, Animation.PlayMode.LOOP_PINGPONG);
 		}
 	}
 	
 	
+	@SuppressWarnings("rawtypes")
 	@Override
 	public void error(AssetDescriptor asset, Throwable throwable) {
 		Gdx.app.error(TAG, "Couldn't load asset '" + asset.fileName + "'", (Exception) throwable);
@@ -121,7 +146,7 @@ public class Assets implements Disposable, AssetErrorListener {
 	@Override
 	public void dispose() {
 		assetManager.dispose();
-
+		fonts.defaultNormal.dispose();
 	}
 
 }

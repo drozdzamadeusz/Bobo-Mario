@@ -1,5 +1,7 @@
 package com.bobo.objects;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
@@ -28,6 +30,9 @@ public class Mario extends AbstractGameObject {
 
 	public Vector2 momentumGain;
 	
+	
+	public Animation<?> marioWalking;
+	
 	public Mario() {
 		init();
 	}
@@ -35,6 +40,8 @@ public class Mario extends AbstractGameObject {
 	public void init() {
 		dimension.set(1.0f, 1.0f);
 
+		marioWalking = Assets.instance.charactersAssets.marioWalking;
+		
 		regMario = Assets.instance.charactersAssets.marioStanding;
 
 		// Center image on game object
@@ -91,8 +98,11 @@ public class Mario extends AbstractGameObject {
 		case GROUNDED:
 			jumpState = JUMP_STATE.FALLING;
 
+			//Mario standing on platform
 			if (velocity.x != 0) {
-				//Mario standing on platform
+				if(animation == null) setAnimation(marioWalking);
+			}else{
+				setAnimation(null);
 			}
 
 			break;
@@ -117,6 +127,8 @@ public class Mario extends AbstractGameObject {
 			}
 		}
 		if (jumpState != JUMP_STATE.GROUNDED) {
+			//Gdx.app.debug(TAG, "aaaaa");
+			//setAnimation(null);
 			super.updateMotionY(deltaTime);
 		}
 	}
@@ -141,11 +153,19 @@ public class Mario extends AbstractGameObject {
 	public void render(SpriteBatch batch) {
 		TextureRegion reg = null;
 
-		// Draw image
-		reg = regMario;
-		batch.draw(reg.getTexture(), position.x, position.y, origin.x, origin.y, dimension.x, dimension.y, scale.x,
-				scale.y, rotation, reg.getRegionX(), reg.getRegionY(), reg.getRegionWidth(), reg.getRegionHeight(),
-				viewDirection == VIEW_DIRECTION.LEFT, false);
+		float dimCorrectionX = 0;
+		float dimCorrectionY = 0;
+		
+		if(animation == null)
+			reg = regMario;
+		else {
+			reg = (TextureRegion) animation.getKeyFrame(stateTime, true);
+			Gdx.app.debug(TAG, "assassas");
+			
+		}
+		batch.draw(reg.getTexture(), position.x, position.y, origin.x, origin.y, dimension.x + dimCorrectionX,
+				dimension.y + dimCorrectionY, scale.x, scale.y, rotation, reg.getRegionX(), reg.getRegionY(),
+				reg.getRegionWidth(), reg.getRegionHeight(), viewDirection == VIEW_DIRECTION.LEFT, false);
 
 	}
 

@@ -11,9 +11,20 @@ public class Constants {
 		return  ((Gdx.app.getType() == ApplicationType.Desktop) ? DESKTOP_PATH_PREFIX: "") + fileName;
 	}
 	
+	
+	public static final String FONT_DEFAULT_NORMAL = "fonts/emulogic_font.fnt";
+	
+	// World Width
 	public static final float VIEWPORT_WIDTH = 16.0f;
-
+	
+	// World Height
 	public static final float VIEWPORT_HEIGHT = 14.0f;
+	
+	// GUI Width
+	public static final float VIEWPORT_GUI_WIDTH = 512.0f;
+	
+	// GUI Height
+	public static final float VIEWPORT_GUI_HEIGHT = 448.0f;
 	
 	//Sprites
 	
