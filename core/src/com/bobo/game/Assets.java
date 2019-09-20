@@ -133,7 +133,7 @@ public class Assets implements Disposable, AssetErrorListener {
 			Array<AtlasRegion> regions = null;
 			// Animation: Mario walking
 			regions = atlas.findRegions("mario_walking");
-			marioWalking = new Animation<Object>(1.0f / 13.0f, regions, Animation.PlayMode.LOOP_PINGPONG);
+			marioWalking = new Animation<Object>(1.0f / 15.0f, regions, Animation.PlayMode.LOOP_PINGPONG);
 		}
 	}
 	

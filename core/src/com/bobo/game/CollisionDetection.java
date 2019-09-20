@@ -36,7 +36,7 @@ public class CollisionDetection {
 			mario.position.y = (ground.position.y - ground.bounds.height);
 			
 			mario.timeJumping = mario.JUMP_TIME_MAX+1.0f;
-			mario.velocity.y = -mario.terminalVelocity.y / 1.5f;
+			mario.velocity.y = -mario.terminalVelocity.y / 2f;
 			
 			return;	
 		}
