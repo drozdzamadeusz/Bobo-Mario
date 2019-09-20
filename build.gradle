@@ -54,6 +54,7 @@ project(":desktop") {
     }
 }
 
+
 project(":html") {
     apply plugin: "java-library"
     apply plugin: "gwt"
