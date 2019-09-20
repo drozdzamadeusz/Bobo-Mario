@@ -22,6 +22,8 @@ public class WorldController extends InputAdapter implements Disposable {
 
 	public Level level;
 	
+	public CollisionDetection collisionDetection;
+	
 	public WorldController(DirectedGame game) {
 		this.game = game;
 		cameraHelper = new CameraHelper();
@@ -30,8 +32,14 @@ public class WorldController extends InputAdapter implements Disposable {
 
 	public void init() {
 		Gdx.input.setInputProcessor(this);
+		
 		cameraHelper = new CameraHelper();
+		
 		initLevel();
+		
+		collisionDetection = new CollisionDetection();
+		collisionDetection.setLevel(level);
+		
 		cameraHelper.setTarget(level.mario);
 	}
 
@@ -40,105 +48,36 @@ public class WorldController extends InputAdapter implements Disposable {
 	}
 	
 	public void update(float deltaTime) {
-		//handleDebugInput(deltaTime);
 		
 		handleInputGame(deltaTime);
 		
 		level.update(deltaTime);
 		
-		testCollisions();
+		collisionDetection.detectCollisions();
 		
 		cameraHelper.update(deltaTime);
 	}
 	
 	
-	// Rectangles for collision detection
-	private Rectangle r1 = new Rectangle();
-	private Rectangle r2 = new Rectangle();
-	
-	public void onCollisionMarioWithBlock(Ground ground) {
-		Mario mario = level.mario;
-		
-		float heightDifference = Math.abs(mario.position.y - (ground.position.y + ground.bounds.height));
-		float widthDifference = Math.abs(mario.position.x - (ground.position.x));
-		
-		
-		//hit from below
-		if (widthDifference < 0.5f && heightDifference > 1.5f) {
-			mario.position.y = (ground.position.y - ground.bounds.height);
-			
-			mario.timeJumping = mario.JUMP_TIME_MAX+1;
-			mario.velocity.y = -mario.terminalVelocity.y;
-			
-			return;	
-		}
-		
-		//hit from right or left side
-		if (heightDifference > 0.45f) {
-			boolean hitRightEdge = mario.position.x > (ground.position.x + ground.bounds.width / 2.0f);	
-		 
-			if (hitRightEdge) {
-				mario.position.x = ground.position.x + ground.bounds.width;
-			} else {
-				mario.position.x = ground.position.x - mario.bounds.width;
-			}
-			
-			return;
-			
-		}
-		
-		if (widthDifference < 0.91f) 
-		
-			switch (mario.jumpState) {
-				case GROUNDED:
-					break;
-				case FALLING:
-				case JUMP_FALLING:
-					mario.position.y = ground.position.y + mario.bounds.height;
-					mario.jumpState = JUMP_STATE.GROUNDED;
-					break;
-				case JUMP_RISING:
-					mario.position.y = ground.position.y + mario.bounds.height;
-					
-			}
-	}
-	
-	private void testCollisions() {
-		r1.set(level.mario.position.x, level.mario.position.y, level.mario.bounds.width,
-				level.mario.bounds.height);
-		
-		// Test collision: Mario <-> Blocks
-		for (Ground g : level.gorundBlocks) {
-			r2.set(g.position.x, g.position.y, g.bounds.width, g.bounds.height);
-			
-			if (!r1.overlaps(r2))
-				continue;
-			
-			onCollisionMarioWithBlock(g);
-			
-			// IMPORTANT: must do all collisions for valid
-			// edge testing on rocks.
-		}
-		
-	}
+
 
 	private void handleInputGame(float deltaTime) {
 		if (cameraHelper.hasTarget(level.mario)) {
 			
 			// Mario Movement
 			if (Gdx.input.isKeyPressed(Keys.LEFT)) {
-				level.mario.setWalking(deltaTime, false);
+				((Mario) level.mario).setWalking(deltaTime, false);
 			} else if (Gdx.input.isKeyPressed(Keys.RIGHT)) {
-				level.mario.setWalking(deltaTime, true);
+				((Mario) level.mario).setWalking(deltaTime, true);
 			} else {
 				
 			}
 			
 			// Mario Jump
 			if (Gdx.input.isKeyPressed(Keys.SPACE)) {
-				level.mario.setJumping(deltaTime, true);
+				((Mario) level.mario).setJumping(deltaTime, true);
 			} else {
-				level.mario.setJumping(deltaTime, false);
+				((Mario) level.mario).setJumping(deltaTime, false);
 			}
 		}
 	}

@@ -26,7 +26,7 @@ public abstract class AbstractGameObject {
 
 	public AbstractGameObject() {
 		position = new Vector2();
-		dimension = new Vector2(1, 1);
+		dimension = new Vector2(1.0f, 1.0f);
 		origin = new Vector2();
 		scale = new Vector2(1, 1);
 		rotation = 0;
@@ -35,7 +35,7 @@ public abstract class AbstractGameObject {
 		friction = new Vector2();
 		acceleration = new Vector2();
 		
-		bounds = new Rectangle();
+		bounds = new Rectangle(0, 0, dimension.x, dimension.y);
 	}
 
 	public float stateTime;

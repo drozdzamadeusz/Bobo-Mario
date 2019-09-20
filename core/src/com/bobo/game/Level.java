@@ -36,16 +36,16 @@ public class Level {
 		init(filename);
 	}
 	
-	public Array<Ground> gorundBlocks;
+	public Array<AbstractGameObject> gorundBlocks;
 	
-	public Mario mario;
+	public AbstractGameObject mario;
 	
 	private void init(String filename) {
 		Pixmap pixmap = new Pixmap(Gdx.files.internal(filename));
 		
 		int lastPixel = -1;
 		
-		gorundBlocks = new Array<Ground>();
+		gorundBlocks = new Array<AbstractGameObject>();
 		
 		for (int pixelY = 0; pixelY < pixmap.getHeight(); pixelY++) {
 			
@@ -103,7 +103,7 @@ public class Level {
 	public void render(SpriteBatch batch) {
 		mario.render(batch);
 		
-		for (Ground ground : gorundBlocks) {
+		for (AbstractGameObject ground : gorundBlocks) {
 			ground.render(batch);
 		}
 	}

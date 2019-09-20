@@ -33,7 +33,7 @@ public class Mario extends AbstractGameObject {
 	}
 
 	public void init() {
-		dimension.set(1, 1);
+		dimension.set(1.0f, 1.0f);
 
 		regMario = Assets.instance.charactersAssets.marioStanding;
 
@@ -45,7 +45,7 @@ public class Mario extends AbstractGameObject {
 
 		// Set physics values
 		terminalVelocity.set(6.0f, 17.0f);
-		friction.set(27.0f, 10.0f);
+		friction.set(20.0f, 10.0f);
 		acceleration.set(0, -70.0f);
 		momentumGain = new Vector2(40,1);
 		
@@ -92,6 +92,7 @@ public class Mario extends AbstractGameObject {
 			jumpState = JUMP_STATE.FALLING;
 
 			if (velocity.x != 0) {
+				//Mario standing on platform
 			}
 
 			break;
