@@ -126,9 +126,15 @@ public class Mario extends AbstractGameObject {
 				velocity.y = terminalVelocity.y;
 			}
 		}
+		
+		if (jumpState == JUMP_STATE.JUMP_RISING || jumpState == JUMP_STATE.JUMP_FALLING) {
+			setAnimation(null);
+			regMario = Assets.instance.charactersAssets.marioJumping;
+		}else {
+			regMario = Assets.instance.charactersAssets.marioStanding;
+		}
+		
 		if (jumpState != JUMP_STATE.GROUNDED) {
-			//Gdx.app.debug(TAG, "aaaaa");
-			//setAnimation(null);
 			super.updateMotionY(deltaTime);
 		}
 	}
@@ -158,11 +164,8 @@ public class Mario extends AbstractGameObject {
 		
 		if(animation == null)
 			reg = regMario;
-		else {
+		else
 			reg = (TextureRegion) animation.getKeyFrame(stateTime, true);
-			Gdx.app.debug(TAG, "assassas");
-			
-		}
 		batch.draw(reg.getTexture(), position.x, position.y, origin.x, origin.y, dimension.x + dimCorrectionX,
 				dimension.y + dimCorrectionY, scale.x, scale.y, rotation, reg.getRegionX(), reg.getRegionY(),
 				reg.getRegionWidth(), reg.getRegionHeight(), viewDirection == VIEW_DIRECTION.LEFT, false);

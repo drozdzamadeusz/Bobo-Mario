@@ -122,15 +122,16 @@ public class Assets implements Disposable, AssetErrorListener {
 	
 	public class CharactersAssets{
 		public final AtlasRegion marioStanding;
+		public final AtlasRegion marioJumping;
 		
 		public final Animation<?> marioWalking;
 		
 		public CharactersAssets(TextureAtlas atlas) {
 			marioStanding = atlas.findRegion("mario_standing");
+			marioJumping = atlas.findRegion("mario_jumping");
 			
 			Array<AtlasRegion> regions = null;
-			
-			// Animation: Player walking
+			// Animation: Mario walking
 			regions = atlas.findRegions("mario_walking");
 			marioWalking = new Animation<Object>(1.0f / 13.0f, regions, Animation.PlayMode.LOOP_PINGPONG);
 		}
