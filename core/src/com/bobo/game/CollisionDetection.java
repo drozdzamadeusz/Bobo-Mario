@@ -5,6 +5,7 @@ import com.badlogic.gdx.utils.Array;
 import com.bobo.objects.AbstractGameObject;
 import com.bobo.objects.Mario;
 import com.bobo.objects.Mario.JUMP_STATE;
+import com.bobo.utils.AudioManager;
 
 public class CollisionDetection {
 
@@ -33,6 +34,8 @@ public class CollisionDetection {
 		
 		//hit from below
 		if (widthDifference < 0.5f && heightDifference > 1.5f) {
+			AudioManager.instance.play(Assets.instance.sounds.bump);
+			
 			mario.position.y = (ground.position.y - ground.bounds.height);
 			
 			mario.timeJumping = mario.JUMP_TIME_MAX+1.0f;

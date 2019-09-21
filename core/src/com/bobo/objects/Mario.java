@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.bobo.game.Assets;
+import com.bobo.utils.AudioManager;
 
 public class Mario extends AbstractGameObject {
 
@@ -77,6 +78,8 @@ public class Mario extends AbstractGameObject {
 		switch (jumpState) {
 		case GROUNDED: // Character is standing on a platform
 			if (jumpKeyPressed) {
+				AudioManager.instance.play(Assets.instance.sounds.jump);
+				
 				// Start counting jump time from the beginning
 				timeJumping = 0;
 				jumpState = JUMP_STATE.JUMP_RISING;
