@@ -14,7 +14,7 @@ public class Mario extends AbstractGameObject {
 	public static final String TAG = Mario.class.getCanonicalName();
 
 	public final float JUMP_TIME_MAX = 0.175f;
-	public final float JUMP_TIME_MIN = 0.00f;
+	public final float JUMP_TIME_MIN = 0.01f;
 
 	public enum VIEW_DIRECTION {
 		LEFT, RIGHT
@@ -97,6 +97,8 @@ public class Mario extends AbstractGameObject {
 
 	@Override
 	protected void updateMotionY(float deltaTime) {
+		
+		Gdx.app.debug(TAG, "DELTA TIME"+ deltaTime+" TIME:" + timeJumping+" STATUS: "+ jumpState);
 		switch (jumpState) {
 		case GROUNDED:
 			jumpState = JUMP_STATE.FALLING;
@@ -116,6 +118,8 @@ public class Mario extends AbstractGameObject {
 			if (timeJumping <= JUMP_TIME_MAX) {
 				// Still jumping
 				velocity.y = terminalVelocity.y;
+			}else {
+				Gdx.app.debug(TAG, "");
 			}
 			break;
 		case FALLING:

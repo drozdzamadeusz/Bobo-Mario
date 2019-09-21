@@ -39,9 +39,9 @@ public abstract class AbstractGameObject {
 	}
 
 	public float stateTime;
-	public Animation animation;
+	public Animation<?> animation;
 
-	public void setAnimation(Animation animation) {
+	public void setAnimation(Animation<?> animation) {
 		this.animation = animation;
 		stateTime = 0;
 	}
