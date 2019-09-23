@@ -3,9 +3,6 @@ package com.bobo.game;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
 import com.bobo.objects.AbstractGameObject;
-import com.bobo.objects.Mario;
-import com.bobo.objects.Mario.JUMP_STATE;
-import com.bobo.utils.AudioManager;
 
 public class CollisionDetection {
 
@@ -25,74 +22,83 @@ public class CollisionDetection {
 	private Rectangle r2 = new Rectangle();
 
 	
-	private void onCollisionMarioWithBlock(AbstractGameObject ground) {
-		Mario mario = (Mario) level.mario;
+	private void onCollisionAbstractGameObjectWithBlock(AbstractGameObject movingObject, AbstractGameObject block) {
 		
-		float heightDifference = Math.abs(mario.position.y - (ground.position.y + ground.bounds.height));
-		float widthDifference = Math.abs(mario.position.x - (ground.position.x));
+		float heightDifference = Math.abs(movingObject.position.y - (block.position.y + block.bounds.height));
+		float widthDifference = Math.abs(movingObject.position.x - (block.position.x));
 		
 		
-		//hit from below
+		//hit from bottom
 		if (widthDifference < 0.5f && heightDifference > 1.5f) {
-			AudioManager.instance.play(Assets.instance.sounds.bump);
-			
-			mario.position.y = (ground.position.y - ground.bounds.height);
-			
-			mario.timeJumping = mario.JUMP_TIME_MAX+1.0f;
-			mario.velocity.y = -mario.terminalVelocity.y / 2f;
-			
+			movingObject.onHitFromBottom(block);
 			return;	
 		}
 		
 		//hit from right or left side
 		if (heightDifference > 0.45f) {
-			boolean hitRightEdge = mario.position.x > (ground.position.x + ground.bounds.width / 2.0f);	
-		 
-			if (hitRightEdge) {
-				mario.position.x = ground.position.x + ground.bounds.width;
-			} else {
-				mario.position.x = ground.position.x - mario.bounds.width;
-			}
-			
+			boolean hitRightEdge = movingObject.position.x > (block.position.x + block.bounds.width / 2.0f);
+			movingObject.onHitFromSide(block, hitRightEdge);
 			return;
 			
 		}
-		
-		//mario on block
+		//hit from top
 		if (widthDifference < 0.91f)
-			switch (mario.jumpState) {
-				case GROUNDED:
-					break;
-				case FALLING:
-				case JUMP_FALLING:
-					mario.position.y = ground.position.y + mario.bounds.height;
-					mario.jumpState = JUMP_STATE.GROUNDED;
-					break;
-				case JUMP_RISING:
-					mario.position.y = ground.position.y + mario.bounds.height;
-					
-			}
+			movingObject.onHitFromTop(block);
 	}
 	
-	private void detectCollisionsForObjects(Array<AbstractGameObject> gorundBlocks) {
-		for (AbstractGameObject g : gorundBlocks) {
+	
+
+	
+	
+	private void detectCollisionsObjectForObjects(AbstractGameObject movingObject, Array<AbstractGameObject> block) {
+		
+		r1.set(movingObject.position.x, movingObject.position.y, movingObject.bounds.width,
+				movingObject.bounds.height);
+		
+		for (AbstractGameObject g : block) {
 			r2.set(g.position.x, g.position.y, g.bounds.width, g.bounds.height);
 			
 			if (!r1.overlaps(r2))
 				continue;
 			
-			onCollisionMarioWithBlock(g);
+			onCollisionAbstractGameObjectWithBlock(movingObject, g);
 			
 			// !IMPORTANT: must do all collisions for valid
 			// edge testing on rocks.
 		}
 	}
 	
-	public void detectCollisions() {
-		r1.set(level.mario.position.x, level.mario.position.y, level.mario.bounds.width,
-				level.mario.bounds.height);
 	
-		detectCollisionsForObjects(level.gorundBlocks); // ground platform
+	private void detectCollisionsObjectsForObjects(Array<AbstractGameObject> movingObjects, Array<AbstractGameObject> block) {
+		for (AbstractGameObject m : movingObjects) {
+			
+			r1.set(m.position.x, m.position.y, m.bounds.width,
+					m.bounds.height);
+	
+			
+			for (AbstractGameObject g : block) {
+				r2.set(g.position.x, g.position.y, g.bounds.width, g.bounds.height);
+				
+				if (!r1.overlaps(r2))
+					continue;
+				
+				onCollisionAbstractGameObjectWithBlock(m, g);
+				
+				// IMPORTANT: must do all collisions for valid
+				// edge testing on rocks.
+			}
+		}
+	}
+	
+	
+	
+	
+	public void detectCollisions() {
+		detectCollisionsObjectForObjects(level.mario, level.gorundBlocks); // ground platform
+		
+		detectCollisionsObjectsForObjects(level.goombas, level.gorundBlocks);
+		
+		detectCollisionsObjectForObjects(level.mario, level.goombas);
 		
 	}
 

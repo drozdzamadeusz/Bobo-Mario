@@ -2,15 +2,17 @@ package com.bobo.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Disposable;
-import com.bobo.objects.Ground;
-import com.bobo.objects.Mario;
-import com.bobo.objects.Mario.JUMP_STATE;
+import com.bobo.objects.AbstractGameObject;
+import com.bobo.objects.characters.Player;
+import com.bobo.objects.enemies.Goomba;
 import com.bobo.screens.DirectedGame;
+import com.bobo.utils.AudioManager;
 import com.bobo.utils.CameraHelper;
 import com.bobo.utils.Constants;
+import com.bobo.objects.enemies.Goomba;
 
 public class WorldController extends InputAdapter implements Disposable {
 
@@ -47,8 +49,9 @@ public class WorldController extends InputAdapter implements Disposable {
 		level = new Level(Constants.getPath(Constants.WORLD_1_1));
 	}
 	
+
+	
 	public void update(float deltaTime) {
-		
 		handleInputGame(deltaTime);
 		
 		level.update(deltaTime);
@@ -56,34 +59,61 @@ public class WorldController extends InputAdapter implements Disposable {
 		collisionDetection.detectCollisions();
 		
 		cameraHelper.update(deltaTime);
+		
+		if (isGameOver() || isPlayerInWater()) {
+			AudioManager.instance.play(Assets.instance.sounds.lostLife);
+			init();
+		}
+		
+		startUpdatingObjects();
 	}
 	
+	public boolean isPlayerInWater() {
+		return level.mario.position.y < -10;
+	}
 	
 
+	private boolean isGameOver() {
+		return (((Player) level.mario).health > 0)?false:true;
+	}
+	
+	public void startUpdatingObjects() {
+		for (AbstractGameObject goomba : level.goombas) {
+			if(goomba.position.x > cameraHelper.getPosition().x && goomba.position.x < cameraHelper.getPosition().x + Constants.VIEWPORT_WIDTH/2.0f) {
+				Gdx.app.debug(TAG, ""+cameraHelper.getPosition().x );
+				((Goomba)goomba).startUpdating = true;
+			}
+		}
+	}
 
 	private void handleInputGame(float deltaTime) {
 		if (cameraHelper.hasTarget(level.mario)) {
 			
 			// Mario Movement
 			if (Gdx.input.isKeyPressed(Keys.LEFT)) {
-				((Mario) level.mario).setWalking(deltaTime, false);
+				((Player) level.mario).setWalking(deltaTime, false);
 			} else if (Gdx.input.isKeyPressed(Keys.RIGHT)) {
-				((Mario) level.mario).setWalking(deltaTime, true);
+				((Player) level.mario).setWalking(deltaTime, true);
 			} else {
 				
 			}
 			
 			// Mario Jump
 			if (Gdx.input.isKeyPressed(Keys.SPACE)) {
-				((Mario) level.mario).setJumping(deltaTime, true);
+				((Player) level.mario).setJumping(deltaTime, true);
 			} else {
-				((Mario) level.mario).setJumping(deltaTime, false);
+				((Player) level.mario).setJumping(deltaTime, false);
+			}
+			
+			
+			if(((Player) level.mario).makeSmallJump){
+				((Player) level.mario).setSmallJump(deltaTime);
 			}
 		}
 	}
 	
 
-	private void handleDebugInput(float deltaTime) {
+	/*private void handleDebugInput(float deltaTime) {
 		
 		// Camera Controls (move)
 		float camMoveSpeed = 5 * deltaTime;
@@ -118,7 +148,7 @@ public class WorldController extends InputAdapter implements Disposable {
 		x += cameraHelper.getPosition().x;
 		y += cameraHelper.getPosition().y;
 		cameraHelper.setPosition(x, y);
-	}
+	}*/
 
 	@Override
 	public void dispose() {

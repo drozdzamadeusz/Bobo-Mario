@@ -19,10 +19,12 @@ public abstract class AbstractGameObject {
 	public Vector2 terminalVelocity;
 	public Vector2 friction;
 	public Vector2 acceleration;
+	public Vector2 momentumGain;
 	
 	public Rectangle bounds;
-
 	public Body body;
+	
+	public boolean isEnemy;
 
 	public AbstractGameObject() {
 		position = new Vector2();
@@ -33,7 +35,10 @@ public abstract class AbstractGameObject {
 		velocity = new Vector2();
 		terminalVelocity = new Vector2(1, 1);
 		friction = new Vector2();
-		acceleration = new Vector2();
+		acceleration = new Vector2(0, -70.0f);
+		momentumGain = new Vector2();
+		
+		isEnemy = false;
 		
 		bounds = new Rectangle(0, 0, dimension.x, dimension.y);
 	}
@@ -64,6 +69,24 @@ public abstract class AbstractGameObject {
 		velocity.x = MathUtils.clamp(velocity.x, -terminalVelocity.x, terminalVelocity.x);
 	}
 
+	
+	public void setWalking(float deltaTime, boolean directionRight) {
+		if (directionRight) {
+			velocity.x += momentumGain.x * deltaTime;
+		}else {
+			velocity.x += -momentumGain.x * deltaTime;
+		}
+	}
+	
+	
+	public void setWalking(boolean directionRight) {
+		if (directionRight) {
+			velocity.x += momentumGain.x;
+		}else {
+			velocity.x += -momentumGain.x;
+		}
+	}
+	
 	protected void updateMotionY(float deltaTime) {
 		if (velocity.y != 0) {
 			// Apply friction
@@ -95,7 +118,27 @@ public abstract class AbstractGameObject {
 			rotation = body.getAngle() * MathUtils.radiansToDegrees;
 		}
 	}
+	
+	public void onHitFromBottom(AbstractGameObject collidedObject) {
+		position.y = (collidedObject.position.y - collidedObject.bounds.height);
+	}
 
+	public void onHitFromSide(AbstractGameObject collidedObject, boolean hitRightEdge) {
+		if (hitRightEdge) {
+			position.x = collidedObject.position.x + collidedObject.bounds.width;
+		} else {
+			position.x = collidedObject.position.x - bounds.width;
+		}
+	}
+	
+	public void onHitFromTop(AbstractGameObject collidedObject) {}
+	
+	public boolean isEnemy() {
+		return isEnemy;
+	}
+	
+	public abstract void init();
+	
 	// making method abstract forces class that call it to implement it and handle
 	// render
 	public abstract void render(SpriteBatch batch);

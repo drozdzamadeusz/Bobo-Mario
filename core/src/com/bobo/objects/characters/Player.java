@@ -1,4 +1,6 @@
-package com.bobo.objects;
+package com.bobo.objects.characters;
+
+import javax.swing.text.StyleContext.SmallAttributeSet;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -7,34 +9,23 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.bobo.game.Assets;
+import com.bobo.objects.AbstractGameObject;
+import com.bobo.objects.AbstractRigidBodyObject;
+import com.bobo.objects.enemies.Enemy;
 import com.bobo.utils.AudioManager;
 
-public class Mario extends AbstractGameObject {
+public class Player extends AbstractRigidBodyObject {
 
-	public static final String TAG = Mario.class.getCanonicalName();
+	public static final String TAG = Player.class.getCanonicalName();
 
-	public final float JUMP_TIME_MAX = 0.175f;
-	public final float JUMP_TIME_MIN = 0.01f;
-
-	public enum VIEW_DIRECTION {
-		LEFT, RIGHT
-	}
-
-	public enum JUMP_STATE {
-		GROUNDED, FALLING, JUMP_RISING, JUMP_FALLING
-	}
-
-	public TextureRegion regMario;
-	public VIEW_DIRECTION viewDirection;
-	public JUMP_STATE jumpState;
-	public float timeJumping;
-
-	public Vector2 momentumGain;
-	
-	
+	public TextureRegion regMarioStanding;
 	public Animation<?> marioWalking;
 	
-	public Mario() {
+	public boolean makeSmallJump = false;
+	
+	public float health = 100;
+	
+	public Player() {
 		init();
 	}
 
@@ -43,7 +34,7 @@ public class Mario extends AbstractGameObject {
 
 		marioWalking = Assets.instance.charactersAssets.marioWalking;
 		
-		regMario = Assets.instance.charactersAssets.marioStanding;
+		regMarioStanding = Assets.instance.charactersAssets.marioStanding;
 
 		// Center image on game object
 		origin.set(dimension.x / 2, dimension.y / 2);
@@ -68,6 +59,7 @@ public class Mario extends AbstractGameObject {
 
 	@Override
 	public void update(float deltaTime) {
+		Gdx.app.debug(TAG, jumpState.toString());
 		super.update(deltaTime);
 		if (velocity.x != 0) {
 			viewDirection = velocity.x < 0 ? VIEW_DIRECTION.LEFT : VIEW_DIRECTION.RIGHT;
@@ -95,10 +87,16 @@ public class Mario extends AbstractGameObject {
 		}
 	}
 
+	public void setSmallJump(float deltaTime) {
+		//timeJumping = JUMP_TIME_MAX / 1.15f;
+		jumpState = JUMP_STATE.JUMP_RISING;
+		makeSmallJump = false;
+	}
+	
+	
 	@Override
 	protected void updateMotionY(float deltaTime) {
 		
-		Gdx.app.debug(TAG, "DELTA TIME"+ deltaTime+" TIME:" + timeJumping+" STATUS: "+ jumpState);
 		switch (jumpState) {
 		case GROUNDED:
 			jumpState = JUMP_STATE.FALLING;
@@ -119,7 +117,7 @@ public class Mario extends AbstractGameObject {
 				// Still jumping
 				velocity.y = terminalVelocity.y;
 			}else {
-				Gdx.app.debug(TAG, "");
+				//Gdx.app.debug(TAG, "");
 			}
 			break;
 		case FALLING:
@@ -136,23 +134,27 @@ public class Mario extends AbstractGameObject {
 		
 		if (jumpState == JUMP_STATE.JUMP_RISING || jumpState == JUMP_STATE.JUMP_FALLING) {
 			setAnimation(null);
-			regMario = Assets.instance.charactersAssets.marioJumping;
+			regMarioStanding = Assets.instance.charactersAssets.marioJumping;
 		}else {
-			regMario = Assets.instance.charactersAssets.marioStanding;
+			regMarioStanding = Assets.instance.charactersAssets.marioStanding;
 		}
 		
 		if (jumpState != JUMP_STATE.GROUNDED) {
-			super.updateMotionY(deltaTime);
-		}
-	}
-	
-
-	public void setWalking(float deltaTime, boolean directionRight) {
-		if (directionRight) {
+			if (velocity.y != 0) {
+				// Apply friction
+				if (velocity.y > 0) {
+					velocity.y = Math.max(velocity.y - friction.y * deltaTime, 0);
+				} else {
+					velocity.y = Math.min(velocity.y + friction.y * deltaTime, 0);
+				}
+			}
 			
-			velocity.x += momentumGain.x * deltaTime;
-		}else {
-			velocity.x += -momentumGain.x * deltaTime;
+			// Apply acceleration
+			velocity.y += acceleration.y * deltaTime;
+			
+			// Make sure the object's velocity does not exceed the
+			// positive or negative terminal velocity
+			velocity.y = MathUtils.clamp(velocity.y, -terminalVelocity.y, terminalVelocity.y);
 		}
 	}
 	
@@ -161,7 +163,56 @@ public class Mario extends AbstractGameObject {
 	protected void updateMotionX(float deltaTime) {
 		super.updateMotionX(deltaTime);
 	}
+
 	
+	
+	@Override
+	public void onHitFromBottom(AbstractGameObject collidedObject) {
+		if(collidedObject.isEnemy() && !((Enemy) collidedObject).isEnemyAlive()) {
+			
+		}else {
+			super.onHitFromBottom(collidedObject);
+		}
+		
+		AudioManager.instance.play(Assets.instance.sounds.bump);
+		
+		timeJumping = JUMP_TIME_MAX+1.0f;
+		velocity.y = -terminalVelocity.y / 2f;
+		
+		if(collidedObject.isEnemy()) Gdx.app.debug(TAG, "onHitFromBottom");
+	}
+
+	@Override
+	public void onHitFromSide(AbstractGameObject collidedObject, boolean hitRightEdge) {
+		if(collidedObject.isEnemy() && !((Enemy) collidedObject).isEnemyAlive()) {
+			
+		}else {
+			super.onHitFromSide(collidedObject, hitRightEdge);
+		}
+		
+		if(collidedObject.isEnemy() && ((Enemy) collidedObject).isEnemyAlive()) {
+			AudioManager.instance.play(Assets.instance.sounds.lostLife);
+			health -= ((Enemy) collidedObject).getDealingDamage();
+		}
+	}
+
+	@Override
+	public void onHitFromTop(AbstractGameObject collidedObject) {
+		if(collidedObject.isEnemy() && ((Enemy) collidedObject).isEnemyAlive()) {
+			((Enemy) collidedObject).killEnemy();
+			this.jumpState = JUMP_STATE.GROUNDED;
+			this.timeJumping = 0.0f;
+			AudioManager.instance.play(Assets.instance.sounds.stomp);
+			makeSmallJump = true;
+		}
+		
+		if(collidedObject.isEnemy() && !((Enemy) collidedObject).isEnemyAlive()) {
+			
+		}else {
+			super.onHitFromTop(collidedObject);
+		}
+	}
+
 	@Override
 	public void render(SpriteBatch batch) {
 		TextureRegion reg = null;
@@ -170,9 +221,10 @@ public class Mario extends AbstractGameObject {
 		float dimCorrectionY = 0;
 		
 		if(animation == null)
-			reg = regMario;
+			reg = regMarioStanding;
 		else
 			reg = (TextureRegion) animation.getKeyFrame(stateTime, true);
+		
 		batch.draw(reg.getTexture(), position.x, position.y, origin.x, origin.y, dimension.x + dimCorrectionX,
 				dimension.y + dimCorrectionY, scale.x, scale.y, rotation, reg.getRegionX(), reg.getRegionY(),
 				reg.getRegionWidth(), reg.getRegionHeight(), viewDirection == VIEW_DIRECTION.LEFT, false);

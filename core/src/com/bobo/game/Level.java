@@ -6,7 +6,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
 import com.bobo.objects.AbstractGameObject;
 import com.bobo.objects.Ground;
-import com.bobo.objects.Mario;
+import com.bobo.objects.characters.Player;
+import com.bobo.objects.enemies.Goomba;
 
 public class Level {
 	public static final String TAG = Level.class.getCanonicalName();
@@ -14,7 +15,8 @@ public class Level {
 	public enum BLOCK_TYPE {
 		EMPTY(0, 0, 0), // black
 		PLAYER(255, 255, 255), // white - player
-		GROUND(155, 74, 0); // brown - ground
+		GROUND(155, 74, 0), // brown - ground
+		GOOMBA(92, 44, 7); // dark brown - ground
 		
 		
 		private int color;
@@ -37,6 +39,7 @@ public class Level {
 	}
 	
 	public Array<AbstractGameObject> gorundBlocks;
+	public Array<AbstractGameObject> goombas;
 	
 	public AbstractGameObject mario;
 	
@@ -46,6 +49,7 @@ public class Level {
 		int lastPixel = -1;
 		
 		gorundBlocks = new Array<AbstractGameObject>();
+		goombas = new Array<AbstractGameObject>();
 		
 		for (int pixelY = 0; pixelY < pixmap.getHeight(); pixelY++) {
 			
@@ -72,13 +76,19 @@ public class Level {
 					gorundBlocks.add((Ground) obj);
 				// palyer
 				}else if (BLOCK_TYPE.PLAYER.sameColor(currentPixel)) {
-					obj = new Mario();
+					obj = new Player();
 					
 					offsetHeight = 0.0f;
 					obj.position.set(pixelX, baseHeight * obj.dimension.y + offsetHeight);
 					
-					mario = (Mario) obj;
-				
+					mario = (Player) obj;
+				}else if (BLOCK_TYPE.GOOMBA.sameColor(currentPixel)) {
+					obj = new Goomba();
+					
+					offsetHeight = 0.0f;
+					obj.position.set(pixelX, baseHeight * obj.dimension.y + offsetHeight);
+					
+					goombas.add((Goomba) obj);
 				} else {
 					int r = 0xff & (currentPixel >>> 24);
 					int g = 0xff & (currentPixel >>> 16);
@@ -98,6 +108,10 @@ public class Level {
 
 	public void update(float deltaTime) {
 		mario.update(deltaTime);
+		
+		for (AbstractGameObject goomba : goombas) {
+			goomba.update(deltaTime);
+		}
 	}
 
 	public void render(SpriteBatch batch) {
@@ -105,6 +119,11 @@ public class Level {
 		
 		for (AbstractGameObject ground : gorundBlocks) {
 			ground.render(batch);
+		}
+		
+		
+		for (AbstractGameObject goomba : goombas) {
+			goomba.render(batch);
 		}
 	}
 	

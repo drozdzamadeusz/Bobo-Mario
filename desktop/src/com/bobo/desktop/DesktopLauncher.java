@@ -22,6 +22,7 @@ public class DesktopLauncher {
 			
 			TexturePacker.process(settings, "assets-raw/images/Tileset", "../android/assets/images", "tileset.pack");
 			TexturePacker.process(settings, "assets-raw/images/Characters", "../android/assets/images", "characters.pack");
+			TexturePacker.process(settings, "assets-raw/images/Enemies", "../android/assets/images", "enemies.pack");
 		}
 
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();

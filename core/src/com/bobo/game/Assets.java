@@ -28,6 +28,7 @@ public class Assets implements Disposable, AssetErrorListener {
 	
 	public TilesetAssets tilesetAssets;
 	public CharactersAssets charactersAssets;
+	public EnemiesAssets enemiesAssets;
 
 	public AssetFonts fonts;
 
@@ -38,10 +39,15 @@ public class Assets implements Disposable, AssetErrorListener {
 
 		assetManager.load(Constants.getPath(Constants.TILESET_TEXTURE_ATLAS_OBJECTS), TextureAtlas.class);
 		assetManager.load(Constants.getPath(Constants.CHARACTERS_TEXTURE_ATLAS_OBJECTS), TextureAtlas.class);
-
+		assetManager.load(Constants.getPath(Constants.ENEMIES_TEXTURE_ATLAS_OBJECTS), TextureAtlas.class);
+		
+		assetManager.load(Constants.getPath("music/ground_theme.mp3"), Music.class);
+		
 		assetManager.load(Constants.getPath("sounds/jump.wav"), Sound.class);
 		assetManager.load(Constants.getPath("sounds/bump.wav"), Sound.class);
-		assetManager.load(Constants.getPath("music/ground_theme.mp3"), Music.class);
+		assetManager.load(Constants.getPath("sounds/stomp.wav"), Sound.class);
+		assetManager.load(Constants.getPath("sounds/coin.wav"), Sound.class);
+		assetManager.load(Constants.getPath("sounds/lost_life.wav"), Sound.class);
 		
 		assetManager.finishLoading();
 
@@ -53,16 +59,21 @@ public class Assets implements Disposable, AssetErrorListener {
 
 		TextureAtlas tilesetAtlas = assetManager.get(Constants.getPath(Constants.TILESET_TEXTURE_ATLAS_OBJECTS));
 		TextureAtlas charactersAtlas = assetManager.get(Constants.getPath(Constants.CHARACTERS_TEXTURE_ATLAS_OBJECTS));
-
+		TextureAtlas enemiesAtlas = assetManager.get(Constants.getPath(Constants.ENEMIES_TEXTURE_ATLAS_OBJECTS));
+		
 		for (Texture t : tilesetAtlas.getTextures())
 			t.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 
 		for (Texture t : charactersAtlas.getTextures())
 			t.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 
+		for (Texture t : enemiesAtlas.getTextures())
+			t.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+		
 		tilesetAssets = new TilesetAssets(tilesetAtlas);
 		charactersAssets = new CharactersAssets(charactersAtlas);
-
+		enemiesAssets = new EnemiesAssets(enemiesAtlas);
+		
 		fonts = new AssetFonts();
 
 		sounds = new AssetSounds(assetManager);
@@ -86,10 +97,16 @@ public class Assets implements Disposable, AssetErrorListener {
 	public class AssetSounds {
 		public final Sound jump;
 		public final Sound bump;
-
+		public final Sound stomp;
+		public final Sound coin;
+		public final Sound lostLife;
+		
 		public AssetSounds(AssetManager am) {
 			jump = am.get(Constants.getPath("sounds/jump.wav"), Sound.class);
 			bump = am.get(Constants.getPath("sounds/bump.wav"), Sound.class);
+			stomp = am.get(Constants.getPath("sounds/stomp.wav"), Sound.class);
+			coin = am.get(Constants.getPath("sounds/coin.wav"), Sound.class);
+			lostLife = am.get(Constants.getPath("sounds/lost_life.wav"), Sound.class);
 		}
 	}
 	
@@ -105,6 +122,7 @@ public class Assets implements Disposable, AssetErrorListener {
 
 	
 	// IMAGES
+	// Tileset Assets
 	public class TilesetAssets {
 		public final AtlasRegion block;
 		public final AtlasRegion blockTop;
@@ -151,6 +169,7 @@ public class Assets implements Disposable, AssetErrorListener {
 
 	}
 
+	//Characters Assets
 	public class CharactersAssets {
 		public final AtlasRegion marioStanding;
 		public final AtlasRegion marioJumping;
@@ -164,10 +183,28 @@ public class Assets implements Disposable, AssetErrorListener {
 			Array<AtlasRegion> regions = null;
 			// Animation: Mario walking
 			regions = atlas.findRegions("mario_walking");
-			marioWalking = new Animation<Object>(1.0f / 15.0f, regions, Animation.PlayMode.LOOP_PINGPONG);
+			marioWalking = new Animation<Object>(1.0f / 15.0f, regions, Animation.PlayMode.LOOP);
 		}
 	}
 
+	
+	//Enemies Assets
+	public class EnemiesAssets {
+		
+		public final Animation<?> goombaWalking;
+		public final AtlasRegion goombaCrushed;
+		
+		public EnemiesAssets(TextureAtlas atlas) {
+			
+			Array<AtlasRegion> regions = null;
+			// Animation: Goomba walking
+			regions = atlas.findRegions("goomba");
+			goombaWalking = new Animation<Object>(1.0f / 15.0f, regions, Animation.PlayMode.LOOP_PINGPONG);
+			
+			goombaCrushed = atlas.findRegion("goomba_crushed");
+		}
+	}
+	
 	@SuppressWarnings("rawtypes")
 	@Override
 	public void error(AssetDescriptor asset, Throwable throwable) {

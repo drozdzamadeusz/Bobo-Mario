@@ -32,6 +32,8 @@ public class Constants {
 	
 	public static final String CHARACTERS_TEXTURE_ATLAS_OBJECTS = "images/characters.pack.atlas";
 	
+	public static final String ENEMIES_TEXTURE_ATLAS_OBJECTS = "images/enemies.pack.atlas";
+	
 	//Worlds
 	
 	public static final String WORLD_1_1 = "worlds/world_1_1.png";
