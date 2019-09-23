@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.bobo.game.Assets;
 import com.bobo.objects.AbstractGameObject;
@@ -44,7 +45,9 @@ public class Goomba extends AbstractRigidBodyObject implements Enemy{
 		
 		
 		// View direction
-		viewDirection = VIEW_DIRECTION.RIGHT;
+		viewDirection = (0 == (MathUtils.random(0, 1)))?VIEW_DIRECTION.RIGHT:VIEW_DIRECTION.LEFT;
+		
+		Gdx.app.debug(TAG, viewDirection.toString());
 		
 		jumpState = JUMP_STATE.FALLING;
 		

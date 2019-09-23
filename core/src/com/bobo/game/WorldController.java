@@ -80,7 +80,6 @@ public class WorldController extends InputAdapter implements Disposable {
 	public void startUpdatingObjects() {
 		for (AbstractGameObject goomba : level.goombas) {
 			if(goomba.position.x > cameraHelper.getPosition().x && goomba.position.x < cameraHelper.getPosition().x + Constants.VIEWPORT_WIDTH/2.0f) {
-				Gdx.app.debug(TAG, ""+cameraHelper.getPosition().x );
 				((Goomba)goomba).startUpdating = true;
 			}
 		}
