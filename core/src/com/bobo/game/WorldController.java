@@ -2,7 +2,6 @@ package com.bobo.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.utils.Disposable;
 import com.bobo.objects.AbstractGameObject;
@@ -12,7 +11,6 @@ import com.bobo.screens.DirectedGame;
 import com.bobo.utils.AudioManager;
 import com.bobo.utils.CameraHelper;
 import com.bobo.utils.Constants;
-import com.bobo.objects.enemies.Goomba;
 
 public class WorldController extends InputAdapter implements Disposable {
 

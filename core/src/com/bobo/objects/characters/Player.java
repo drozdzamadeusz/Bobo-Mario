@@ -168,7 +168,7 @@ public class Player extends AbstractRigidBodyObject {
 	
 	@Override
 	public void onHitFromBottom(AbstractGameObject collidedObject) {
-		if(collidedObject.isEnemy() && !((Enemy) collidedObject).isEnemyAlive()) {
+		if(collidedObject.isEnemy() && !(collidedObject).isAlive()) {
 			
 		}else {
 			super.onHitFromBottom(collidedObject);
@@ -184,13 +184,13 @@ public class Player extends AbstractRigidBodyObject {
 
 	@Override
 	public void onHitFromSide(AbstractGameObject collidedObject, boolean hitRightEdge) {
-		if(collidedObject.isEnemy() && !((Enemy) collidedObject).isEnemyAlive()) {
+		if(collidedObject.isEnemy() && !(collidedObject).isAlive()) {
 			
 		}else {
 			super.onHitFromSide(collidedObject, hitRightEdge);
 		}
 		
-		if(collidedObject.isEnemy() && ((Enemy) collidedObject).isEnemyAlive()) {
+		if(collidedObject.isEnemy() && (collidedObject).isAlive()) {
 			AudioManager.instance.play(Assets.instance.sounds.lostLife);
 			health -= ((Enemy) collidedObject).getDealingDamage();
 		}
@@ -198,7 +198,7 @@ public class Player extends AbstractRigidBodyObject {
 
 	@Override
 	public void onHitFromTop(AbstractGameObject collidedObject) {
-		if(collidedObject.isEnemy() && ((Enemy) collidedObject).isEnemyAlive()) {
+		if(collidedObject.isEnemy() && (collidedObject).isAlive()) {
 			((Enemy) collidedObject).killEnemy();
 			this.jumpState = JUMP_STATE.GROUNDED;
 			this.timeJumping = 0.0f;
@@ -206,7 +206,7 @@ public class Player extends AbstractRigidBodyObject {
 			makeSmallJump = true;
 		}
 		
-		if(collidedObject.isEnemy() && !((Enemy) collidedObject).isEnemyAlive()) {
+		if(collidedObject.isEnemy() && !(collidedObject).isAlive()) {
 			
 		}else {
 			super.onHitFromTop(collidedObject);

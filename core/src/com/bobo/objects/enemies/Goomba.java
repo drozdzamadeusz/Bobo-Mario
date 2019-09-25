@@ -20,8 +20,6 @@ public class Goomba extends AbstractRigidBodyObject implements Enemy{
 	
 	private float dealingDamage;
 	
-	private boolean isAlive;
-	
 	public boolean startUpdating = false;
 	
 	public Goomba() {
@@ -35,19 +33,15 @@ public class Goomba extends AbstractRigidBodyObject implements Enemy{
 		
 		setAnimation(goombaWalking);
 		
-		
 		origin.set(dimension.x / 2, dimension.y / 2);
 		bounds.set(0, 0, dimension.x, dimension.y);
 		
 		terminalVelocity.set(3.0f, 17.0f);
-		//friction.set(20.0f, 10.0f);
 		momentumGain = new Vector2(terminalVelocity);
 		
 		
-		// View direction
+		// Goomba init direction
 		viewDirection = (0 == (MathUtils.random(0, 1)))?VIEW_DIRECTION.RIGHT:VIEW_DIRECTION.LEFT;
-		
-		Gdx.app.debug(TAG, viewDirection.toString());
 		
 		jumpState = JUMP_STATE.FALLING;
 		
@@ -55,12 +49,9 @@ public class Goomba extends AbstractRigidBodyObject implements Enemy{
 		dealingDamage = 100;
 	
 		isAlive = true;
-		
 	}
 	
-	
-	
-	
+
 	@Override
 	public void onHitFromTop(AbstractGameObject collidedObject) {
 		super.onHitFromTop(collidedObject);
@@ -74,9 +65,12 @@ public class Goomba extends AbstractRigidBodyObject implements Enemy{
 	@Override
 	public void onHitFromSide(AbstractGameObject collidedObject, boolean hitRightEdge) {
 		super.onHitFromSide(collidedObject, hitRightEdge);
-		viewDirection = (hitRightEdge)?VIEW_DIRECTION.RIGHT : VIEW_DIRECTION.LEFT;
+		viewDirection = (hitRightEdge)?VIEW_DIRECTION.RIGHT:VIEW_DIRECTION.LEFT;
 	}
 
+	private float TIME_TO_SHOW_AFTER_DEAD = 0.4f;
+	
+	
 	@Override
 	public void update(float deltaTime) {
 		if(startUpdating) {
@@ -84,16 +78,15 @@ public class Goomba extends AbstractRigidBodyObject implements Enemy{
 			if(isAlive) {
 				setWalking((viewDirection == VIEW_DIRECTION.RIGHT)?true:false);
 			}else {
-				if(TIME_AFTER_DEAD > 0.0f) {
-					TIME_AFTER_DEAD -= deltaTime;
+				if(TIME_TO_SHOW_AFTER_DEAD > 0.0f) {
+					TIME_TO_SHOW_AFTER_DEAD -= deltaTime;
 				}
 			}
 		}
 		
 	}
 	
-	private float TIME_AFTER_DEAD = 0.4f;
-	
+
 	@Override
 	public void render(SpriteBatch batch) {
 		TextureRegion reg = null;
@@ -102,9 +95,9 @@ public class Goomba extends AbstractRigidBodyObject implements Enemy{
 		if(isAlive)
 			reg = (TextureRegion) animation.getKeyFrame(stateTime, true);
 		else
-				reg = regGoombaCrushed;
+			reg = regGoombaCrushed;
 
-		if(TIME_AFTER_DEAD > 0.0f)
+		if(TIME_TO_SHOW_AFTER_DEAD > 0.0f)
 			batch.draw(reg.getTexture(), position.x, position.y, origin.x, origin.y, dimension.x,
 						dimension.y, scale.x, scale.y, rotation, reg.getRegionX(), reg.getRegionY(),
 						reg.getRegionWidth(), reg.getRegionHeight(), false, false);
@@ -117,12 +110,7 @@ public class Goomba extends AbstractRigidBodyObject implements Enemy{
 		velocity.x = 0.0f;
 		
 	}
-
-	@Override
-	public boolean isEnemyAlive() {
-		return isAlive;
-	}
-
+	
 	@Override
 	public float getDealingDamage() {
 		return dealingDamage;

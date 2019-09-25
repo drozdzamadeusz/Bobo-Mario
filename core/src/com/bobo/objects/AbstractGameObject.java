@@ -25,6 +25,7 @@ public abstract class AbstractGameObject {
 	public Body body;
 	
 	public boolean isEnemy;
+	public boolean isAlive;
 
 	public AbstractGameObject() {
 		position = new Vector2();
@@ -135,6 +136,10 @@ public abstract class AbstractGameObject {
 	
 	public boolean isEnemy() {
 		return isEnemy;
+	}
+	
+	public boolean isAlive() {
+		return isAlive;
 	}
 	
 	public abstract void init();

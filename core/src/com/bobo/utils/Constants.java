@@ -37,4 +37,6 @@ public class Constants {
 	//Worlds
 	
 	public static final String WORLD_1_1 = "worlds/world_1_1.png";
+	
+	public static final float TIME_DELAY_GAME_OVER = 2.0f;
 }
