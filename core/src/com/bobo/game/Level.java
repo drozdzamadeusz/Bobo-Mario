@@ -8,6 +8,8 @@ import com.bobo.objects.AbstractGameObject;
 import com.bobo.objects.Ground;
 import com.bobo.objects.characters.Player;
 import com.bobo.objects.enemies.Goomba;
+import com.bobo.utils.CameraHelper;
+import com.bobo.utils.Constants;
 
 public class Level {
 	public static final String TAG = Level.class.getCanonicalName();
@@ -34,6 +36,14 @@ public class Level {
 		}
 	}
 	
+	private CameraHelper cameraHelper;
+
+	
+	public Level(String filename, CameraHelper cameraHelper) {
+		this.cameraHelper = cameraHelper;
+		init(filename);
+	}
+	
 	public Level(String filename) {
 		init(filename);
 	}
@@ -44,6 +54,7 @@ public class Level {
 	public AbstractGameObject mario;
 	
 	private void init(String filename) {
+			
 		Pixmap pixmap = new Pixmap(Gdx.files.internal(filename));
 		
 		int lastPixel = -1;
@@ -105,26 +116,34 @@ public class Level {
 		// free memory
 		pixmap.dispose();
 	}
+	
+	
+	public boolean objectInViewPort(AbstractGameObject obj) {
+		//return true;
+		return (obj.position.x > (cameraHelper.getPosition().x - Constants.VIEWPORT_WIDTH/2.0f - 1.0f) && obj.position.x < cameraHelper.getPosition().x + Constants.VIEWPORT_WIDTH/2.0f);
+	}
 
 	public void update(float deltaTime) {
 		mario.update(deltaTime);
 		
 		for (AbstractGameObject goomba : goombas) {
-			goomba.update(deltaTime);
+			if(objectInViewPort(goomba)) goomba.update(deltaTime);
 		}
 	}
 
 	public void render(SpriteBatch batch) {
-		mario.render(batch);
+		
 		
 		for (AbstractGameObject ground : gorundBlocks) {
-			ground.render(batch);
+			if(objectInViewPort(ground))ground.render(batch);
 		}
 		
 		
 		for (AbstractGameObject goomba : goombas) {
-			goomba.render(batch);
+			if(objectInViewPort(goomba)) goomba.render(batch);
 		}
+		
+		mario.render(batch);
 	}
 	
 }

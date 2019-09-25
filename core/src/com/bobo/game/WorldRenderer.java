@@ -68,7 +68,7 @@ public class WorldRenderer implements Disposable {
 	
 	
 	private void renderGuiFpsCounter(SpriteBatch batch) {
-		float x = cameraGUI.viewportWidth - 115f;
+		float x = cameraGUI.viewportWidth - 185f;
 		float y = 10f;
 		int fps = Gdx.graphics.getFramesPerSecond();
 		BitmapFont fpsFont = Assets.instance.fonts.defaultNormal;

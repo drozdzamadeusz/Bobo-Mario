@@ -94,11 +94,11 @@ public class CollisionDetection {
 	
 	
 	public void detectCollisions() {
-		detectCollisionsObjectForObjects(level.mario, level.gorundBlocks); // ground platform
+		if(level.mario.isAlive()) detectCollisionsObjectForObjects(level.mario, level.gorundBlocks); // ground platform
 		
 		detectCollisionsObjectsForObjects(level.goombas, level.gorundBlocks);
 		
-		detectCollisionsObjectForObjects(level.mario, level.goombas);
+		if(level.mario.isAlive()) detectCollisionsObjectForObjects(level.mario, level.goombas);
 		
 	}
 

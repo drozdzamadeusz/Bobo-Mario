@@ -19,6 +19,7 @@ public class Player extends AbstractRigidBodyObject {
 	public static final String TAG = Player.class.getCanonicalName();
 
 	public TextureRegion regMarioStanding;
+	public TextureRegion regMarioDied;
 	public Animation<?> marioWalking;
 	
 	public boolean makeSmallJump = false;
@@ -33,9 +34,9 @@ public class Player extends AbstractRigidBodyObject {
 		dimension.set(1.0f, 1.0f);
 
 		marioWalking = Assets.instance.charactersAssets.marioWalking;
-		
 		regMarioStanding = Assets.instance.charactersAssets.marioStanding;
-
+		regMarioDied = Assets.instance.charactersAssets.marioDied;
+		
 		// Center image on game object
 		origin.set(dimension.x / 2, dimension.y / 2);
 
@@ -59,7 +60,6 @@ public class Player extends AbstractRigidBodyObject {
 
 	@Override
 	public void update(float deltaTime) {
-		Gdx.app.debug(TAG, jumpState.toString());
 		super.update(deltaTime);
 		if (velocity.x != 0) {
 			viewDirection = velocity.x < 0 ? VIEW_DIRECTION.LEFT : VIEW_DIRECTION.RIGHT;
@@ -87,8 +87,7 @@ public class Player extends AbstractRigidBodyObject {
 		}
 	}
 
-	public void setSmallJump(float deltaTime) {
-		//timeJumping = JUMP_TIME_MAX / 1.15f;
+	public void makeSmallJump(float deltaTime) {
 		jumpState = JUMP_STATE.JUMP_RISING;
 		makeSmallJump = false;
 	}
@@ -168,9 +167,14 @@ public class Player extends AbstractRigidBodyObject {
 	
 	@Override
 	public void onHitFromBottom(AbstractGameObject collidedObject) {
-		if(collidedObject.isEnemy() && !(collidedObject).isAlive()) {
-			
-		}else {
+		
+		if(collidedObject.isEnemy() && (collidedObject).isAlive()) {
+			AudioManager.instance.play(Assets.instance.sounds.lostLife);
+			health -= ((Enemy) collidedObject).getDealingDamage();
+			return;
+		}
+		
+		if(!(collidedObject.isEnemy() && !(collidedObject).isAlive())) {
 			super.onHitFromBottom(collidedObject);
 		}
 		
@@ -179,20 +183,19 @@ public class Player extends AbstractRigidBodyObject {
 		timeJumping = JUMP_TIME_MAX+1.0f;
 		velocity.y = -terminalVelocity.y / 2f;
 		
-		if(collidedObject.isEnemy()) Gdx.app.debug(TAG, "onHitFromBottom");
 	}
 
 	@Override
 	public void onHitFromSide(AbstractGameObject collidedObject, boolean hitRightEdge) {
-		if(collidedObject.isEnemy() && !(collidedObject).isAlive()) {
-			
-		}else {
-			super.onHitFromSide(collidedObject, hitRightEdge);
-		}
 		
 		if(collidedObject.isEnemy() && (collidedObject).isAlive()) {
 			AudioManager.instance.play(Assets.instance.sounds.lostLife);
 			health -= ((Enemy) collidedObject).getDealingDamage();
+			return;
+		}
+		
+		if(!(collidedObject.isEnemy() && !(collidedObject).isAlive())) {
+			super.onHitFromSide(collidedObject, hitRightEdge);
 		}
 	}
 
@@ -201,7 +204,7 @@ public class Player extends AbstractRigidBodyObject {
 		if(collidedObject.isEnemy() && (collidedObject).isAlive()) {
 			((Enemy) collidedObject).killEnemy();
 			this.jumpState = JUMP_STATE.GROUNDED;
-			this.timeJumping = 0.0f;
+			
 			AudioManager.instance.play(Assets.instance.sounds.stomp);
 			makeSmallJump = true;
 		}
@@ -213,6 +216,12 @@ public class Player extends AbstractRigidBodyObject {
 		}
 	}
 
+
+	@Override
+	public boolean isAlive() {
+		return health > 0;
+	}
+
 	@Override
 	public void render(SpriteBatch batch) {
 		TextureRegion reg = null;
@@ -220,10 +229,13 @@ public class Player extends AbstractRigidBodyObject {
 		float dimCorrectionX = 0;
 		float dimCorrectionY = 0;
 		
-		if(animation == null)
-			reg = regMarioStanding;
+		if(isAlive())
+			if(animation == null)
+				reg = regMarioStanding;
+			else
+				reg = (TextureRegion) animation.getKeyFrame(stateTime, true);
 		else
-			reg = (TextureRegion) animation.getKeyFrame(stateTime, true);
+			reg = regMarioDied;
 		
 		batch.draw(reg.getTexture(), position.x, position.y, origin.x, origin.y, dimension.x + dimCorrectionX,
 				dimension.y + dimCorrectionY, scale.x, scale.y, rotation, reg.getRegionX(), reg.getRegionY(),

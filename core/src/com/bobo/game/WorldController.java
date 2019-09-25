@@ -4,9 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.utils.Disposable;
-import com.bobo.objects.AbstractGameObject;
 import com.bobo.objects.characters.Player;
-import com.bobo.objects.enemies.Goomba;
 import com.bobo.screens.DirectedGame;
 import com.bobo.utils.AudioManager;
 import com.bobo.utils.CameraHelper;
@@ -24,6 +22,9 @@ public class WorldController extends InputAdapter implements Disposable {
 	
 	public CollisionDetection collisionDetection;
 	
+	private float timeLeftGameOverDelay;
+	private boolean isGameOver;
+	
 	public WorldController(DirectedGame game) {
 		this.game = game;
 		cameraHelper = new CameraHelper();
@@ -35,6 +36,9 @@ public class WorldController extends InputAdapter implements Disposable {
 		
 		cameraHelper = new CameraHelper();
 		
+		isGameOver = false;
+		timeLeftGameOverDelay = Constants.TIME_DELAY_GAME_OVER;
+		
 		initLevel();
 		
 		collisionDetection = new CollisionDetection();
@@ -44,43 +48,43 @@ public class WorldController extends InputAdapter implements Disposable {
 	}
 
 	private void initLevel() {
-		level = new Level(Constants.getPath(Constants.WORLD_1_1));
+		level = new Level(Constants.getPath(Constants.WORLD_1_1), cameraHelper);
 	}
 	
 
 	
 	public void update(float deltaTime) {
-		handleInputGame(deltaTime);
-		
+		if(isGameOver) {
+			timeLeftGameOverDelay -= deltaTime;
+			if(timeLeftGameOverDelay <= 0) {
+				init();
+			}
+			
+		}else {
+			handleInputGame(deltaTime);
+		}
+			
 		level.update(deltaTime);
 		
 		collisionDetection.detectCollisions();
 		
 		cameraHelper.update(deltaTime);
 		
-		if (isGameOver() || isPlayerInWater()) {
+		if ((isPlayerDead() || isPlayerInWater()) && !isGameOver){
 			AudioManager.instance.play(Assets.instance.sounds.lostLife);
-			init();
+			((Player) level.mario).makeSmallJump(deltaTime);
+			isGameOver = true;
 		}
 		
-		startUpdatingObjects();
 	}
 	
 	public boolean isPlayerInWater() {
-		return level.mario.position.y < -10;
+		return level.mario.position.y < -15;
 	}
 	
 
-	private boolean isGameOver() {
-		return (((Player) level.mario).health > 0)?false:true;
-	}
-	
-	public void startUpdatingObjects() {
-		for (AbstractGameObject goomba : level.goombas) {
-			if(goomba.position.x > cameraHelper.getPosition().x && goomba.position.x < cameraHelper.getPosition().x + Constants.VIEWPORT_WIDTH/2.0f) {
-				((Goomba)goomba).startUpdating = true;
-			}
-		}
+	private boolean isPlayerDead() {
+		return !level.mario.isAlive();
 	}
 
 	private void handleInputGame(float deltaTime) {
@@ -104,13 +108,21 @@ public class WorldController extends InputAdapter implements Disposable {
 			
 			
 			if(((Player) level.mario).makeSmallJump){
-				((Player) level.mario).setSmallJump(deltaTime);
+				((Player) level.mario).makeSmallJump(deltaTime);
 			}
 		}
 	}
 	
-
-	/*private void handleDebugInput(float deltaTime) {
+	
+	/*public void startUpdatingObjects() {
+		for (AbstractGameObject goomba : level.goombas) {
+			if(goomba.position.x > cameraHelper.getPosition().x && goomba.position.x < cameraHelper.getPosition().x + Constants.VIEWPORT_WIDTH/2.0f) {
+				((Goomba)goomba).startUpdating = true;
+			}
+		}
+	}
+	
+	private void handleDebugInput(float deltaTime) {
 		
 		// Camera Controls (move)
 		float camMoveSpeed = 5 * deltaTime;

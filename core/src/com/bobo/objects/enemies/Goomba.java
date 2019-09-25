@@ -20,8 +20,6 @@ public class Goomba extends AbstractRigidBodyObject implements Enemy{
 	
 	private float dealingDamage;
 	
-	public boolean startUpdating = false;
-	
 	public Goomba() {
 		init();
 	}
@@ -73,17 +71,14 @@ public class Goomba extends AbstractRigidBodyObject implements Enemy{
 	
 	@Override
 	public void update(float deltaTime) {
-		if(startUpdating) {
-			super.update(deltaTime);
-			if(isAlive) {
-				setWalking((viewDirection == VIEW_DIRECTION.RIGHT)?true:false);
-			}else {
-				if(TIME_TO_SHOW_AFTER_DEAD > 0.0f) {
-					TIME_TO_SHOW_AFTER_DEAD -= deltaTime;
-				}
+		super.update(deltaTime);
+		if(isAlive) {
+			setWalking((viewDirection == VIEW_DIRECTION.RIGHT)?true:false);
+		}else {
+			if(TIME_TO_SHOW_AFTER_DEAD > 0.0f) {
+				TIME_TO_SHOW_AFTER_DEAD -= deltaTime;
 			}
 		}
-		
 	}
 	
 

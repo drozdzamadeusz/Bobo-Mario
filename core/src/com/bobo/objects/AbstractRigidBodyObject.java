@@ -3,7 +3,7 @@ package com.bobo.objects;
 public abstract class AbstractRigidBodyObject extends AbstractGameObject {
 
 	public final float JUMP_TIME_MAX = 0.175f;
-	public final float JUMP_TIME_MIN = 0.01f;
+	public final float JUMP_TIME_MIN = 0.00f;
 
 	public enum VIEW_DIRECTION {
 		LEFT, RIGHT
