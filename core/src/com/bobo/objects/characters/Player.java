@@ -169,7 +169,6 @@ public class Player extends AbstractRigidBodyObject {
 	public void onHitFromBottom(AbstractGameObject collidedObject) {
 		
 		if(collidedObject.isEnemy() && (collidedObject).isAlive()) {
-			AudioManager.instance.play(Assets.instance.sounds.lostLife);
 			health -= ((Enemy) collidedObject).getDealingDamage();
 			return;
 		}
@@ -189,7 +188,6 @@ public class Player extends AbstractRigidBodyObject {
 	public void onHitFromSide(AbstractGameObject collidedObject, boolean hitRightEdge) {
 		
 		if(collidedObject.isEnemy() && (collidedObject).isAlive()) {
-			AudioManager.instance.play(Assets.instance.sounds.lostLife);
 			health -= ((Enemy) collidedObject).getDealingDamage();
 			return;
 		}
