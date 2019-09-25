@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.utils.Disposable;
+import com.bobo.objects.AbstractRigidBodyObject.JUMP_STATE;
 import com.bobo.objects.characters.Player;
 import com.bobo.screens.DirectedGame;
 import com.bobo.utils.AudioManager;
@@ -54,6 +55,7 @@ public class WorldController extends InputAdapter implements Disposable {
 
 	
 	public void update(float deltaTime) {
+		
 		if(isGameOver) {
 			timeLeftGameOverDelay -= deltaTime;
 			if(timeLeftGameOverDelay <= 0) {
@@ -62,6 +64,10 @@ public class WorldController extends InputAdapter implements Disposable {
 			
 		}else {
 			handleInputGame(deltaTime);
+		}
+		
+		if(((Player) level.mario).makeSmallJump){
+			((Player) level.mario).makeSmallJump(deltaTime);
 		}
 			
 		level.update(deltaTime);
@@ -72,7 +78,9 @@ public class WorldController extends InputAdapter implements Disposable {
 		
 		if ((isPlayerDead() || isPlayerInWater()) && !isGameOver){
 			AudioManager.instance.play(Assets.instance.sounds.lostLife);
-			((Player) level.mario).makeSmallJump(deltaTime);
+			((Player) level.mario).jumpState = JUMP_STATE.GROUNDED;
+			((Player) level.mario).timeJumping = 0.0f;
+			((Player) level.mario).makeSmallJump = true;	
 			isGameOver = true;
 		}
 		
@@ -104,11 +112,6 @@ public class WorldController extends InputAdapter implements Disposable {
 				((Player) level.mario).setJumping(deltaTime, true);
 			} else {
 				((Player) level.mario).setJumping(deltaTime, false);
-			}
-			
-			
-			if(((Player) level.mario).makeSmallJump){
-				((Player) level.mario).makeSmallJump(deltaTime);
 			}
 		}
 	}

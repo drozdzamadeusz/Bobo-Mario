@@ -44,7 +44,7 @@ public class Player extends AbstractRigidBodyObject {
 		bounds.set(0, 0, dimension.x, dimension.y);
 
 		// Set physics values
-		terminalVelocity.set(6.0f, 17.0f);
+		terminalVelocity.set(7.0f, 17.0f);
 		friction.set(20.0f, 10.0f);
 		acceleration.set(0, -70.0f);
 		momentumGain = new Vector2(40,1);
@@ -88,10 +88,10 @@ public class Player extends AbstractRigidBodyObject {
 	}
 
 	public void makeSmallJump(float deltaTime) {
+		timeJumping = 0.15f;
 		jumpState = JUMP_STATE.JUMP_RISING;
 		makeSmallJump = false;
-	}
-	
+	} 
 	
 	@Override
 	protected void updateMotionY(float deltaTime) {
@@ -204,7 +204,7 @@ public class Player extends AbstractRigidBodyObject {
 		if(collidedObject.isEnemy() && (collidedObject).isAlive()) {
 			((Enemy) collidedObject).killEnemy();
 			this.jumpState = JUMP_STATE.GROUNDED;
-			
+			this.timeJumping = 0.0f;
 			AudioManager.instance.play(Assets.instance.sounds.stomp);
 			makeSmallJump = true;
 		}

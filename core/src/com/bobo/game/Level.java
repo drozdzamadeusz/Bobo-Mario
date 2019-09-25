@@ -120,7 +120,7 @@ public class Level {
 	
 	public boolean objectInViewPort(AbstractGameObject obj) {
 		//return true;
-		return (obj.position.x > (cameraHelper.getPosition().x - Constants.VIEWPORT_WIDTH/2.0f - 1.0f) && obj.position.x < cameraHelper.getPosition().x + Constants.VIEWPORT_WIDTH/2.0f);
+		return (obj.position.x > (cameraHelper.getPosition().x - Constants.VIEWPORT_WIDTH) && obj.position.x < cameraHelper.getPosition().x + Constants.VIEWPORT_WIDTH/2.0f);
 	}
 
 	public void update(float deltaTime) {
