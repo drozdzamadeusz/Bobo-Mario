@@ -8,6 +8,7 @@ import com.bobo.objects.AbstractGameObject;
 import com.bobo.objects.Ground;
 import com.bobo.objects.characters.Player;
 import com.bobo.objects.enemies.Goomba;
+import com.bobo.objects.enemies.KoopaTroopa;
 import com.bobo.utils.CameraHelper;
 import com.bobo.utils.Constants;
 
@@ -18,7 +19,8 @@ public class Level {
 		EMPTY(0, 0, 0), // black
 		PLAYER(255, 255, 255), // white - player
 		GROUND(155, 74, 0), // brown - ground
-		GOOMBA(92, 44, 7); // dark brown - ground
+		GOOMBA(92, 44, 7), // dark brown - goomba
+		KOOPA_TROOPA(30, 132, 0); // green - koopa troopa
 		
 		
 		private int color;
@@ -50,6 +52,7 @@ public class Level {
 	
 	public Array<AbstractGameObject> gorundBlocks;
 	public Array<AbstractGameObject> goombas;
+	public Array<AbstractGameObject> koopaTroopas;
 	
 	public AbstractGameObject mario;
 	
@@ -61,6 +64,7 @@ public class Level {
 		
 		gorundBlocks = new Array<AbstractGameObject>();
 		goombas = new Array<AbstractGameObject>();
+		koopaTroopas = new Array<AbstractGameObject>();
 		
 		for (int pixelY = 0; pixelY < pixmap.getHeight(); pixelY++) {
 			
@@ -82,7 +86,7 @@ public class Level {
 					obj = new Ground();
 						
 					offsetHeight = 0.0f;
-					obj.position.set(pixelX, baseHeight * obj.dimension.y + offsetHeight);
+					obj.position.set(pixelX, baseHeight + offsetHeight);
 					
 					gorundBlocks.add((Ground) obj);
 				// palyer
@@ -90,16 +94,23 @@ public class Level {
 					obj = new Player();
 					
 					offsetHeight = 0.0f;
-					obj.position.set(pixelX, baseHeight * obj.dimension.y + offsetHeight);
+					obj.position.set(pixelX, baseHeight + offsetHeight);
 					
 					mario = (Player) obj;
 				}else if (BLOCK_TYPE.GOOMBA.sameColor(currentPixel)) {
 					obj = new Goomba();
 					
 					offsetHeight = 0.0f;
-					obj.position.set(pixelX, baseHeight * obj.dimension.y + offsetHeight);
+					obj.position.set(pixelX, baseHeight + offsetHeight);
 					
 					goombas.add((Goomba) obj);
+				}else if (BLOCK_TYPE.KOOPA_TROOPA.sameColor(currentPixel)) {
+					obj = new KoopaTroopa();
+					
+					offsetHeight = 0f;
+					obj.position.set(pixelX, baseHeight + offsetHeight);
+					
+					koopaTroopas.add((KoopaTroopa) obj);
 				} else {
 					int r = 0xff & (currentPixel >>> 24);
 					int g = 0xff & (currentPixel >>> 16);
@@ -129,6 +140,11 @@ public class Level {
 		for (AbstractGameObject goomba : goombas) {
 			if(objectInViewPort(goomba)) goomba.update(deltaTime);
 		}
+		
+		for (AbstractGameObject koopa : koopaTroopas) {
+			if(objectInViewPort(koopa)) koopa.update(deltaTime);
+		}
+		
 	}
 
 	public void render(SpriteBatch batch) {
@@ -141,6 +157,11 @@ public class Level {
 		
 		for (AbstractGameObject goomba : goombas) {
 			if(objectInViewPort(goomba)) goomba.render(batch);
+		}
+		
+		
+		for (AbstractGameObject koopa : koopaTroopas) {
+			if(objectInViewPort(koopa)) koopa.render(batch);
 		}
 		
 		mario.render(batch);

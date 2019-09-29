@@ -1,11 +1,14 @@
 package com.bobo.game;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
 import com.bobo.objects.AbstractGameObject;
 
 public class CollisionDetection {
 
+	public static final String TAG = CollisionDetection.class.getCanonicalName();
+	
 	private Level level;
 	
 	public CollisionDetection() {
@@ -22,6 +25,7 @@ public class CollisionDetection {
 	private Rectangle r2 = new Rectangle();
 
 	
+	/*
 	private void onCollisionAbstractGameObjectWithBlock(AbstractGameObject movingObject, AbstractGameObject block) {
 		
 		float heightDifference = Math.abs(movingObject.position.y - (block.position.y + block.bounds.height));
@@ -45,9 +49,39 @@ public class CollisionDetection {
 		if (widthDifference < 0.91f)
 			movingObject.onHitFromTop(block);
 	}
+	*/
 	
 	
+	private void onCollisionAbstractGameObjectWithBlock(AbstractGameObject movingObject, AbstractGameObject block) {
+		
+		float heightDifference = Math.abs(movingObject.position.y - (block.position.y + block.bounds.height));
+		float widthDifference = Math.abs(movingObject.position.x - (block.position.x));
+		
+		
+		/*if(movingObject.isMario == true && block.isEnemy()) {
+			Gdx.app.debug(TAG, "heightDifference: "+heightDifference+" widthDifference: "+widthDifference);
+		}*/
+		
+		//hit from bottom
+		if (widthDifference < block.bounds.width * 0.5f && heightDifference > block.bounds.height * 1.5f) {
+			movingObject.onHitFromBottom(block);
+			return;	
+		}
+		
+		//hit from right or left side
+		if (heightDifference > block.bounds.height * 0.45f) {
+			boolean hitRightEdge = movingObject.position.x > (block.position.x + block.bounds.width / 2.0f);
+			movingObject.onHitFromSide(block, hitRightEdge);
+			return;
+			
+		}
+		//hit from top
+		if (widthDifference < block.bounds.width * 0.91f) {
+			movingObject.onHitFromTop(block);
+		}
+		
 
+	}
 	
 	
 	private void detectCollisionsObjectForObjects(AbstractGameObject movingObject, Array<AbstractGameObject> block) {
@@ -76,7 +110,14 @@ public class CollisionDetection {
 					m.bounds.height);
 	
 			
-			for (AbstractGameObject g : block) {
+			//for (AbstractGameObject g : block) {
+			
+			for (int i = 0; i < block.size; i++) {
+				
+				AbstractGameObject g = block.get(i);
+				
+				if(m == g) continue;
+				
 				r2.set(g.position.x, g.position.y, g.bounds.width, g.bounds.height);
 				
 				if (!r1.overlaps(r2))
@@ -94,11 +135,24 @@ public class CollisionDetection {
 	
 	
 	public void detectCollisions() {
-		if(level.mario.isAlive()) detectCollisionsObjectForObjects(level.mario, level.gorundBlocks); // ground platform
+		if(level.mario.isAlive()) {
+			detectCollisionsObjectForObjects(level.mario, level.gorundBlocks); // ground platform
+			detectCollisionsObjectForObjects(level.mario, level.goombas);
+			detectCollisionsObjectForObjects(level.mario, level.koopaTroopas);
+			
+		}
+		
 		
 		detectCollisionsObjectsForObjects(level.goombas, level.gorundBlocks);
 		
-		if(level.mario.isAlive()) detectCollisionsObjectForObjects(level.mario, level.goombas);
+		
+		
+		detectCollisionsObjectsForObjects(level.goombas, level.goombas);		
+		detectCollisionsObjectsForObjects(level.koopaTroopas, level.koopaTroopas);
+		
+		
+		detectCollisionsObjectsForObjects(level.koopaTroopas, level.gorundBlocks);
+		
 		
 	}
 

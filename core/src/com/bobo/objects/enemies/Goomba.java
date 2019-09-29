@@ -1,6 +1,5 @@
 package com.bobo.objects.enemies;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -9,11 +8,10 @@ import com.badlogic.gdx.math.Vector2;
 import com.bobo.game.Assets;
 import com.bobo.objects.AbstractGameObject;
 import com.bobo.objects.AbstractRigidBodyObject;
-import com.bobo.objects.characters.Player;
 
 public class Goomba extends AbstractRigidBodyObject implements Enemy{
 
-	public static final String TAG = Player.class.getCanonicalName();
+	public static final String TAG = Goomba.class.getCanonicalName();
 	
 	private Animation<?> goombaWalking;
 	private TextureRegion regGoombaCrushed;
@@ -49,6 +47,11 @@ public class Goomba extends AbstractRigidBodyObject implements Enemy{
 		isAlive = true;
 	}
 	
+	
+	@Override
+	public boolean hasBody() {
+		return isAlive();
+	}
 
 	@Override
 	public void onHitFromTop(AbstractGameObject collidedObject) {
@@ -63,7 +66,7 @@ public class Goomba extends AbstractRigidBodyObject implements Enemy{
 	@Override
 	public void onHitFromSide(AbstractGameObject collidedObject, boolean hitRightEdge) {
 		super.onHitFromSide(collidedObject, hitRightEdge);
-		viewDirection = (hitRightEdge)?VIEW_DIRECTION.RIGHT:VIEW_DIRECTION.LEFT;
+		viewDirection = (hitRightEdge)? VIEW_DIRECTION.RIGHT : VIEW_DIRECTION.LEFT;
 	}
 
 	private float TIME_TO_SHOW_AFTER_DEAD = 0.4f;
@@ -102,8 +105,7 @@ public class Goomba extends AbstractRigidBodyObject implements Enemy{
 	@Override
 	public void killEnemy() {
 		isAlive = false;
-		velocity.x = 0.0f;
-		
+		velocity.x = 0.0f;	
 	}
 	
 	@Override

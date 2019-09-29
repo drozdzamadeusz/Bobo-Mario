@@ -22,10 +22,12 @@ public abstract class AbstractGameObject {
 	public Vector2 momentumGain;
 	
 	public Rectangle bounds;
-	public Body body;
+	//public Body body;
 	
 	public boolean isEnemy;
 	public boolean isAlive;
+	public boolean isPlayer;
+	public boolean hasBody;
 
 	public AbstractGameObject() {
 		position = new Vector2();
@@ -39,7 +41,10 @@ public abstract class AbstractGameObject {
 		acceleration = new Vector2(0, -70.0f);
 		momentumGain = new Vector2();
 		
+		isAlive = true;
 		isEnemy = false;
+		isPlayer = false;
+		hasBody = true;
 		
 		bounds = new Rectangle(0, 0, dimension.x, dimension.y);
 	}
@@ -108,16 +113,16 @@ public abstract class AbstractGameObject {
 
 	public void update(float deltaTime) {
 		stateTime += deltaTime;
-		if (body == null) {
+		//if (body == null) {
 			updateMotionX(deltaTime);
 			updateMotionY(deltaTime);
 			// Move to the new position
 			position.x += velocity.x * deltaTime;
 			position.y += velocity.y * deltaTime;
-		} else {
+		/*} else {
 			position.set(body.getPosition());
 			rotation = body.getAngle() * MathUtils.radiansToDegrees;
-		}
+		}*/
 	}
 	
 	public void onHitFromBottom(AbstractGameObject collidedObject) {
@@ -141,7 +146,15 @@ public abstract class AbstractGameObject {
 	public boolean isAlive() {
 		return isAlive;
 	}
-	
+
+	public boolean isPlayer() {
+		return isPlayer;
+	}
+
+	public boolean hasBody() {
+		return hasBody;
+	}
+
 	public abstract void init();
 	
 	// making method abstract forces class that call it to implement it and handle

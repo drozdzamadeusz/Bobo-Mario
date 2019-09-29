@@ -12,6 +12,7 @@ import com.bobo.game.Assets;
 import com.bobo.objects.AbstractGameObject;
 import com.bobo.objects.AbstractRigidBodyObject;
 import com.bobo.objects.enemies.Enemy;
+import com.bobo.objects.enemies.KoopaTroopa;
 import com.bobo.utils.AudioManager;
 
 public class Player extends AbstractRigidBodyObject {
@@ -30,6 +31,10 @@ public class Player extends AbstractRigidBodyObject {
 		init();
 	}
 
+	
+	public final float JUMP_TIME_MAX = 0.20f;
+	public final float JUMP_TIME_MIN = 0.01f;
+	
 	public void init() {
 		dimension.set(1.0f, 1.0f);
 
@@ -44,10 +49,15 @@ public class Player extends AbstractRigidBodyObject {
 		bounds.set(0, 0, dimension.x, dimension.y);
 
 		// Set physics values
-		terminalVelocity.set(7.0f, 17.0f);
+		/*terminalVelocity.set(7.0f, 17.0f);
 		friction.set(20.0f, 10.0f);
 		acceleration.set(0, -70.0f);
-		momentumGain = new Vector2(40,1);
+		momentumGain = new Vector2(40,1);*/
+		terminalVelocity.set(8.0f, 15.0f);
+		friction.set(20.0f, 10.0f);
+		acceleration.set(0, -55.0f);
+		momentumGain = new Vector2(30,1);
+		
 		
 		// View direction
 		viewDirection = VIEW_DIRECTION.RIGHT;
@@ -56,6 +66,8 @@ public class Player extends AbstractRigidBodyObject {
 		jumpState = JUMP_STATE.FALLING;
 
 		timeJumping = 0;
+		
+		isPlayer = true;
 	}
 
 	@Override
@@ -65,6 +77,7 @@ public class Player extends AbstractRigidBodyObject {
 			viewDirection = velocity.x < 0 ? VIEW_DIRECTION.LEFT : VIEW_DIRECTION.RIGHT;
 		}
 	}
+	
 
 	public void setJumping(float deltaTime, boolean jumpKeyPressed) {
 		switch (jumpState) {
@@ -96,6 +109,12 @@ public class Player extends AbstractRigidBodyObject {
 	@Override
 	protected void updateMotionY(float deltaTime) {
 		
+		/*float JUMP_TIME_MAX = 0.25f;
+		 
+		 if(Gdx.graphics.getFramesPerSecond() > 80) {
+			 JUMP_TIME_MAX -= deltaTime * (Gdx.graphics.getFramesPerSecond()) / 34.0f;
+		 }*/
+	
 		switch (jumpState) {
 		case GROUNDED:
 			jumpState = JUMP_STATE.FALLING;
@@ -111,6 +130,7 @@ public class Player extends AbstractRigidBodyObject {
 		case JUMP_RISING:
 			// Keep track of jump time
 			timeJumping += deltaTime;
+			
 			// Jump time left?
 			if (timeJumping <= JUMP_TIME_MAX) {
 				// Still jumping
@@ -173,7 +193,7 @@ public class Player extends AbstractRigidBodyObject {
 			return;
 		}
 		
-		if(!(collidedObject.isEnemy() && !(collidedObject).isAlive())) {
+		if(!(collidedObject.isEnemy() && !(collidedObject).hasBody())) {
 			super.onHitFromBottom(collidedObject);
 		}
 		
@@ -186,30 +206,55 @@ public class Player extends AbstractRigidBodyObject {
 
 	@Override
 	public void onHitFromSide(AbstractGameObject collidedObject, boolean hitRightEdge) {
-		
 		if(collidedObject.isEnemy() && (collidedObject).isAlive()) {
 			health -= ((Enemy) collidedObject).getDealingDamage();
 			return;
 		}
 		
-		if(!(collidedObject.isEnemy() && !(collidedObject).isAlive())) {
-			super.onHitFromSide(collidedObject, hitRightEdge);
+		if(!(collidedObject.isEnemy() && !(collidedObject).hasBody())) {
+			if (hitRightEdge) {
+				position.x = collidedObject.position.x + collidedObject.bounds.width;
+			} else {
+				position.x = collidedObject.position.x - bounds.width;
+			}
 		}
 	}
 
+	
+	/* TO DO: POPRAWA JAKOSCI KODU */
 	@Override
 	public void onHitFromTop(AbstractGameObject collidedObject) {
-		if(collidedObject.isEnemy() && (collidedObject).isAlive()) {
+		
+		if(collidedObject.isEnemy() && collidedObject.dimension.y == 1.5f) {
+			float heightDifference = Math.abs(position.y - (collidedObject.position.y + collidedObject.bounds.height));
+			float widthDifference = Math.abs(position.x - (collidedObject.position.x));
+			
+			if(heightDifference > 0.20f && widthDifference > 0.8f) {
+				if(collidedObject.isEnemy() && (collidedObject).isAlive()) {
+					health -= ((Enemy) collidedObject).getDealingDamage();
+					return;
+				}
+			}
+		}
+		
+		if(collidedObject.isEnemy() && (collidedObject).hasBody()) {
 			((Enemy) collidedObject).killEnemy();
+			
+			if(collidedObject.getClass() == KoopaTroopa.class && ((KoopaTroopa) collidedObject).secondHit == true) {
+				float widthDifference = position.x - (collidedObject.position.x);
+				if(widthDifference < 0)
+					((KoopaTroopa) collidedObject).viewDirection = VIEW_DIRECTION.RIGHT;
+				else
+					((KoopaTroopa) collidedObject).viewDirection = VIEW_DIRECTION.LEFT;
+			}
+			
 			this.jumpState = JUMP_STATE.GROUNDED;
 			this.timeJumping = 0.0f;
 			AudioManager.instance.play(Assets.instance.sounds.stomp);
 			makeSmallJump = true;
 		}
 		
-		if(collidedObject.isEnemy() && !(collidedObject).isAlive()) {
-			
-		}else {
+		if(!(collidedObject.isEnemy() && !(collidedObject).hasBody())) {
 			super.onHitFromTop(collidedObject);
 		}
 	}

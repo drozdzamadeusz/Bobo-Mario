@@ -1,0 +1,150 @@
+package com.bobo.objects.enemies;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
+import com.bobo.game.Assets;
+import com.bobo.objects.AbstractGameObject;
+import com.bobo.objects.AbstractRigidBodyObject;
+
+public class KoopaTroopa extends AbstractRigidBodyObject implements Enemy {
+
+	public static final String TAG = KoopaTroopa.class.getCanonicalName();
+	
+	private Animation<?> koopaTroopaWalking;
+	private Animation<?> koopaTroopaCrushedReborn;
+	private AtlasRegion koopaTroopaCrushed;
+	
+	private float TIME_TO_REBORN;
+	private float TIME_TO_START_REBORN_ANIMATION;
+	
+	public boolean secondHit;
+	
+	public KoopaTroopa() {
+		init();
+	}
+
+	@Override
+	public void init() {
+		koopaTroopaWalking = Assets.instance.enemiesAssets.koopaTroopaWalking;
+		koopaTroopaCrushedReborn = Assets.instance.enemiesAssets.koopaTroopaCrushedReborn;
+		koopaTroopaCrushed =  (AtlasRegion) Assets.instance.enemiesAssets.koopaTroopaCrushedReborn.getKeyFrame(0);
+		
+		setAnimation(koopaTroopaWalking);
+		 
+		
+		dimension = new Vector2(1.0f, 1.5f);
+		origin.set(dimension.x / 2, dimension.y / 2);
+		bounds.set(0, 0, dimension.x, dimension.y);
+		
+		terminalVelocity.set(3.0f, 17.0f);
+		momentumGain = new Vector2(terminalVelocity);
+		
+		
+		// Goomba init direction
+		viewDirection = (0 == (MathUtils.random(0, 1)))?VIEW_DIRECTION.RIGHT:VIEW_DIRECTION.LEFT;
+		
+		jumpState = JUMP_STATE.FALLING;
+		
+		isEnemy = true;
+	
+		isAlive = true;
+		
+		secondHit = false;
+		
+	}
+	
+	@Override
+	public void killEnemy() {
+		if(!isAlive()) {
+			terminalVelocity.set(12.0f, 17.0f);
+			momentumGain.set(terminalVelocity);
+			secondHit = true;
+		}
+		isAlive = false;
+		velocity.x = 0.0f;
+		TIME_TO_REBORN = 2.0f;
+		TIME_TO_START_REBORN_ANIMATION = 1f;
+	}
+
+	@Override
+	public float getDealingDamage() {
+		// TODO Auto-generated method stub
+		return 100;
+	}	
+	
+	@Override
+	public boolean isAlive() {
+		return isAlive || secondHit;
+	}
+
+	@Override
+	public void onHitFromTop(AbstractGameObject collidedObject) {
+		super.onHitFromTop(collidedObject);
+	}
+
+	@Override
+	public void onHitFromBottom(AbstractGameObject collidedObject) {
+		super.onHitFromBottom(collidedObject);
+	}
+
+	@Override
+	public void onHitFromSide(AbstractGameObject collidedObject, boolean hitRightEdge) {
+		super.onHitFromSide(collidedObject, hitRightEdge);
+	}
+	
+	
+	@Override
+	public void update(float deltaTime) {
+		super.update(deltaTime);
+		if(isAlive || secondHit) {
+			setWalking(viewDirection == VIEW_DIRECTION.RIGHT);
+		}else{
+			if(TIME_TO_REBORN > 0.0f) {
+				TIME_TO_REBORN -= deltaTime;
+			}
+			if(TIME_TO_START_REBORN_ANIMATION > 0.0f) {
+				TIME_TO_START_REBORN_ANIMATION -= deltaTime;
+			}
+		}
+	}
+
+	@Override
+	public void render(SpriteBatch batch) {
+		TextureRegion reg = null;
+		
+		if(isAlive) {
+			reg = (TextureRegion) animation.getKeyFrame(stateTime, true);
+		}else {
+			
+			dimension = new Vector2(1.0f, 1.0f);
+			origin.set(dimension.x / 2, dimension.y / 2);
+			bounds.set(0, 0, dimension.x, dimension.y);
+			
+			reg = koopaTroopaCrushed;
+			if(TIME_TO_START_REBORN_ANIMATION <= 0.0f) {
+				if(animation != koopaTroopaCrushedReborn)
+					setAnimation(koopaTroopaCrushedReborn);
+				reg = (TextureRegion) animation.getKeyFrame(stateTime, true);
+			}
+			if(TIME_TO_REBORN <= 0.0f) {
+				viewDirection = (0 == (MathUtils.random(0, 1)))?VIEW_DIRECTION.RIGHT:VIEW_DIRECTION.LEFT;
+				setAnimation(koopaTroopaWalking);
+				dimension = new Vector2(1.0f, 1.5f);
+				origin.set(dimension.x / 2, dimension.y / 2);
+				bounds.set(0, 0, dimension.x, dimension.y);
+				isAlive = true;
+				secondHit = false;
+			}
+		}
+		batch.draw(reg.getTexture(), position.x, position.y, origin.x, origin.y, dimension.x,
+					dimension.y, scale.x, scale.y, rotation, reg.getRegionX(), reg.getRegionY(),
+					reg.getRegionWidth(), reg.getRegionHeight(), viewDirection == VIEW_DIRECTION.RIGHT, false);
+
+	}
+
+}

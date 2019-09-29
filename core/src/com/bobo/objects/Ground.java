@@ -23,9 +23,13 @@ public class Ground extends AbstractGameObject {
 		TextureRegion reg = null;
 		reg = regGround;
 		
+		batch.setColor(0.0f, 0.6f, 0.8f, 1);
+		
 		batch.draw(reg.getTexture(), position.x, position.y, origin.x, origin.y, dimension.x, dimension.y, scale.x,
 				scale.y, rotation, reg.getRegionX(), reg.getRegionY(), reg.getRegionWidth(), reg.getRegionHeight(),
 				false, false);
+		
+		batch.setColor(1, 1, 1, 1);
 	}
 	
 	

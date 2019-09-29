@@ -197,6 +197,10 @@ public class Assets implements Disposable, AssetErrorListener {
 		public final Animation<?> goombaWalking;
 		public final AtlasRegion goombaCrushed;
 		
+		public final Animation<?> koopaTroopaWalking;
+		public final Animation<?> koopaTroopaCrushedReborn;
+		//public final AtlasRegion koopaTroopaCrushed;
+		
 		public EnemiesAssets(TextureAtlas atlas) {
 			
 			Array<AtlasRegion> regions = null;
@@ -205,6 +209,16 @@ public class Assets implements Disposable, AssetErrorListener {
 			goombaWalking = new Animation<Object>(1.0f / 15.0f, regions, Animation.PlayMode.LOOP_PINGPONG);
 			
 			goombaCrushed = atlas.findRegion("goomba_crushed");
+			
+			// Animation: Koopa Troopa walking
+			regions = atlas.findRegions("koopa_troopa");
+			koopaTroopaWalking = new Animation<Object>(1.0f / 15.0f, regions, Animation.PlayMode.LOOP_PINGPONG);
+			
+			// Animation: Koopa Troopa crushed reborn
+			regions = atlas.findRegions("koopa_troopa_crushed");
+			koopaTroopaCrushedReborn = new Animation<Object>(1.0f / 15.0f, regions, Animation.PlayMode.LOOP_PINGPONG);
+			
+			//koopaTroopaCrushed = atlas.findRegion("koopa_troopa_crushed_01");
 		}
 	}
 	

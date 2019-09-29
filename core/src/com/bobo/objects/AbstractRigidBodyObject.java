@@ -1,8 +1,14 @@
 package com.bobo.objects;
 
+import com.badlogic.gdx.Gdx;
+import com.bobo.objects.AbstractRigidBodyObject.JUMP_STATE;
+import com.bobo.objects.AbstractRigidBodyObject.VIEW_DIRECTION;
+import com.bobo.objects.enemies.Enemy;
+import com.bobo.objects.enemies.KoopaTroopa;
+
 public abstract class AbstractRigidBodyObject extends AbstractGameObject {
 
-	public final float JUMP_TIME_MAX = 0.175f;
+	public final float JUMP_TIME_MAX = 0.25f;
 	public final float JUMP_TIME_MIN = 0.00f;
 
 	public enum VIEW_DIRECTION {
@@ -22,7 +28,7 @@ public abstract class AbstractRigidBodyObject extends AbstractGameObject {
 	public AbstractRigidBodyObject() {
 		// View direction
 		viewDirection = VIEW_DIRECTION.RIGHT;
-
+ 
 		// Jump state
 		jumpState = JUMP_STATE.FALLING;
 
@@ -61,6 +67,25 @@ public abstract class AbstractRigidBodyObject extends AbstractGameObject {
 			super.updateMotionY(deltaTime);
 		}
 	}
+	
+	
+
+	@Override
+	public void onHitFromSide(AbstractGameObject collidedObject, boolean hitRightEdge) {
+		
+		super.onHitFromSide(collidedObject, hitRightEdge);
+		
+		viewDirection = (hitRightEdge)?VIEW_DIRECTION.RIGHT:VIEW_DIRECTION.LEFT;
+		if(collidedObject.isEnemy() && !collidedObject.isPlayer() && collidedObject.isAlive()) {
+			((AbstractRigidBodyObject) collidedObject).viewDirection = (!hitRightEdge)?VIEW_DIRECTION.RIGHT:VIEW_DIRECTION.LEFT;
+			
+			if(this.getClass() == KoopaTroopa.class && ((KoopaTroopa)this).secondHit) {
+				//if(collidedObject.getClass() == KoopaTroopa.class) ((KoopaTroopa)collidedObject).secondHit = true;
+				Gdx.app.debug("", "aa");
+				((Enemy) collidedObject).killEnemy();
+			}	
+		}
+	}
 
 	@Override
 	public void onHitFromTop(AbstractGameObject collidedObject) {
@@ -71,11 +96,11 @@ public abstract class AbstractRigidBodyObject extends AbstractGameObject {
 			break;
 		case FALLING:
 		case JUMP_FALLING:
-			position.y = collidedObject.position.y + bounds.height;
+			position.y = collidedObject.position.y + collidedObject.bounds.height;
 			jumpState = JUMP_STATE.GROUNDED;
 			break;
 		case JUMP_RISING:
-			position.y = collidedObject.position.y + bounds.height;
+			position.y = collidedObject.position.y + collidedObject.bounds.height;
 
 		}
 	}
