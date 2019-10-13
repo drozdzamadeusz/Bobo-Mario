@@ -61,15 +61,6 @@ public class Assets implements Disposable, AssetErrorListener {
 		TextureAtlas charactersAtlas = assetManager.get(Constants.getPath(Constants.CHARACTERS_TEXTURE_ATLAS_OBJECTS));
 		TextureAtlas enemiesAtlas = assetManager.get(Constants.getPath(Constants.ENEMIES_TEXTURE_ATLAS_OBJECTS));
 		
-		for (Texture t : tilesetAtlas.getTextures())
-			t.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
-
-		for (Texture t : charactersAtlas.getTextures())
-			t.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
-
-		for (Texture t : enemiesAtlas.getTextures())
-			t.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
-		
 		tilesetAssets = new TilesetAssets(tilesetAtlas);
 		charactersAssets = new CharactersAssets(charactersAtlas);
 		enemiesAssets = new EnemiesAssets(enemiesAtlas);

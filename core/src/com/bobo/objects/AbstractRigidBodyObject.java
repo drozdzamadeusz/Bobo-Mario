@@ -8,6 +8,8 @@ import com.bobo.objects.enemies.KoopaTroopa;
 
 public abstract class AbstractRigidBodyObject extends AbstractGameObject {
 
+	public static final String TAG = AbstractRigidBodyObject.class.getCanonicalName();
+	
 	public final float JUMP_TIME_MAX = 0.25f;
 	public final float JUMP_TIME_MIN = 0.00f;
 
@@ -79,10 +81,10 @@ public abstract class AbstractRigidBodyObject extends AbstractGameObject {
 		if(collidedObject.isEnemy() && !collidedObject.isPlayer() && collidedObject.isAlive()) {
 			((AbstractRigidBodyObject) collidedObject).viewDirection = (!hitRightEdge)?VIEW_DIRECTION.RIGHT:VIEW_DIRECTION.LEFT;
 			
-			if(this.getClass() == KoopaTroopa.class && ((KoopaTroopa)this).secondHit) {
+			if(this.getClass() == KoopaTroopa.class && ((KoopaTroopa)this).slidingAfterHit) {
 				//if(collidedObject.getClass() == KoopaTroopa.class) ((KoopaTroopa)collidedObject).secondHit = true;
-				Gdx.app.debug("", "aa");
-				((Enemy) collidedObject).killEnemy();
+				Gdx.app.debug(TAG, "aa");	
+				((Enemy) collidedObject).damageEnemyFromSide(this, hitRightEdge);
 			}	
 		}
 	}

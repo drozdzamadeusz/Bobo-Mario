@@ -151,19 +151,24 @@ public class Level {
 		
 		
 		for (AbstractGameObject ground : gorundBlocks) {
-			if(objectInViewPort(ground))ground.render(batch);
-		}
-		
-		
-		for (AbstractGameObject goomba : goombas) {
-			if(objectInViewPort(goomba)) goomba.render(batch);
+			//if(objectInViewPort(ground))
+				ground.render(batch);
 		}
 		
 		
 		for (AbstractGameObject koopa : koopaTroopas) {
-			if(objectInViewPort(koopa)) koopa.render(batch);
+			//if(objectInViewPort(koopa))
+				koopa.render(batch);
 		}
 		
+		
+		for (AbstractGameObject goomba : goombas) {
+//			/if(objectInViewPort(goomba))
+				goomba.render(batch);
+		}
+		
+		
+
 		mario.render(batch);
 	}
 	

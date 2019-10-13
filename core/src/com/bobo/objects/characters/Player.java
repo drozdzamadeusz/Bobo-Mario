@@ -1,7 +1,5 @@
 package com.bobo.objects.characters;
 
-import javax.swing.text.StyleContext.SmallAttributeSet;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -9,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.bobo.game.Assets;
+import com.bobo.game.Level;
 import com.bobo.objects.AbstractGameObject;
 import com.bobo.objects.AbstractRigidBodyObject;
 import com.bobo.objects.enemies.Enemy;
@@ -18,7 +17,7 @@ import com.bobo.utils.AudioManager;
 public class Player extends AbstractRigidBodyObject {
 
 	public static final String TAG = Player.class.getCanonicalName();
-
+	
 	public TextureRegion regMarioStanding;
 	public TextureRegion regMarioDied;
 	public Animation<?> marioWalking;
@@ -55,7 +54,7 @@ public class Player extends AbstractRigidBodyObject {
 		momentumGain = new Vector2(40,1);*/
 		terminalVelocity.set(8.0f, 15.0f);
 		friction.set(20.0f, 10.0f);
-		acceleration.set(0, -55.0f);
+		acceleration.set(0, -60.0f);
 		momentumGain = new Vector2(30,1);
 		
 		
@@ -115,6 +114,8 @@ public class Player extends AbstractRigidBodyObject {
 			 JUMP_TIME_MAX -= deltaTime * (Gdx.graphics.getFramesPerSecond()) / 34.0f;
 		 }*/
 	
+		deltaTime = Math.min(deltaTime, 1.0f / 60.0f);
+		
 		switch (jumpState) {
 		case GROUNDED:
 			jumpState = JUMP_STATE.FALLING;
@@ -238,9 +239,9 @@ public class Player extends AbstractRigidBodyObject {
 		}
 		
 		if(collidedObject.isEnemy() && (collidedObject).hasBody()) {
-			((Enemy) collidedObject).killEnemy();
+			((Enemy) collidedObject).damageEnemyFromTop();
 			
-			if(collidedObject.getClass() == KoopaTroopa.class && ((KoopaTroopa) collidedObject).secondHit == true) {
+			if(collidedObject.getClass() == KoopaTroopa.class && ((KoopaTroopa) collidedObject).slidingAfterHit == true) {
 				float widthDifference = position.x - (collidedObject.position.x);
 				if(widthDifference < 0)
 					((KoopaTroopa) collidedObject).viewDirection = VIEW_DIRECTION.RIGHT;

@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.bobo.game.Assets;
 import com.bobo.objects.AbstractGameObject;
 import com.bobo.objects.AbstractRigidBodyObject;
+import com.bobo.objects.AbstractRigidBodyObject.VIEW_DIRECTION;
 
 public class KoopaTroopa extends AbstractRigidBodyObject implements Enemy {
 
@@ -22,7 +23,7 @@ public class KoopaTroopa extends AbstractRigidBodyObject implements Enemy {
 	private float TIME_TO_REBORN;
 	private float TIME_TO_START_REBORN_ANIMATION;
 	
-	public boolean secondHit;
+	public boolean slidingAfterHit;
 	
 	public KoopaTroopa() {
 		init();
@@ -54,21 +55,8 @@ public class KoopaTroopa extends AbstractRigidBodyObject implements Enemy {
 	
 		isAlive = true;
 		
-		secondHit = false;
+		slidingAfterHit = false;
 		
-	}
-	
-	@Override
-	public void killEnemy() {
-		if(!isAlive()) {
-			terminalVelocity.set(12.0f, 17.0f);
-			momentumGain.set(terminalVelocity);
-			secondHit = true;
-		}
-		isAlive = false;
-		velocity.x = 0.0f;
-		TIME_TO_REBORN = 2.0f;
-		TIME_TO_START_REBORN_ANIMATION = 1f;
 	}
 
 	@Override
@@ -79,29 +67,51 @@ public class KoopaTroopa extends AbstractRigidBodyObject implements Enemy {
 	
 	@Override
 	public boolean isAlive() {
-		return isAlive || secondHit;
+		return true;
 	}
 
 	@Override
 	public void onHitFromTop(AbstractGameObject collidedObject) {
+		if(collidedObject.isEnemy()) return;
 		super.onHitFromTop(collidedObject);
 	}
 
 	@Override
 	public void onHitFromBottom(AbstractGameObject collidedObject) {
+		if(collidedObject.isEnemy()) return;
 		super.onHitFromBottom(collidedObject);
 	}
 
 	@Override
 	public void onHitFromSide(AbstractGameObject collidedObject, boolean hitRightEdge) {
-		super.onHitFromSide(collidedObject, hitRightEdge);
+		
+		if(!slidingAfterHit  || (slidingAfterHit && !collidedObject.isEnemy())) {
+			if (hitRightEdge) {
+				position.x = collidedObject.position.x + collidedObject.bounds.width;
+			} else {
+				position.x = collidedObject.position.x - bounds.width;
+			}
+			
+			viewDirection = (hitRightEdge) ? VIEW_DIRECTION.RIGHT : VIEW_DIRECTION.LEFT;	
+		}else if(slidingAfterHit){
+			
+		}
+		
+		if(collidedObject.isEnemy() && collidedObject.isAlive()) {			
+			if(slidingAfterHit) {
+				((Enemy) collidedObject).damageEnemyFromSide(this, hitRightEdge);
+			}else{
+				((AbstractRigidBodyObject) collidedObject).viewDirection = (!hitRightEdge)?VIEW_DIRECTION.RIGHT:VIEW_DIRECTION.LEFT;
+			}
+		}
+		
 	}
 	
 	
 	@Override
 	public void update(float deltaTime) {
 		super.update(deltaTime);
-		if(isAlive || secondHit) {
+		if(isAlive || slidingAfterHit) {
 			setWalking(viewDirection == VIEW_DIRECTION.RIGHT);
 		}else{
 			if(TIME_TO_REBORN > 0.0f) {
@@ -138,7 +148,7 @@ public class KoopaTroopa extends AbstractRigidBodyObject implements Enemy {
 				origin.set(dimension.x / 2, dimension.y / 2);
 				bounds.set(0, 0, dimension.x, dimension.y);
 				isAlive = true;
-				secondHit = false;
+				slidingAfterHit = false;
 			}
 		}
 		batch.draw(reg.getTexture(), position.x, position.y, origin.x, origin.y, dimension.x,
@@ -146,5 +156,40 @@ public class KoopaTroopa extends AbstractRigidBodyObject implements Enemy {
 					reg.getRegionWidth(), reg.getRegionHeight(), viewDirection == VIEW_DIRECTION.RIGHT, false);
 
 	}
+	
+	@Override
+	public void damageEnemyFromTop() {
+		if(!(isAlive)) {
+			terminalVelocity.set(12.0f, 17.0f);
+			momentumGain.set(terminalVelocity);
+			slidingAfterHit = true;
+		}
+		isAlive = false;
+		velocity.x = 0.0f;
+		TIME_TO_REBORN = 2.0f;
+		TIME_TO_START_REBORN_ANIMATION = 1f;
+	}
+
+
+	@Override
+	public void damageEnemyFromBottom() {
+		
+	}
+
+	@Override
+	public void damageEnemyFromSide(AbstractGameObject collidedObjcet, boolean hitRightEdge) {
+		
+	}
+
+	@Override
+	public boolean hasBody() {
+		// TODO Auto-generated method stub
+		return super.hasBody();
+	}
+	
+	
+	
+	
+	
 
 }

@@ -1,5 +1,6 @@
 package com.bobo.objects.enemies;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -17,6 +18,10 @@ public class Goomba extends AbstractRigidBodyObject implements Enemy{
 	private TextureRegion regGoombaCrushed;
 	
 	private float dealingDamage;
+	
+	public final float JUMP_TIME_MAX = 0.03f;
+	public final float JUMP_TIME_MIN = 0.00f;
+
 	
 	public Goomba() {
 		init();
@@ -49,32 +54,72 @@ public class Goomba extends AbstractRigidBodyObject implements Enemy{
 	
 	
 	@Override
-	public boolean hasBody() {
-		return isAlive();
-	}
-
-	@Override
 	public void onHitFromTop(AbstractGameObject collidedObject) {
 		super.onHitFromTop(collidedObject);
 	}
 
 	@Override
 	public void onHitFromBottom(AbstractGameObject collidedObject) {
+		if(collidedObject.isEnemy()) return;
 		super.onHitFromBottom(collidedObject);
 	}
 
 	@Override
 	public void onHitFromSide(AbstractGameObject collidedObject, boolean hitRightEdge) {
+		if(collidedObject.isEnemy()) return;
 		super.onHitFromSide(collidedObject, hitRightEdge);
-		viewDirection = (hitRightEdge)? VIEW_DIRECTION.RIGHT : VIEW_DIRECTION.LEFT;
 	}
 
 	private float TIME_TO_SHOW_AFTER_DEAD = 0.4f;
 	
+
+	boolean killedFromSide = false;
+	
+	@Override
+	public void render(SpriteBatch batch) {
+		TextureRegion reg = null;
+		
+		Gdx.app.debug(TAG, isAlive + " "+ killedFromSide);
+		
+		if(isAlive || killedFromSide) {
+			reg = (TextureRegion) animation.getKeyFrame(stateTime, true);
+		}else {
+			reg = regGoombaCrushed;
+		}
+			
+		if(TIME_TO_SHOW_AFTER_DEAD > 0.0f)
+			batch.draw(reg.getTexture(), position.x, position.y, origin.x, origin.y, dimension.x,
+						dimension.y, scale.x, scale.y, rotation, reg.getRegionX(), reg.getRegionY(),
+						reg.getRegionWidth(), reg.getRegionHeight(), false, false);
+
+	}
+	
+	public float KILL_ANIMATION_JUMP_TIME = 0.0001f;
+	
 	
 	@Override
 	public void update(float deltaTime) {
+		
+		
 		super.update(deltaTime);
+		
+		if(killedFromSide) {
+			
+			if(KILL_ANIMATION_JUMP_TIME > 0.0f) {
+				KILL_ANIMATION_JUMP_TIME -= deltaTime;
+				
+				terminalVelocity.set(13.0f, 25.0f);
+				friction.set(12.0f, 42.0f);
+				acceleration.set(-15f, -200.0f);
+				momentumGain = new Vector2(terminalVelocity);
+				
+				velocity.y = terminalVelocity.y;
+				velocity.x = terminalVelocity.x;
+			}
+			
+			return;
+		}
+		
 		if(isAlive) {
 			setWalking((viewDirection == VIEW_DIRECTION.RIGHT)?true:false);
 		}else {
@@ -84,28 +129,23 @@ public class Goomba extends AbstractRigidBodyObject implements Enemy{
 		}
 	}
 	
-
+	
 	@Override
-	public void render(SpriteBatch batch) {
-		TextureRegion reg = null;
-		
-		
-		if(isAlive)
-			reg = (TextureRegion) animation.getKeyFrame(stateTime, true);
-		else
-			reg = regGoombaCrushed;
-
-		if(TIME_TO_SHOW_AFTER_DEAD > 0.0f)
-			batch.draw(reg.getTexture(), position.x, position.y, origin.x, origin.y, dimension.x,
-						dimension.y, scale.x, scale.y, rotation, reg.getRegionX(), reg.getRegionY(),
-						reg.getRegionWidth(), reg.getRegionHeight(), false, false);
-
-	}
-
-	@Override
-	public void killEnemy() {
+	public void damageEnemyFromTop() {
 		isAlive = false;
 		velocity.x = 0.0f;	
+	}
+	
+	
+	@Override
+	public void damageEnemyFromSide(AbstractGameObject collidedObjcet, boolean hitRightEdge) {
+		isAlive = false;
+		killedFromSide = (collidedObjcet.isEnemy && collidedObjcet.getClass() == KoopaTroopa.class && ((KoopaTroopa)collidedObjcet).slidingAfterHit);
+	}
+	
+	@Override
+	public void damageEnemyFromBottom() {
+		damageEnemyFromTop();
 	}
 	
 	@Override
@@ -113,4 +153,14 @@ public class Goomba extends AbstractRigidBodyObject implements Enemy{
 		return dealingDamage;
 	}
 
+	@Override
+	public boolean hasBody() {
+		return isAlive() || TIME_TO_SHOW_AFTER_DEAD > 0.0f;
+	}
+
+	@Override
+	public boolean isAlive() {
+		return isAlive;
+	}
+	
 }

@@ -23,37 +23,9 @@ public class CollisionDetection {
 	// Rectangles for collision detection
 	private Rectangle r1 = new Rectangle();
 	private Rectangle r2 = new Rectangle();
-
-	
-	/*
-	private void onCollisionAbstractGameObjectWithBlock(AbstractGameObject movingObject, AbstractGameObject block) {
-		
-		float heightDifference = Math.abs(movingObject.position.y - (block.position.y + block.bounds.height));
-		float widthDifference = Math.abs(movingObject.position.x - (block.position.x));
-		
-		
-		//hit from bottom
-		if (widthDifference < 0.5f && heightDifference > 1.5f) {
-			movingObject.onHitFromBottom(block);
-			return;	
-		}
-		
-		//hit from right or left side
-		if (heightDifference > 0.45f) {
-			boolean hitRightEdge = movingObject.position.x > (block.position.x + block.bounds.width / 2.0f);
-			movingObject.onHitFromSide(block, hitRightEdge);
-			return;
-			
-		}
-		//hit from top
-		if (widthDifference < 0.91f)
-			movingObject.onHitFromTop(block);
-	}
-	*/
 	
 	
 	private void onCollisionAbstractGameObjectWithBlock(AbstractGameObject movingObject, AbstractGameObject block) {
-		
 		float heightDifference = Math.abs(movingObject.position.y - (block.position.y + block.bounds.height));
 		float widthDifference = Math.abs(movingObject.position.x - (block.position.x));
 		
@@ -84,12 +56,14 @@ public class CollisionDetection {
 	}
 	
 	
-	private void detectCollisionsObjectForObjects(AbstractGameObject movingObject, Array<AbstractGameObject> block) {
+	private void detectCollisionsObjectForObjects(AbstractGameObject movingObject, Array<AbstractGameObject> collisionObjectsList) {
+		
+		if(!movingObject.hasBody()) return;
 		
 		r1.set(movingObject.position.x, movingObject.position.y, movingObject.bounds.width,
 				movingObject.bounds.height);
 		
-		for (AbstractGameObject g : block) {
+		for (AbstractGameObject g : collisionObjectsList) {
 			r2.set(g.position.x, g.position.y, g.bounds.width, g.bounds.height);
 			
 			if (!r1.overlaps(r2))
@@ -103,8 +77,10 @@ public class CollisionDetection {
 	}
 	
 	
-	private void detectCollisionsObjectsForObjects(Array<AbstractGameObject> movingObjects, Array<AbstractGameObject> block) {
+	private void detectCollisionsObjectsForObjects(Array<AbstractGameObject> movingObjects, Array<AbstractGameObject> collisionObject) {
 		for (AbstractGameObject m : movingObjects) {
+			
+			if(!m.hasBody()) continue;
 			
 			r1.set(m.position.x, m.position.y, m.bounds.width,
 					m.bounds.height);
@@ -112,9 +88,9 @@ public class CollisionDetection {
 			
 			//for (AbstractGameObject g : block) {
 			
-			for (int i = 0; i < block.size; i++) {
+			for (int i = 0; i < collisionObject.size; i++) {
 				
-				AbstractGameObject g = block.get(i);
+				AbstractGameObject g = collisionObject.get(i);
 				
 				if(m == g) continue;
 				
@@ -133,7 +109,7 @@ public class CollisionDetection {
 	
 	
 	
-	
+	//TO DO: poprawa jakosci kodu
 	public void detectCollisions() {
 		if(level.mario.isAlive()) {
 			detectCollisionsObjectForObjects(level.mario, level.gorundBlocks); // ground platform
@@ -144,11 +120,10 @@ public class CollisionDetection {
 		
 		
 		detectCollisionsObjectsForObjects(level.goombas, level.gorundBlocks);
-		
-		
-		
+				
 		detectCollisionsObjectsForObjects(level.goombas, level.goombas);		
 		detectCollisionsObjectsForObjects(level.koopaTroopas, level.koopaTroopas);
+		detectCollisionsObjectsForObjects(level.koopaTroopas, level.goombas);
 		
 		
 		detectCollisionsObjectsForObjects(level.koopaTroopas, level.gorundBlocks);

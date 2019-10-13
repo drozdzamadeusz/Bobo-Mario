@@ -126,10 +126,12 @@ public abstract class AbstractGameObject {
 	}
 	
 	public void onHitFromBottom(AbstractGameObject collidedObject) {
+		if(collidedObject.isEnemy()) return;
 		position.y = (collidedObject.position.y - collidedObject.bounds.height);
 	}
 
 	public void onHitFromSide(AbstractGameObject collidedObject, boolean hitRightEdge) {
+		if(collidedObject.isEnemy()) return;
 		if (hitRightEdge) {
 			position.x = collidedObject.position.x + collidedObject.bounds.width;
 		} else {

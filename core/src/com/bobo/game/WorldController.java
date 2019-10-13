@@ -72,8 +72,6 @@ public class WorldController extends InputAdapter implements Disposable {
 			
 		level.update(deltaTime);
 		
-		collisionDetection.detectCollisions();
-		
 		cameraHelper.update(deltaTime);
 		
 		if ((isPlayerDead() || isPlayerInWater()) && !isGameOver){
@@ -83,6 +81,8 @@ public class WorldController extends InputAdapter implements Disposable {
 			((Player) level.mario).makeSmallJump = true;	
 			isGameOver = true;
 		}
+		
+		collisionDetection.detectCollisions();
 		
 	}
 	
