@@ -3,8 +3,10 @@ package com.bobo.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.bobo.objects.AbstractGameObject;
+import com.bobo.objects.Block;
 import com.bobo.objects.Ground;
 import com.bobo.objects.characters.Player;
 import com.bobo.objects.enemies.Goomba;
@@ -19,6 +21,7 @@ public class Level {
 		EMPTY(0, 0, 0), // black
 		PLAYER(255, 255, 255), // white - player
 		GROUND(155, 74, 0), // brown - ground
+		BLOCK(185, 122, 87), // light brown - block
 		GOOMBA(92, 44, 7), // dark brown - goomba
 		KOOPA_TROOPA(30, 132, 0); // green - koopa troopa
 		
@@ -89,6 +92,15 @@ public class Level {
 					obj.position.set(pixelX, baseHeight + offsetHeight);
 					
 					gorundBlocks.add((Ground) obj);
+					// ground
+				}else if (BLOCK_TYPE.BLOCK.sameColor(currentPixel)) {
+					obj = new Block();
+							
+					offsetHeight = 0.0f;
+					obj.position.set(pixelX, baseHeight + offsetHeight);
+					((Block)obj).originPosition = new Vector2(obj.position);
+					
+					gorundBlocks.add((Block) obj);
 				// palyer
 				}else if (BLOCK_TYPE.PLAYER.sameColor(currentPixel)) {
 					obj = new Player();
@@ -105,8 +117,7 @@ public class Level {
 					
 					goombas.add((Goomba) obj);
 				}else if (BLOCK_TYPE.KOOPA_TROOPA.sameColor(currentPixel)) {
-					obj = new KoopaTroopa();
-					
+					obj = new KoopaTroopa();					
 					offsetHeight = 0f;
 					obj.position.set(pixelX, baseHeight + offsetHeight);
 					
@@ -145,6 +156,9 @@ public class Level {
 			if(objectInViewPort(koopa)) koopa.update(deltaTime);
 		}
 		
+		for (AbstractGameObject ground : gorundBlocks) {
+			if(objectInViewPort(ground)) ground.update(deltaTime);
+		}
 	}
 
 	public void render(SpriteBatch batch) {

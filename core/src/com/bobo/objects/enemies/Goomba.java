@@ -79,8 +79,6 @@ public class Goomba extends AbstractRigidBodyObject implements Enemy{
 	public void render(SpriteBatch batch) {
 		TextureRegion reg = null;
 		
-		Gdx.app.debug(TAG, isAlive + " "+ killedFromSide);
-		
 		if(isAlive || killedFromSide) {
 			reg = (TextureRegion) animation.getKeyFrame(stateTime, true);
 		}else {
@@ -105,7 +103,7 @@ public class Goomba extends AbstractRigidBodyObject implements Enemy{
 		
 		if(killedFromSide) {
 			
-			if(KILL_ANIMATION_JUMP_TIME > 0.0f) {
+			if(KILL_ANIMATION_JUMP_TIME >= 0.0f) {
 				KILL_ANIMATION_JUMP_TIME -= deltaTime;
 				
 				terminalVelocity.set(13.0f, 25.0f);

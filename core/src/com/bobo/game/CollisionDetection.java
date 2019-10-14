@@ -1,7 +1,10 @@
 package com.bobo.game;
 
+import java.util.Arrays;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.badlogic.gdx.utils.Array;
 import com.bobo.objects.AbstractGameObject;
 
@@ -35,7 +38,7 @@ public class CollisionDetection {
 		}*/
 		
 		//hit from bottom
-		if (widthDifference < block.bounds.width * 0.5f && heightDifference > block.bounds.height * 1.5f) {
+		if (widthDifference < block.bounds.width * 0.6f && heightDifference > block.bounds.height * 1.5f) {
 			movingObject.onHitFromBottom(block);
 			return;	
 		}
@@ -115,6 +118,8 @@ public class CollisionDetection {
 			detectCollisionsObjectForObjects(level.mario, level.gorundBlocks); // ground platform
 			detectCollisionsObjectForObjects(level.mario, level.goombas);
 			detectCollisionsObjectForObjects(level.mario, level.koopaTroopas);
+			
+			//detectCollisionsObjectsForObjects(level.gorundBlocks, (Array<AbstractGameObject>) Arrays.asList(level.mario));
 			
 		}
 		

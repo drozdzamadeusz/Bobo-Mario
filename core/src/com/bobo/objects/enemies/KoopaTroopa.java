@@ -38,7 +38,7 @@ public class KoopaTroopa extends AbstractRigidBodyObject implements Enemy {
 		setAnimation(koopaTroopaWalking);
 		 
 		
-		dimension = new Vector2(1.0f, 1.5f);
+		dimension = new Vector2(1.0f, 1.5f);	
 		origin.set(dimension.x / 2, dimension.y / 2);
 		bounds.set(0, 0, dimension.x, dimension.y);
 		
@@ -56,6 +56,7 @@ public class KoopaTroopa extends AbstractRigidBodyObject implements Enemy {
 		isAlive = true;
 		
 		slidingAfterHit = false;
+
 		
 	}
 
@@ -136,17 +137,22 @@ public class KoopaTroopa extends AbstractRigidBodyObject implements Enemy {
 			bounds.set(0, 0, dimension.x, dimension.y);
 			
 			reg = koopaTroopaCrushed;
+			
 			if(TIME_TO_START_REBORN_ANIMATION <= 0.0f) {
 				if(animation != koopaTroopaCrushedReborn)
 					setAnimation(koopaTroopaCrushedReborn);
 				reg = (TextureRegion) animation.getKeyFrame(stateTime, true);
 			}
+			
 			if(TIME_TO_REBORN <= 0.0f) {
 				viewDirection = (0 == (MathUtils.random(0, 1)))?VIEW_DIRECTION.RIGHT:VIEW_DIRECTION.LEFT;
+				
 				setAnimation(koopaTroopaWalking);
+				
 				dimension = new Vector2(1.0f, 1.5f);
 				origin.set(dimension.x / 2, dimension.y / 2);
 				bounds.set(0, 0, dimension.x, dimension.y);
+				
 				isAlive = true;
 				slidingAfterHit = false;
 			}

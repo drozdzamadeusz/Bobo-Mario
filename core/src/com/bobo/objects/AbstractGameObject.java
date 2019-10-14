@@ -38,7 +38,8 @@ public abstract class AbstractGameObject {
 		velocity = new Vector2();
 		terminalVelocity = new Vector2(1, 1);
 		friction = new Vector2();
-		acceleration = new Vector2(0, -70.0f);
+		acceleration = new Vector2(0, -60.0f);
+		//acceleration = new Vector2(0.0f, 0.0f);
 		momentumGain = new Vector2();
 		
 		isAlive = true;
@@ -113,17 +114,15 @@ public abstract class AbstractGameObject {
 
 	public void update(float deltaTime) {
 		stateTime += deltaTime;
-		//if (body == null) {
-			updateMotionX(deltaTime);
-			updateMotionY(deltaTime);
-			// Move to the new position
-			position.x += velocity.x * deltaTime;
-			position.y += velocity.y * deltaTime;
-		/*} else {
-			position.set(body.getPosition());
-			rotation = body.getAngle() * MathUtils.radiansToDegrees;
-		}*/
+		updateMotionX(deltaTime);
+		updateMotionY(deltaTime);
+		// Move to the new position
+		position.x += velocity.x * deltaTime;
+		position.y += velocity.y * deltaTime;
 	}
+	
+	
+	/* THIS OBJECT COLLIDED ON ANOTHER OBJECT */
 	
 	public void onHitFromBottom(AbstractGameObject collidedObject) {
 		if(collidedObject.isEnemy()) return;
@@ -140,6 +139,16 @@ public abstract class AbstractGameObject {
 	}
 	
 	public void onHitFromTop(AbstractGameObject collidedObject) {}
+	
+	
+	/* MOVING OBJECT COLLIDED ON THIS OBJECT */
+	
+	public void movingObjectHitFromTop(AbstractGameObject collidedObject) {}
+	
+	public void movingObjectHitFromBottom(AbstractGameObject collidedObject) {}
+
+	public void movingObjectHitFromSide(AbstractGameObject collidedObject, boolean hitRightEdge) {}
+	
 	
 	public boolean isEnemy() {
 		return isEnemy;

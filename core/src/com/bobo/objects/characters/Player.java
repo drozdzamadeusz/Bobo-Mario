@@ -47,11 +47,7 @@ public class Player extends AbstractRigidBodyObject {
 		// Bounding box for collision detection
 		bounds.set(0, 0, dimension.x, dimension.y);
 
-		// Set physics values
-		/*terminalVelocity.set(7.0f, 17.0f);
-		friction.set(20.0f, 10.0f);
-		acceleration.set(0, -70.0f);
-		momentumGain = new Vector2(40,1);*/
+		
 		terminalVelocity.set(8.0f, 15.0f);
 		friction.set(20.0f, 10.0f);
 		acceleration.set(0, -60.0f);
@@ -188,6 +184,7 @@ public class Player extends AbstractRigidBodyObject {
 	
 	@Override
 	public void onHitFromBottom(AbstractGameObject collidedObject) {
+		collidedObject.movingObjectHitFromBottom(this);
 		
 		if(collidedObject.isEnemy() && (collidedObject).isAlive()) {
 			health -= ((Enemy) collidedObject).getDealingDamage();
@@ -207,6 +204,8 @@ public class Player extends AbstractRigidBodyObject {
 
 	@Override
 	public void onHitFromSide(AbstractGameObject collidedObject, boolean hitRightEdge) {
+		collidedObject.movingObjectHitFromSide(this, hitRightEdge);
+		
 		if(collidedObject.isEnemy() && (collidedObject).isAlive()) {
 			health -= ((Enemy) collidedObject).getDealingDamage();
 			return;
@@ -225,6 +224,7 @@ public class Player extends AbstractRigidBodyObject {
 	/* TO DO: POPRAWA JAKOSCI KODU */
 	@Override
 	public void onHitFromTop(AbstractGameObject collidedObject) {
+		collidedObject.movingObjectHitFromTop(this);
 		
 		if(collidedObject.isEnemy() && collidedObject.dimension.y == 1.5f) {
 			float heightDifference = Math.abs(position.y - (collidedObject.position.y + collidedObject.bounds.height));
