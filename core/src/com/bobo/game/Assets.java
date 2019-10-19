@@ -29,7 +29,8 @@ public class Assets implements Disposable, AssetErrorListener {
 	public TilesetAssets tilesetAssets;
 	public CharactersAssets charactersAssets;
 	public EnemiesAssets enemiesAssets;
-
+	public ObjectsAssets objectsAssets;
+	
 	public AssetFonts fonts;
 
 	public void init(AssetManager assetManager) {
@@ -40,6 +41,7 @@ public class Assets implements Disposable, AssetErrorListener {
 		assetManager.load(Constants.getPath(Constants.TILESET_TEXTURE_ATLAS_OBJECTS), TextureAtlas.class);
 		assetManager.load(Constants.getPath(Constants.CHARACTERS_TEXTURE_ATLAS_OBJECTS), TextureAtlas.class);
 		assetManager.load(Constants.getPath(Constants.ENEMIES_TEXTURE_ATLAS_OBJECTS), TextureAtlas.class);
+		assetManager.load(Constants.getPath(Constants.OBJECTS_TEXTURE_ATLAS_OBJECTS), TextureAtlas.class);
 		
 		assetManager.load(Constants.getPath("music/ground_theme.mp3"), Music.class);
 		
@@ -60,10 +62,12 @@ public class Assets implements Disposable, AssetErrorListener {
 		TextureAtlas tilesetAtlas = assetManager.get(Constants.getPath(Constants.TILESET_TEXTURE_ATLAS_OBJECTS));
 		TextureAtlas charactersAtlas = assetManager.get(Constants.getPath(Constants.CHARACTERS_TEXTURE_ATLAS_OBJECTS));
 		TextureAtlas enemiesAtlas = assetManager.get(Constants.getPath(Constants.ENEMIES_TEXTURE_ATLAS_OBJECTS));
+		TextureAtlas objectsAtlas = assetManager.get(Constants.getPath(Constants.OBJECTS_TEXTURE_ATLAS_OBJECTS));
 		
 		tilesetAssets = new TilesetAssets(tilesetAtlas);
 		charactersAssets = new CharactersAssets(charactersAtlas);
 		enemiesAssets = new EnemiesAssets(enemiesAtlas);
+		objectsAssets = new ObjectsAssets(objectsAtlas);
 		
 		fonts = new AssetFonts();
 
@@ -210,6 +214,22 @@ public class Assets implements Disposable, AssetErrorListener {
 			koopaTroopaCrushedReborn = new Animation<Object>(1.0f / 15.0f, regions, Animation.PlayMode.LOOP_PINGPONG);
 			
 			//koopaTroopaCrushed = atlas.findRegion("koopa_troopa_crushed_01");
+		}
+	}
+	
+	//Items, Objects and NPCs
+	public class ObjectsAssets {
+		
+		public final Animation<?> goldCoin;
+		
+		public ObjectsAssets(TextureAtlas atlas) {
+			
+			Array<AtlasRegion> regions = null;
+			
+			// Animation: Coin turns
+			regions = atlas.findRegions("coin");
+			goldCoin = new Animation<Object>(1.0f / 16.0f, regions, Animation.PlayMode.LOOP);
+			
 		}
 	}
 	

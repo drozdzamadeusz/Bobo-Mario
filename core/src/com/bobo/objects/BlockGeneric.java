@@ -26,7 +26,10 @@ public class BlockGeneric extends AbstractRigidBodyObject {
 	}
 	
 	@Override
-	public void render(SpriteBatch batch) {		
+	public void render(SpriteBatch batch) {
+		
+		super.render(batch);
+		
 		batch.draw(reg.getTexture(), position.x, position.y, origin.x, origin.y, dimension.x, dimension.y, scale.x,
 				scale.y, rotation, reg.getRegionX(), reg.getRegionY(), reg.getRegionWidth(), reg.getRegionHeight(),
 				false, false);
@@ -35,7 +38,7 @@ public class BlockGeneric extends AbstractRigidBodyObject {
 	
 
 	private float BUMP_TIME = 0.001f;
-	private float timeGoingUp;
+	private float timeBumpingUp;
 	private boolean playerBumpFromBottom = false;
 	
 	
@@ -47,7 +50,7 @@ public class BlockGeneric extends AbstractRigidBodyObject {
 		position.y = Math.max(position.y, originPosition.y);
 		
 		if(playerBumpFromBottom && bumpFromBottomAnimation) {			
-			if(timeGoingUp >= 0.0f) {
+			if(timeBumpingUp >= 0.0f) {
 				
 				terminalVelocity.set(0, 10.0f);
 				friction.set(0, 0.0f);
@@ -55,9 +58,8 @@ public class BlockGeneric extends AbstractRigidBodyObject {
 				momentumGain = new Vector2(terminalVelocity);
 				
 				velocity.y = terminalVelocity.y;
-			}else {
 			}
-			timeGoingUp -= deltaTime;
+			timeBumpingUp -= deltaTime;
 			
 		}
 	}
@@ -73,7 +75,7 @@ public class BlockGeneric extends AbstractRigidBodyObject {
 	public void movingObjectHitFromBottom(AbstractGameObject collidedObject) {
 		// TODO Auto-generated method stub
 		super.movingObjectHitFromBottom(collidedObject);
-		timeGoingUp = BUMP_TIME;
+		timeBumpingUp = BUMP_TIME;
 		playerBumpFromBottom = true;
 	}
 

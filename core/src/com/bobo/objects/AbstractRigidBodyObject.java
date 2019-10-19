@@ -1,8 +1,5 @@
 package com.bobo.objects;
 
-import com.badlogic.gdx.Gdx;
-import com.bobo.objects.AbstractRigidBodyObject.JUMP_STATE;
-import com.bobo.objects.AbstractRigidBodyObject.VIEW_DIRECTION;
 import com.bobo.objects.enemies.Enemy;
 import com.bobo.objects.enemies.KoopaTroopa;
 

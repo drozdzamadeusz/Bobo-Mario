@@ -89,7 +89,7 @@ public class Level {
 					obj = new Ground();
 						
 					offsetHeight = 0.0f;
-					obj.position.set(pixelX, baseHeight + offsetHeight);
+					obj.setPosition(pixelX, baseHeight + offsetHeight);
 					((Ground)obj).originPosition = new Vector2(obj.position);
 					
 					gorundBlocks.add((Ground) obj);
@@ -98,7 +98,7 @@ public class Level {
 					obj = new BlockGeneric();
 							
 					offsetHeight = 0.0f;
-					obj.position.set(pixelX, baseHeight + offsetHeight);
+					obj.setPosition(pixelX, baseHeight + offsetHeight);
 					((BlockGeneric)obj).originPosition = new Vector2(obj.position);
 					
 					gorundBlocks.add((BlockGeneric) obj);
@@ -107,20 +107,20 @@ public class Level {
 					obj = new Player();
 					
 					offsetHeight = 0.0f;
-					obj.position.set(pixelX, baseHeight + offsetHeight);
+					obj.setPosition(pixelX, baseHeight + offsetHeight);
 					
 					mario = (Player) obj;
 				}else if (BLOCK_TYPE.GOOMBA.sameColor(currentPixel)) {
 					obj = new Goomba();
 					
 					offsetHeight = 0.0f;
-					obj.position.set(pixelX, baseHeight + offsetHeight);
+					obj.setPosition(pixelX, baseHeight + offsetHeight);
 					
 					goombas.add((Goomba) obj);
 				}else if (BLOCK_TYPE.KOOPA_TROOPA.sameColor(currentPixel)) {
 					obj = new KoopaTroopa();					
-					offsetHeight = 0f;
-					obj.position.set(pixelX, baseHeight + offsetHeight);
+					offsetHeight = 0.0f;
+					obj.setPosition(pixelX, baseHeight + offsetHeight);
 					
 					koopaTroopas.add((KoopaTroopa) obj);
 				} else {

@@ -6,6 +6,9 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.scenes.scene2d.ui.List;
+import com.badlogic.gdx.utils.Array;
+import com.bobo.rewards.AbstractGameReward;
 
 public abstract class AbstractGameObject {
 
@@ -23,6 +26,8 @@ public abstract class AbstractGameObject {
 	
 	public Rectangle bounds;
 	//public Body body;
+	
+	public Array<AbstractGameReward> reward;
 	
 	public boolean isEnemy;
 	public boolean isAlive;
@@ -48,6 +53,8 @@ public abstract class AbstractGameObject {
 		hasBody = true;
 		
 		bounds = new Rectangle(0, 0, dimension.x, dimension.y);
+		
+		reward = new Array<>();
 	}
 
 	public float stateTime;
@@ -113,6 +120,11 @@ public abstract class AbstractGameObject {
 	}
 
 	public void update(float deltaTime) {
+		
+		for(AbstractGameReward r:reward) {
+			r.update(deltaTime);
+		}
+		
 		stateTime += deltaTime;
 		updateMotionX(deltaTime);
 		updateMotionY(deltaTime);
@@ -122,8 +134,17 @@ public abstract class AbstractGameObject {
 	}
 	
 	
-	/* THIS OBJECT COLLIDED ON ANOTHER OBJECT */
+	public abstract void init();
 	
+	public void setPosition(float x, float y) {
+		position.set(x, y);
+		for(AbstractGameReward r:reward) {
+			r.init();
+		}
+	}
+	
+	/* THIS OBJECT COLLIDED ON ANOTHER OBJECT */
+
 	public void onHitFromBottom(AbstractGameObject collidedObject) {
 		position.y = (collidedObject.position.y - collidedObject.bounds.height);
 	}
@@ -164,10 +185,15 @@ public abstract class AbstractGameObject {
 	public boolean hasBody() {
 		return hasBody;
 	}
-
-	public abstract void init();
 	
-	// making method abstract forces class that call it to implement it and handle
+	
+	public void grantAward() {}
+	
 	// render
-	public abstract void render(SpriteBatch batch);
+	public void render(SpriteBatch batch) {
+		for(AbstractGameReward r:reward) {
+			r.render(batch);
+		}
+	}
+	
 }
