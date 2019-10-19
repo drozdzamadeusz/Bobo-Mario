@@ -19,8 +19,10 @@ public class Ground extends BlockGeneric {
 		regGround = Assets.instance.tilesetAssets.ground;
 		reg = regGround;
 		bumpFromBottomAnimation = true;
-		reward = Array.with((AbstractGameReward) new Coin(this, 100), (AbstractGameReward) new Coin(this, 100),
-				(AbstractGameReward) new Coin(this, 100));
+		//reward = Array.with((AbstractGameReward) new Coin(this, 100), (AbstractGameReward) new Coin(this, 100),
+		//		(AbstractGameReward) new Coin(this, 100));
+		reward = new Array<AbstractGameReward>();
+		reward.add((AbstractGameReward) new Coin(this, 100), (AbstractGameReward) new Coin(this, 100));
 	}
 
 	@Override
