@@ -125,7 +125,6 @@ public abstract class AbstractGameObject {
 	/* THIS OBJECT COLLIDED ON ANOTHER OBJECT */
 	
 	public void onHitFromBottom(AbstractGameObject collidedObject) {
-		if(collidedObject.isEnemy()) return;
 		position.y = (collidedObject.position.y - collidedObject.bounds.height);
 	}
 

@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.bobo.objects.AbstractGameObject;
-import com.bobo.objects.Block;
+import com.bobo.objects.BlockGeneric;
 import com.bobo.objects.Ground;
 import com.bobo.objects.characters.Player;
 import com.bobo.objects.enemies.Goomba;
@@ -90,17 +90,18 @@ public class Level {
 						
 					offsetHeight = 0.0f;
 					obj.position.set(pixelX, baseHeight + offsetHeight);
+					((Ground)obj).originPosition = new Vector2(obj.position);
 					
 					gorundBlocks.add((Ground) obj);
 					// ground
 				}else if (BLOCK_TYPE.BLOCK.sameColor(currentPixel)) {
-					obj = new Block();
+					obj = new BlockGeneric();
 							
 					offsetHeight = 0.0f;
 					obj.position.set(pixelX, baseHeight + offsetHeight);
-					((Block)obj).originPosition = new Vector2(obj.position);
+					((BlockGeneric)obj).originPosition = new Vector2(obj.position);
 					
-					gorundBlocks.add((Block) obj);
+					gorundBlocks.add((BlockGeneric) obj);
 				// palyer
 				}else if (BLOCK_TYPE.PLAYER.sameColor(currentPixel)) {
 					obj = new Player();

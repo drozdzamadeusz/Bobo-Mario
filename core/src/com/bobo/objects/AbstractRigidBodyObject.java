@@ -82,8 +82,6 @@ public abstract class AbstractRigidBodyObject extends AbstractGameObject {
 			((AbstractRigidBodyObject) collidedObject).viewDirection = (!hitRightEdge)?VIEW_DIRECTION.RIGHT:VIEW_DIRECTION.LEFT;
 			
 			if(this.getClass() == KoopaTroopa.class && ((KoopaTroopa)this).slidingAfterHit) {
-				//if(collidedObject.getClass() == KoopaTroopa.class) ((KoopaTroopa)collidedObject).secondHit = true;
-				Gdx.app.debug(TAG, "aa");	
 				((Enemy) collidedObject).damageEnemyFromSide(this, hitRightEdge);
 			}	
 		}

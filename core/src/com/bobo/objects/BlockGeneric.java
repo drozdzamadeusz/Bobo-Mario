@@ -1,20 +1,18 @@
 package com.bobo.objects;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.bobo.game.Assets;
-import com.bobo.game.CollisionDetection;
 
-public class Block extends AbstractRigidBodyObject {
+public class BlockGeneric extends AbstractRigidBodyObject {
 
-	public static final String TAG = Block.class.getCanonicalName();
+	public static final String TAG = BlockGeneric.class.getCanonicalName();
 	
-	private TextureRegion regGround;
+	protected TextureRegion reg;
+	protected boolean bumpFromBottomAnimation = true;
 	
-	public Block(){
+	public BlockGeneric(){
 		init();
 	}
 	
@@ -22,20 +20,16 @@ public class Block extends AbstractRigidBodyObject {
 	
 	
 	public void init() {
-		regGround = Assets.instance.tilesetAssets.block;
+		reg = Assets.instance.tilesetAssets.block;
 		acceleration.set(0,0);
+		bumpFromBottomAnimation = true;
 	}
 	
 	@Override
-	public void render(SpriteBatch batch) {
-		TextureRegion reg = null;
-		reg = regGround;
-		
+	public void render(SpriteBatch batch) {		
 		batch.draw(reg.getTexture(), position.x, position.y, origin.x, origin.y, dimension.x, dimension.y, scale.x,
 				scale.y, rotation, reg.getRegionX(), reg.getRegionY(), reg.getRegionWidth(), reg.getRegionHeight(),
 				false, false);
-		
-		batch.setColor(1, 1, 1, 1);
 	}
 	
 	
@@ -52,10 +46,7 @@ public class Block extends AbstractRigidBodyObject {
 		
 		position.y = Math.max(position.y, originPosition.y);
 		
-		if(playerBumpFromBottom) {
-
-
-			
+		if(playerBumpFromBottom && bumpFromBottomAnimation) {			
 			if(timeGoingUp >= 0.0f) {
 				
 				terminalVelocity.set(0, 10.0f);
@@ -65,11 +56,6 @@ public class Block extends AbstractRigidBodyObject {
 				
 				velocity.y = terminalVelocity.y;
 			}else {
-				/*terminalVelocity.set(0.0f, 0.0f);
-				friction.set(0.0f, 0.0f);
-				acceleration.set(0f, 0.0f);
-				momentumGain = new Vector2(terminalVelocity);*/
-				
 			}
 			timeGoingUp -= deltaTime;
 			

@@ -184,12 +184,8 @@ public class Player extends AbstractRigidBodyObject {
 	
 	@Override
 	public void onHitFromBottom(AbstractGameObject collidedObject) {
-		collidedObject.movingObjectHitFromBottom(this);
 		
-		if(collidedObject.isEnemy() && (collidedObject).isAlive()) {
-			health -= ((Enemy) collidedObject).getDealingDamage();
-			return;
-		}
+		if(enemyKillerPlayer(collidedObject)) return;
 		
 		if(!(collidedObject.isEnemy() && !(collidedObject).hasBody())) {
 			super.onHitFromBottom(collidedObject);
@@ -202,14 +198,12 @@ public class Player extends AbstractRigidBodyObject {
 		
 	}
 
+
+
 	@Override
 	public void onHitFromSide(AbstractGameObject collidedObject, boolean hitRightEdge) {
-		collidedObject.movingObjectHitFromSide(this, hitRightEdge);
 		
-		if(collidedObject.isEnemy() && (collidedObject).isAlive()) {
-			health -= ((Enemy) collidedObject).getDealingDamage();
-			return;
-		}
+		if(enemyKillerPlayer(collidedObject)) return;
 		
 		if(!(collidedObject.isEnemy() && !(collidedObject).hasBody())) {
 			if (hitRightEdge) {
@@ -224,17 +218,14 @@ public class Player extends AbstractRigidBodyObject {
 	/* TO DO: POPRAWA JAKOSCI KODU */
 	@Override
 	public void onHitFromTop(AbstractGameObject collidedObject) {
-		collidedObject.movingObjectHitFromTop(this);
+		//collidedObject.movingObjectHitFromTop(this);
 		
 		if(collidedObject.isEnemy() && collidedObject.dimension.y == 1.5f) {
 			float heightDifference = Math.abs(position.y - (collidedObject.position.y + collidedObject.bounds.height));
 			float widthDifference = Math.abs(position.x - (collidedObject.position.x));
 			
 			if(heightDifference > 0.20f && widthDifference > 0.8f) {
-				if(collidedObject.isEnemy() && (collidedObject).isAlive()) {
-					health -= ((Enemy) collidedObject).getDealingDamage();
-					return;
-				}
+				enemyKillerPlayer(collidedObject);
 			}
 		}
 		
@@ -260,6 +251,13 @@ public class Player extends AbstractRigidBodyObject {
 		}
 	}
 
+	private boolean enemyKillerPlayer(AbstractGameObject collidedObject) {
+		if(collidedObject.isEnemy() && (collidedObject).isAlive()) {
+			health -= ((Enemy) collidedObject).getDealingDamage();
+			return true;
+		}
+		return false;
+	}
 
 	@Override
 	public boolean isAlive() {

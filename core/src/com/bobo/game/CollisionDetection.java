@@ -39,20 +39,28 @@ public class CollisionDetection {
 		
 		//hit from bottom
 		if (widthDifference < block.bounds.width * 0.6f && heightDifference > block.bounds.height * 1.5f) {
+			
+			block.movingObjectHitFromBottom(movingObject);
 			movingObject.onHitFromBottom(block);
+			
 			return;	
 		}
 		
 		//hit from right or left side
 		if (heightDifference > block.bounds.height * 0.45f) {
 			boolean hitRightEdge = movingObject.position.x > (block.position.x + block.bounds.width / 2.0f);
+			
+			block.movingObjectHitFromSide(movingObject, hitRightEdge);
 			movingObject.onHitFromSide(block, hitRightEdge);
+			
 			return;
 			
 		}
 		//hit from top
 		if (widthDifference < block.bounds.width * 0.91f) {
+			
 			movingObject.onHitFromTop(block);
+			block.movingObjectHitFromTop(movingObject);
 		}
 		
 
