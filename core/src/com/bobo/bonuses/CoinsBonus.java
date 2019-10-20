@@ -13,7 +13,7 @@ import com.bobo.objects.AbstractGameObject;
 
 public class CoinsBonus extends AbstractGameBonus {
 
-	public float amout;
+	public int amout;
 	
 	private float COIN_ANIMATION_DURATON = 0.7f;
 	private float currentDuration;
@@ -26,7 +26,7 @@ public class CoinsBonus extends AbstractGameBonus {
 		this(parent, 100);
 	}
 	
-	public CoinsBonus(AbstractGameObject parent, float amout) {
+	public CoinsBonus(AbstractGameObject parent, int amout) {
 		this.parent = parent;
 		this.amout = amout;
 		init();
@@ -60,7 +60,7 @@ public class CoinsBonus extends AbstractGameBonus {
 		
 		glyphTextures = new Array<TextureRegion>();
 		
-		for (int i = 0; i < amoutStr.length() - 2; i++) {
+		for (int i = 0; i < amoutStr.length(); i++) {
 			
 			BitmapFont.Glyph glyph = font.getData().getGlyph(amoutStr.charAt(i));
 
