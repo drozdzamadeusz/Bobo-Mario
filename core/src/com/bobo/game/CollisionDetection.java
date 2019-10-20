@@ -98,7 +98,6 @@ public class CollisionDetection {
 	
 			
 			//for (AbstractGameObject g : block) {
-			
 			for (int i = 0; i < collisionObject.size; i++) {
 				
 				AbstractGameObject g = collisionObject.get(i);
@@ -125,10 +124,7 @@ public class CollisionDetection {
 		if(level.mario.isAlive()) {
 			detectCollisionsObjectForObjects(level.mario, level.gorundBlocks); // ground platform
 			detectCollisionsObjectForObjects(level.mario, level.goombas);
-			detectCollisionsObjectForObjects(level.mario, level.koopaTroopas);
-			
-			//detectCollisionsObjectsForObjects(level.gorundBlocks, (Array<AbstractGameObject>) Arrays.asList(level.mario));
-			
+			detectCollisionsObjectForObjects(level.mario, level.koopaTroopas);			
 		}
 		
 		

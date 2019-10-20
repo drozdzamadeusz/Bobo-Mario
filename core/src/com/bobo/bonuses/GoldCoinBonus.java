@@ -1,63 +1,42 @@
-package com.bobo.rewards;
+package com.bobo.bonuses;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.CpuSpriteBatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.bobo.game.Assets;
 import com.bobo.objects.AbstractGameObject;
 
-public class Coin extends AbstractGameReward{
+public class GoldCoinBonus extends AbstractGameBonus{
 
-	public float amout;
-	
-	private Animation<?> coinCollected;
-
-	public Coin(AbstractGameObject parent) {
-		this(parent, 100);
-	}
-	
-	public Coin(AbstractGameObject parent, float amout) {
-		this.parent = parent;
-		this.amout = amout;
-		init();
-	}
-
-	
+	private Animation<?> coinCollectedAnimation;
 	
 	private float COIN_ANIMATION_DURATON = 0.7f;
 	private float coinCurrentAnimDuration;
 	
+	public GoldCoinBonus(AbstractGameObject parent) {
+		this.parent = parent;
+		init();
+	}
+	
 	@Override
 	public void init() {
-		coinCollected = Assets.instance.objectsAssets.goldCoin;
-		setAnimation(coinCollected);
+		coinCollectedAnimation = Assets.instance.objectsAssets.goldCoin;
+		setAnimation(coinCollectedAnimation);
 		position.set(parent.position);
-		dimension.set(1.0f, 1.0f);
 		
-		terminalVelocity.set(0, 36.0f);
+		dimension.set(1.0f, 1.0f);	
+		terminalVelocity.set(0, 34.0f);
 		friction.set(0, 42.0f);
-		acceleration.set(0, -80.0f);
+		acceleration.set(0, -75.0f);
 		momentumGain = new Vector2(terminalVelocity);
 		
 		velocity.y = terminalVelocity.y;
-		velocity.x = terminalVelocity.x;
-		
 	}
-	
-	@Override
-	public void setCollected(boolean collected) {
-		// TODO Auto-generated method stub
-		super.setCollected(collected);
-	}
-
 	
 	@Override
 	public void setVisible(boolean visible) {
-		// TODO Auto-generated method stub
 		super.setVisible(visible);
-		
 		coinCurrentAnimDuration = COIN_ANIMATION_DURATON;
 	}
 	
@@ -65,11 +44,8 @@ public class Coin extends AbstractGameReward{
 	@Override
 	public void update(float deltaTime) {
 		super.update(deltaTime);
-		
-		if(isVisible()) {
-			coinCurrentAnimDuration -= deltaTime;
-		}
-		
+		if(isVisible())
+			coinCurrentAnimDuration -= deltaTime;	
 	}
 
 	@Override

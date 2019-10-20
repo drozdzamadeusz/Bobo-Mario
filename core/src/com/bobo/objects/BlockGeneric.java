@@ -3,6 +3,7 @@ package com.bobo.objects;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.bobo.bonuses.AbstractGameBonus;
 import com.bobo.game.Assets;
 
 public class BlockGeneric extends AbstractRigidBodyObject {
@@ -63,26 +64,14 @@ public class BlockGeneric extends AbstractRigidBodyObject {
 			
 		}
 	}
-	
-	
-	@Override
-	public void movingObjectHitFromTop(AbstractGameObject collidedObject) {
-		// TODO Auto-generated method stub
-		super.movingObjectHitFromTop(collidedObject);
-	}
 
 	@Override
 	public void movingObjectHitFromBottom(AbstractGameObject collidedObject) {
-		// TODO Auto-generated method stub
+		if (collidedObject.isPlayer()) {
+			grantBonus();
+		}
 		super.movingObjectHitFromBottom(collidedObject);
 		timeBumpingUp = BUMP_TIME;
 		playerBumpFromBottom = true;
 	}
-
-	@Override
-	public void movingObjectHitFromSide(AbstractGameObject collidedObject, boolean hitRightEdge) {
-		// TODO Auto-generated method stub
-		super.movingObjectHitFromSide(collidedObject, hitRightEdge);
-	}
-
 }

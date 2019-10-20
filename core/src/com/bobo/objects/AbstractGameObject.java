@@ -8,7 +8,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.badlogic.gdx.utils.Array;
-import com.bobo.rewards.AbstractGameReward;
+import com.bobo.bonuses.AbstractGameBonus;
+import com.bobo.rewards.AbstractGameRewards;
 
 public abstract class AbstractGameObject {
 
@@ -25,9 +26,8 @@ public abstract class AbstractGameObject {
 	public Vector2 momentumGain;
 	
 	public Rectangle bounds;
-	//public Body body;
 	
-	public Array<AbstractGameReward> reward;
+	public Array<AbstractGameBonus> bonus;
 	
 	public boolean isEnemy;
 	public boolean isAlive;
@@ -44,7 +44,6 @@ public abstract class AbstractGameObject {
 		terminalVelocity = new Vector2(1, 1);
 		friction = new Vector2();
 		acceleration = new Vector2(0, -60.0f);
-		//acceleration = new Vector2(0.0f, 0.0f);
 		momentumGain = new Vector2();
 		
 		isAlive = true;
@@ -54,7 +53,7 @@ public abstract class AbstractGameObject {
 		
 		bounds = new Rectangle(0, 0, dimension.x, dimension.y);
 		
-		reward = new Array<>();
+		bonus = new Array<>();
 	}
 
 	public float stateTime;
@@ -121,8 +120,8 @@ public abstract class AbstractGameObject {
 
 	public void update(float deltaTime) {
 		
-		for(AbstractGameReward r:reward) {
-			r.update(deltaTime);
+		for(AbstractGameBonus b:bonus) {
+			b.update(deltaTime);
 		}
 		
 		stateTime += deltaTime;
@@ -138,8 +137,8 @@ public abstract class AbstractGameObject {
 	
 	public void setPosition(float x, float y) {
 		position.set(x, y);
-		for(AbstractGameReward r:reward) {
-			r.init();
+		for(AbstractGameBonus b:bonus) {
+			b.init();
 		}
 	}
 	
@@ -187,12 +186,19 @@ public abstract class AbstractGameObject {
 	}
 	
 	
-	public void grantAward() {}
+	public void grantBonus() {
+		for (AbstractGameBonus b:bonus) {
+			if (!b.isVisible()) {
+				b.setVisible(true);
+				break;
+			}
+		}
+	}
 	
 	// render
 	public void render(SpriteBatch batch) {
-		for(AbstractGameReward r:reward) {
-			r.render(batch);
+		for(AbstractGameBonus b:bonus) {
+			b.render(batch);
 		}
 	}
 	

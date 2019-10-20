@@ -1,24 +1,22 @@
-package com.bobo.rewards;
+package com.bobo.bonuses;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.bobo.objects.AbstractGameObject;
 import com.bobo.objects.AbstractRigidBodyObject;
 
-public abstract class AbstractGameReward extends AbstractRigidBodyObject{
+public abstract class AbstractGameBonus extends AbstractRigidBodyObject{
 
 	public boolean collected;
 	public boolean visible;
 	
 	public AbstractGameObject parent;
 	
-	public AbstractGameReward() {
+	public AbstractGameBonus() {
 		collected = false;
 		visible = false;
 		acceleration.set(0.0f, 0.0f);
 	}
 
-	public abstract void init();
-	
 	public boolean isCollected() {
 		return collected;
 	}

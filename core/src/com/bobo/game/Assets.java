@@ -82,8 +82,8 @@ public class Assets implements Disposable, AssetErrorListener {
 
 		public AssetFonts() {
 			defaultNormal = new BitmapFont(Gdx.files.internal(Constants.getPath(Constants.FONT_DEFAULT_NORMAL)), true);
-			defaultNormal.getData().setScale(1.0f);
-			defaultNormal.getRegion().getTexture().setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+			defaultNormal.getData().setScale(2.0f);
+			//defaultNormal.getRegion().getTexture().setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 		}
 	}
 	
