@@ -7,14 +7,19 @@ import com.badlogic.gdx.math.Vector2;
 import com.bobo.game.Assets;
 import com.bobo.objects.AbstractGameObject;
 
-public class GoldCoinBonus extends AbstractGameBonus{
+public class GoldCoinAnim extends AbstractGameBonus{
 
 	private Animation<?> coinCollectedAnimation;
 	
 	private float COIN_ANIMATION_DURATON = 0.7f;
 	private float coinCurrentAnimDuration;
 	
-	public GoldCoinBonus(AbstractGameObject parent) {
+	public GoldCoinAnim() {
+		this(null);
+	}
+	
+	
+	public GoldCoinAnim(AbstractGameObject parent) {
 		this.parent = parent;
 		init();
 	}
@@ -23,7 +28,8 @@ public class GoldCoinBonus extends AbstractGameBonus{
 	public void init() {
 		coinCollectedAnimation = Assets.instance.objectsAssets.goldCoin;
 		setAnimation(coinCollectedAnimation);
-		position.set(parent.position);
+		
+		if(parent != null) position.set(parent.position);
 		
 		dimension.set(1.0f, 1.0f);	
 		terminalVelocity.set(0, 34.0f);

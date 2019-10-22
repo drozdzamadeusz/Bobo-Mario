@@ -221,6 +221,8 @@ public class Assets implements Disposable, AssetErrorListener {
 	public class ObjectsAssets {
 		
 		public final Animation<?> goldCoin;
+		public final Animation<?> bonusBlock;
+		public final AtlasRegion growthMushroom;
 		
 		public ObjectsAssets(TextureAtlas atlas) {
 			
@@ -229,6 +231,19 @@ public class Assets implements Disposable, AssetErrorListener {
 			// Animation: Coin turns
 			regions = atlas.findRegions("coin");
 			goldCoin = new Animation<Object>(1.0f / 16.0f, regions, Animation.PlayMode.LOOP);
+			
+			Array<AtlasRegion> bonusBlockRegions = atlas.findRegions("bonus_block");
+			
+			Gdx.app.debug(TAG, bonusBlockRegions.size+"");
+			
+			// Animation: Coin turns
+			regions = new Array<AtlasRegion>(4);
+			regions.add(bonusBlockRegions.get(0));
+			regions.add(bonusBlockRegions.get(0), bonusBlockRegions.get(1), bonusBlockRegions.get(2), bonusBlockRegions.get(1));
+			bonusBlock = new Animation<Object>(1.0f / 7.5f, regions, Animation.PlayMode.LOOP);
+			
+			// Growth Mushroom
+			growthMushroom = atlas.findRegion("growth_mushroom");
 			
 		}
 	}

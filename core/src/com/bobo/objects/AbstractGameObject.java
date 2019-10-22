@@ -5,11 +5,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.badlogic.gdx.utils.Array;
 import com.bobo.bonuses.AbstractGameBonus;
-import com.bobo.rewards.AbstractGameRewards;
 
 public abstract class AbstractGameObject {
 
@@ -28,6 +25,7 @@ public abstract class AbstractGameObject {
 	public Rectangle bounds;
 	
 	public Array<AbstractGameBonus> bonus;
+	public boolean outOfBonus;
 	
 	public boolean isEnemy;
 	public boolean isAlive;
@@ -50,6 +48,7 @@ public abstract class AbstractGameObject {
 		isEnemy = false;
 		isPlayer = false;
 		hasBody = true;
+		outOfBonus = false;
 		
 		bounds = new Rectangle(0, 0, dimension.x, dimension.y);
 		
@@ -118,12 +117,7 @@ public abstract class AbstractGameObject {
 		velocity.y = MathUtils.clamp(velocity.y, -terminalVelocity.y, terminalVelocity.y);
 	}
 
-	public void update(float deltaTime) {
-		
-		for(AbstractGameBonus b:bonus) {
-			b.update(deltaTime);
-		}
-		
+	public void update(float deltaTime) {		
 		stateTime += deltaTime;
 		updateMotionX(deltaTime);
 		updateMotionY(deltaTime);
@@ -137,9 +131,6 @@ public abstract class AbstractGameObject {
 	
 	public void setPosition(float x, float y) {
 		position.set(x, y);
-		for(AbstractGameBonus b:bonus) {
-			b.init();
-		}
 	}
 	
 	/* THIS OBJECT COLLIDED ON ANOTHER OBJECT */
@@ -190,16 +181,11 @@ public abstract class AbstractGameObject {
 		for (AbstractGameBonus b:bonus) {
 			if (!b.isVisible()) {
 				b.setVisible(true);
-				break;
 			}
+			outOfBonus = true;
 		}
 	}
 	
 	// render
-	public void render(SpriteBatch batch) {
-		for(AbstractGameBonus b:bonus) {
-			b.render(batch);
-		}
-	}
-	
+	public abstract void render(SpriteBatch batch);
 }

@@ -6,6 +6,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.badlogic.gdx.utils.Array;
+import com.bobo.bonuses.AbstractGameBonus;
 import com.bobo.objects.AbstractGameObject;
 
 public class CollisionDetection {
@@ -137,7 +138,14 @@ public class CollisionDetection {
 		
 		detectCollisionsObjectsForObjects(level.koopaTroopas, level.gorundBlocks);
 		
+		detectCollisionsObjectsForObjects(level.bonuses, level.gorundBlocks);
 		
+		/*for (AbstractGameObject a : level.gorundBlocks) {
+				for (AbstractGameBonus b : a.bonus) {
+					if(b.hasBody())
+						detectCollisionsObjectForObjects(b, level.gorundBlocks);
+			}
+		}*/
 	}
 
 

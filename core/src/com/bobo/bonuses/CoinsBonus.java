@@ -1,14 +1,12 @@
 package com.bobo.bonuses;
 
-import java.util.Iterator;
-
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.bobo.game.Assets;
+import com.bobo.game.HelpMethods;
 import com.bobo.objects.AbstractGameObject;
 
 public class CoinsBonus extends AbstractGameBonus {
@@ -18,9 +16,12 @@ public class CoinsBonus extends AbstractGameBonus {
 	private float COIN_ANIMATION_DURATON = 0.7f;
 	private float currentDuration;
 	
-	private float COIN_ANIMATION_DELAY = 0.5f;
+	private float COIN_ANIMATION_DELAY = 0.4f;
 	private float currentDelay;
 	
+	public CoinsBonus() {
+		this(null);
+	}
 	
 	public CoinsBonus(AbstractGameObject parent) {
 		this(parent, 100);
@@ -39,9 +40,10 @@ public class CoinsBonus extends AbstractGameBonus {
 	@Override
 	public void init() {
 		
-		position.x = parent.position.x + parent.dimension.x / 3.0f;
-		position.y = parent.position.y + dimension.y + parent.dimension.y;
-		
+		if(parent != null) {
+			position.x = parent.position.x + parent.dimension.x / 3.0f;
+			position.y = parent.position.y + dimension.y + parent.dimension.y;
+		}
 		dimension.set(0.35f, 0.5f);	
 		
 		terminalVelocity.set(0.0f, 3.0f);
@@ -52,27 +54,7 @@ public class CoinsBonus extends AbstractGameBonus {
 		velocity.x = terminalVelocity.x;
 		
 		font = Assets.instance.fonts.defaultNormal;
-		font.setColor(1, 1, 1, 1);
-		font.getData().setScale(0.1f, -0.1f);
-		
-		
-		String amoutStr = String.valueOf(amout);
-		
-		glyphTextures = new Array<TextureRegion>();
-		
-		for (int i = 0; i < amoutStr.length(); i++) {
-			
-			BitmapFont.Glyph glyph = font.getData().getGlyph(amoutStr.charAt(i));
-
-			if(glyph == null){
-			    // No glyph for character
-			}else{
-			    TextureRegion page = font.getRegion(glyph.page);
-			    glyphTextures.add(new TextureRegion(page.getTexture(), glyph.u, glyph.v, glyph.u2, glyph.v2));
-			}
-			
-		}
-
+		glyphTextures = HelpMethods.getFontRegions(String.valueOf(amout), font);
 	}
 	
 	@Override
@@ -100,10 +82,10 @@ public class CoinsBonus extends AbstractGameBonus {
 		
 		if(isVisible() && currentDuration >= 0.0f && currentDelay <= 0) {			
 			for (int i = 0; i < glyphTextures.size; i++) {
-				TextureRegion t = glyphTextures.get(i);
+				TextureRegion reg = glyphTextures.get(i);
 				
-				batch.draw(t.getTexture(), position.x + (i*dimension.x), position.y, origin.x, origin.y, dimension.x, dimension.y, scale.x,
-						scale.y, rotation, t.getRegionX(), t.getRegionY(), t.getRegionWidth(), t.getRegionHeight(),
+				batch.draw(reg.getTexture(), position.x + (i*dimension.x), position.y, origin.x, origin.y, dimension.x, dimension.y, scale.x,
+						scale.y, rotation, reg.getRegionX(), reg.getRegionY(), reg.getRegionWidth(), reg.getRegionHeight(),
 						false, false);
 			}
 		}

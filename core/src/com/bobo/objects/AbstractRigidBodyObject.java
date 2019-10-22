@@ -74,13 +74,9 @@ public abstract class AbstractRigidBodyObject extends AbstractGameObject {
 		
 		super.onHitFromSide(collidedObject, hitRightEdge);
 		
-		viewDirection = (hitRightEdge)?VIEW_DIRECTION.RIGHT:VIEW_DIRECTION.LEFT;
+		viewDirection = (hitRightEdge) ? VIEW_DIRECTION.RIGHT : VIEW_DIRECTION.LEFT;
 		if(collidedObject.isEnemy() && !collidedObject.isPlayer() && collidedObject.isAlive()) {
-			((AbstractRigidBodyObject) collidedObject).viewDirection = (!hitRightEdge)?VIEW_DIRECTION.RIGHT:VIEW_DIRECTION.LEFT;
-			
-			if(this.getClass() == KoopaTroopa.class && ((KoopaTroopa)this).slidingAfterHit) {
-				((Enemy) collidedObject).damageEnemyFromSide(this, hitRightEdge);
-			}	
+			((AbstractRigidBodyObject) collidedObject).viewDirection = (!hitRightEdge) ? VIEW_DIRECTION.RIGHT : VIEW_DIRECTION.LEFT;
 		}
 	}
 

@@ -1,34 +1,62 @@
 
 objects.pack.png
-size: 64,16
+size: 128,32
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+bonus_block
+  rotate: false
+  xy: 1, 15
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 1
+bonus_block
+  rotate: false
+  xy: 19, 15
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 2
+bonus_block
+  rotate: false
+  xy: 37, 15
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 3
 coin
   rotate: false
-  xy: 1, 1
+  xy: 73, 17
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
   index: 1
 coin
   rotate: false
-  xy: 17, 1
+  xy: 73, 1
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
   index: 2
 coin
   rotate: false
-  xy: 33, 1
+  xy: 89, 17
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
   index: 3
 coin
   rotate: false
-  xy: 49, 1
+  xy: 89, 1
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
   index: 4
+growth_mushroom
+  rotate: false
+  xy: 55, 15
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1

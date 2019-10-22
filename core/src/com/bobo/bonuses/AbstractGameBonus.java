@@ -8,12 +8,15 @@ public abstract class AbstractGameBonus extends AbstractRigidBodyObject{
 
 	public boolean collected;
 	public boolean visible;
+	public boolean applyCollisions;
 	
 	public AbstractGameObject parent;
 	
 	public AbstractGameBonus() {
 		collected = false;
 		visible = false;
+		applyCollisions = false;
+		hasBody = false;
 		acceleration.set(0.0f, 0.0f);
 	}
 
@@ -33,6 +36,23 @@ public abstract class AbstractGameBonus extends AbstractRigidBodyObject{
 		this.visible = visible;
 	}
 
+	
+	
+	@Override
+	public void onHitFromSide(AbstractGameObject collidedObject, boolean hitRightEdge) {
+		if(applyCollisions && isVisible()) super.onHitFromSide(collidedObject, hitRightEdge);
+	}
+
+	@Override
+	public void onHitFromTop(AbstractGameObject collidedObject) {
+		if(applyCollisions && isVisible()) super.onHitFromTop(collidedObject);
+	}
+
+	@Override
+	public void movingObjectHitFromBottom(AbstractGameObject collidedObject) {
+		if(applyCollisions && isVisible()) super.movingObjectHitFromBottom(collidedObject);
+	}
+
 	@Override
 	public void update(float deltaTime) {
 		if(isVisible())
@@ -41,8 +61,6 @@ public abstract class AbstractGameBonus extends AbstractRigidBodyObject{
 
 	@Override
 	public void render(SpriteBatch batch) {
-		if(isVisible())
-			super.render(batch);
 	}
 	
 	

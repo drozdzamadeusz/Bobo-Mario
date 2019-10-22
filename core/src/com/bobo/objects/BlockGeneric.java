@@ -10,7 +10,7 @@ public class BlockGeneric extends AbstractRigidBodyObject {
 
 	public static final String TAG = BlockGeneric.class.getCanonicalName();
 	
-	protected TextureRegion reg;
+	protected TextureRegion reg = null;
 	protected boolean bumpFromBottomAnimation = true;
 	
 	public BlockGeneric(){
@@ -28,14 +28,10 @@ public class BlockGeneric extends AbstractRigidBodyObject {
 	
 	@Override
 	public void render(SpriteBatch batch) {
-		
-		super.render(batch);
-		
 		batch.draw(reg.getTexture(), position.x, position.y, origin.x, origin.y, dimension.x, dimension.y, scale.x,
 				scale.y, rotation, reg.getRegionX(), reg.getRegionY(), reg.getRegionWidth(), reg.getRegionHeight(),
 				false, false);
 	}
-	
 	
 
 	private float BUMP_TIME = 0.001f;

@@ -5,8 +5,13 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.bobo.bonuses.AbstractGameBonus;
+import com.bobo.bonuses.CoinsBonus;
+import com.bobo.bonuses.GoldCoinAnim;
+import com.bobo.bonuses.GrowthMushroomBonus;
 import com.bobo.objects.AbstractGameObject;
 import com.bobo.objects.BlockGeneric;
+import com.bobo.objects.BonusBlock;
 import com.bobo.objects.Ground;
 import com.bobo.objects.characters.Player;
 import com.bobo.objects.enemies.Goomba;
@@ -23,8 +28,10 @@ public class Level {
 		GROUND(155, 74, 0), // brown - ground
 		BLOCK(185, 122, 87), // light brown - block
 		GOOMBA(92, 44, 7), // dark brown - goomba
-		KOOPA_TROOPA(30, 132, 0); // green - koopa troopa
-		
+		KOOPA_TROOPA(30, 132, 0), // green - koopa troopa
+		BONUS_BLOCK(255, 255, 0), //yellow - bous block
+		BONUS_COINS_200(248, 242, 216),
+		BONUS_GROWTH_MUSHROOM(255, 174, 174);
 		
 		private int color;
 
@@ -53,9 +60,13 @@ public class Level {
 		init(filename);
 	}
 	
+	public Array<AbstractGameObject> allGameObjects;
+	
 	public Array<AbstractGameObject> gorundBlocks;
 	public Array<AbstractGameObject> goombas;
 	public Array<AbstractGameObject> koopaTroopas;
+	
+	public Array<AbstractGameObject> bonuses;
 	
 	public AbstractGameObject mario;
 	
@@ -65,9 +76,12 @@ public class Level {
 		
 		int lastPixel = -1;
 		
+		allGameObjects = new Array<AbstractGameObject>();
+		
 		gorundBlocks = new Array<AbstractGameObject>();
 		goombas = new Array<AbstractGameObject>();
 		koopaTroopas = new Array<AbstractGameObject>();
+		bonuses = new Array<AbstractGameObject>();
 		
 		for (int pixelY = 0; pixelY < pixmap.getHeight(); pixelY++) {
 			
@@ -88,16 +102,22 @@ public class Level {
 				else if (BLOCK_TYPE.GROUND.sameColor(currentPixel)) {
 					obj = new Ground();
 						
-					offsetHeight = 0.0f;
 					obj.setPosition(pixelX, baseHeight + offsetHeight);
 					((Ground)obj).originPosition = new Vector2(obj.position);
 					
 					gorundBlocks.add((Ground) obj);
-					// ground
+				// block
 				}else if (BLOCK_TYPE.BLOCK.sameColor(currentPixel)) {
 					obj = new BlockGeneric();
 							
-					offsetHeight = 0.0f;
+					obj.setPosition(pixelX, baseHeight + offsetHeight);
+					((BlockGeneric)obj).originPosition = new Vector2(obj.position);
+					
+					gorundBlocks.add((BlockGeneric) obj);
+					// block
+				}else if (BLOCK_TYPE.BONUS_BLOCK.sameColor(currentPixel)) {
+					obj = new BonusBlock();
+					
 					obj.setPosition(pixelX, baseHeight + offsetHeight);
 					((BlockGeneric)obj).originPosition = new Vector2(obj.position);
 					
@@ -106,23 +126,30 @@ public class Level {
 				}else if (BLOCK_TYPE.PLAYER.sameColor(currentPixel)) {
 					obj = new Player();
 					
-					offsetHeight = 0.0f;
 					obj.setPosition(pixelX, baseHeight + offsetHeight);
 					
 					mario = (Player) obj;
 				}else if (BLOCK_TYPE.GOOMBA.sameColor(currentPixel)) {
 					obj = new Goomba();
 					
-					offsetHeight = 0.0f;
 					obj.setPosition(pixelX, baseHeight + offsetHeight);
 					
 					goombas.add((Goomba) obj);
 				}else if (BLOCK_TYPE.KOOPA_TROOPA.sameColor(currentPixel)) {
 					obj = new KoopaTroopa();					
-					offsetHeight = 0.0f;
+					
 					obj.setPosition(pixelX, baseHeight + offsetHeight);
 					
 					koopaTroopas.add((KoopaTroopa) obj);
+				} else if (BLOCK_TYPE.BONUS_COINS_200.sameColor(currentPixel)) {
+					
+					obj = addBonusToUpperBlock(new GoldCoinAnim(), pixelX, baseHeight);
+					obj = addBonusToUpperBlock(new CoinsBonus(), pixelX, baseHeight);
+					
+					bonuses.add(obj);
+				} else if (BLOCK_TYPE.BONUS_GROWTH_MUSHROOM.sameColor(currentPixel)) {
+					obj = addBonusToUpperBlock(new GrowthMushroomBonus(), pixelX, baseHeight);
+					bonuses.add(obj);
 				} else {
 					int r = 0xff & (currentPixel >>> 24);
 					int g = 0xff & (currentPixel >>> 16);
@@ -131,6 +158,7 @@ public class Level {
 					Gdx.app.error(TAG, "Unknown object at x<" + pixelX + "> y<" + pixelY + ">: r<" + r + "> g<" + g
 							+ "> b<" + b + "> a<" + a + ">");
 				}
+				if(obj != null) allGameObjects.add(obj);
 				lastPixel = currentPixel;
 			}
 		}
@@ -138,6 +166,25 @@ public class Level {
 
 		// free memory
 		pixmap.dispose();
+	}
+
+	private AbstractGameObject addBonusToUpperBlock(AbstractGameBonus bonus, int pixelX, float baseHeight) {
+		AbstractGameObject upperBlock = null;
+		for(AbstractGameObject o:allGameObjects) {
+			if(o.position.x == pixelX && o.position.y == (baseHeight + 1)) {
+				upperBlock = o;
+				break;
+			}
+		}
+		Gdx.app.debug(TAG, upperBlock.getClass().getCanonicalName());
+		
+		if(upperBlock != null) {
+			((AbstractGameBonus) bonus).parent = upperBlock;
+			bonus.init();
+			upperBlock.bonus = new Array<AbstractGameBonus>(1);
+			upperBlock.bonus.add((AbstractGameBonus) bonus);
+		}
+		return bonus;
 	}
 	
 	
@@ -160,10 +207,18 @@ public class Level {
 		for (AbstractGameObject ground : gorundBlocks) {
 			if(objectInViewPort(ground)) ground.update(deltaTime);
 		}
+		
+		for (AbstractGameObject bonus : bonuses) {
+			if(objectInViewPort(bonus)) bonus.update(deltaTime);
+		}
 	}
 
 	public void render(SpriteBatch batch) {
 		
+		
+		for(AbstractGameObject bonus:bonuses) {
+			bonus.render(batch);
+		}
 		
 		for (AbstractGameObject ground : gorundBlocks) {
 			//if(objectInViewPort(ground))
@@ -181,7 +236,6 @@ public class Level {
 //			/if(objectInViewPort(goomba))
 				goomba.render(batch);
 		}
-		
 		
 
 		mario.render(batch);

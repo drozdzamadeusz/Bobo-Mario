@@ -3,11 +3,8 @@ package com.bobo.objects;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import com.bobo.bonuses.AbstractGameBonus;
-import com.bobo.bonuses.CoinsBonus;
-import com.bobo.bonuses.GoldCoinBonus;
+import com.bobo.bonuses.GrowthMushroomBonus;
 import com.bobo.game.Assets;
-import com.bobo.rewards.AbstractGameRewards;
-import com.bobo.rewards.CoinsReward;
 
 public class Ground extends BlockGeneric {
 
@@ -22,18 +19,9 @@ public class Ground extends BlockGeneric {
 		
 		regGround = Assets.instance.tilesetAssets.ground;
 		reg = regGround;
-		bumpFromBottomAnimation = true;
-		
-		bonus = new Array<AbstractGameBonus>();
-		bonus.add((AbstractGameBonus) new GoldCoinBonus(this),
-				(AbstractGameBonus) new CoinsBonus(this, 200),
-				
-				(AbstractGameBonus) new GoldCoinBonus(this),
-				(AbstractGameBonus) new CoinsBonus(this, 200));
-		
-	
+		bumpFromBottomAnimation = false;
 	}
-
+	
 	@Override
 	public void grantBonus() {
 		for (int i = 0; i < bonus.size; i++) {
@@ -50,7 +38,6 @@ public class Ground extends BlockGeneric {
 			}
 		}
 	}
-	
 	
 
 }

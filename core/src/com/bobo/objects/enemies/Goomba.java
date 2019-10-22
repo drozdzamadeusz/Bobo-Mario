@@ -21,7 +21,6 @@ public class Goomba extends AbstractRigidBodyObject implements Enemy{
 	
 	public final float JUMP_TIME_MAX = 0.03f;
 	public final float JUMP_TIME_MIN = 0.00f;
-
 	
 	public Goomba() {
 		init();
@@ -110,9 +109,6 @@ public class Goomba extends AbstractRigidBodyObject implements Enemy{
 				friction.set(12.0f, 42.0f);
 				acceleration.set(-15f, -200.0f);
 				momentumGain = new Vector2(terminalVelocity);
-				
-				velocity.y = terminalVelocity.y;
-				velocity.x = terminalVelocity.x;
 			}
 			
 			return;
@@ -153,7 +149,7 @@ public class Goomba extends AbstractRigidBodyObject implements Enemy{
 
 	@Override
 	public boolean hasBody() {
-		return isAlive() || TIME_TO_SHOW_AFTER_DEAD > 0.0f;
+		return !killedFromSide && (isAlive() || TIME_TO_SHOW_AFTER_DEAD > 0.0f);
 	}
 
 	@Override
