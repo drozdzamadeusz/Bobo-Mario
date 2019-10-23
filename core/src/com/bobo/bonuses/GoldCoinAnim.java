@@ -56,9 +56,8 @@ public class GoldCoinAnim extends AbstractGameBonus{
 
 	@Override
 	public void render(SpriteBatch batch) {
-		TextureRegion reg;
-		
 		if(isVisible() && coinCurrentAnimDuration >= 0.0f) {
+			TextureRegion reg;
 			reg = (TextureRegion) animation.getKeyFrame(stateTime, true);
 			
 			batch.draw(reg.getTexture(), position.x, position.y, origin.x, origin.y, dimension.x, dimension.y, scale.x,
@@ -67,7 +66,4 @@ public class GoldCoinAnim extends AbstractGameBonus{
 			
 		}
 	}
-	
-	
-
 }

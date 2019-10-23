@@ -11,11 +11,10 @@ public class GrowthMushroomBonus extends AbstractGameBonus{
 
 	public TextureRegion regMushroom;
 	
-	public static float MUSHROOM_SPAWN_TIME  = 0.8f;
+	public static float MUSHROOM_SPAWN_TIME  = 0.85f;
 	public float currentSpawnTime;
 	
-	
-	private float MUSHROOM_ANIMATION_DELAY = 0.4f;
+	private float MUSHROOM_ANIMATION_DELAY = 0.3f;
 	private float currentDelay;
 	
 	public GrowthMushroomBonus() {
@@ -48,8 +47,8 @@ public class GrowthMushroomBonus extends AbstractGameBonus{
 	
 	@Override
 	public void update(float deltaTime) {
-		super.update(deltaTime);
 		if(isVisible()) {
+			super.update(deltaTime);
 			currentDelay -= deltaTime;
 			
 			if(currentDelay <= 0) {
@@ -81,8 +80,6 @@ public class GrowthMushroomBonus extends AbstractGameBonus{
 	
 	@Override
 	public void render(SpriteBatch batch) {
-		super.render(batch);
-		
 		if(isVisible() && currentDelay <= 0) {
 			TextureRegion reg;
 			reg = regMushroom;

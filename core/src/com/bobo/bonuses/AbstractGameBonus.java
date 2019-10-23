@@ -1,6 +1,5 @@
 package com.bobo.bonuses;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.bobo.objects.AbstractGameObject;
 import com.bobo.objects.AbstractRigidBodyObject;
 
@@ -58,11 +57,6 @@ public abstract class AbstractGameBonus extends AbstractRigidBodyObject{
 		if(isVisible())
 			super.update(deltaTime);
 	}
-
-	@Override
-	public void render(SpriteBatch batch) {
-	}
-	
 	
 
 }

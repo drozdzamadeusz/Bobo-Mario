@@ -135,12 +135,6 @@ public class CollisionDetection {
 		
 		detectCollisionsObjectsForObjects(level.bonuses, level.gorundBlocks);
 		
-		/*for (AbstractGameObject a : level.gorundBlocks) {
-				for (AbstractGameBonus b : a.bonus) {
-					if(b.hasBody())
-						detectCollisionsObjectForObjects(b, level.gorundBlocks);
-			}
-		}*/
 	}
 
 

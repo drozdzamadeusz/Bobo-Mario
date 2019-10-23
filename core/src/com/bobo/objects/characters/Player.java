@@ -103,13 +103,6 @@ public class Player extends AbstractRigidBodyObject {
 	
 	@Override
 	protected void updateMotionY(float deltaTime) {
-		
-		/*float JUMP_TIME_MAX = 0.25f;
-		 
-		 if(Gdx.graphics.getFramesPerSecond() > 80) {
-			 JUMP_TIME_MAX -= deltaTime * (Gdx.graphics.getFramesPerSecond()) / 34.0f;
-		 }*/
-	
 		deltaTime = Math.min(deltaTime, 1.0f / 60.0f);
 		
 		switch (jumpState) {

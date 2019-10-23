@@ -64,7 +64,6 @@ public class CoinsBonus extends AbstractGameBonus {
 	
 	@Override
 	public void update(float deltaTime) {
-		
 		if(isVisible()) {
 			if(currentDelay <= 0) {
 				super.update(deltaTime);
@@ -76,8 +75,6 @@ public class CoinsBonus extends AbstractGameBonus {
 
 	@Override
 	public void render(SpriteBatch batch) {
-		super.render(batch);
-		
 		if(isVisible() && currentDuration >= 0.0f && currentDelay <= 0) {			
 			for (int i = 0; i < glyphTextures.size; i++) {
 				TextureRegion reg = glyphTextures.get(i);
@@ -89,7 +86,4 @@ public class CoinsBonus extends AbstractGameBonus {
 		}
 		
 	}
-	
-	
-
 }

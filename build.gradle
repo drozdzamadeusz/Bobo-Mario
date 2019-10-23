@@ -76,8 +76,7 @@ project(":desktop") {
 			natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-x86_64"
 	        
 	    }
-	}
-}*/
+	}*/
 
 
 project(":html") {

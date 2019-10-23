@@ -177,7 +177,7 @@ public class Level {
 				break;
 			}
 		}
-		Gdx.app.debug(TAG, upperBlock.getClass().getCanonicalName());
+		Gdx.app.debug(TAG, "Adding bonus to "+upperBlock.getClass().getCanonicalName());
 		
 		if(upperBlock != null) {
 			((AbstractGameBonus) bonus).parent = upperBlock;
@@ -233,7 +233,7 @@ public class Level {
 		
 		
 		for (AbstractGameObject goomba : goombas) {
-//			/if(objectInViewPort(goomba))
+			//if(objectInViewPort(goomba))
 				goomba.render(batch);
 		}
 		
