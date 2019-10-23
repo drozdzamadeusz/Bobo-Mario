@@ -15,6 +15,9 @@ public class GrowthMushroomBonus extends AbstractGameBonus{
 	public float currentSpawnTime;
 	
 	
+	private float MUSHROOM_ANIMATION_DELAY = 0.4f;
+	private float currentDelay;
+	
 	public GrowthMushroomBonus() {
 		this(null);
 	}
@@ -30,45 +33,48 @@ public class GrowthMushroomBonus extends AbstractGameBonus{
 		
 		if(parent != null) position.set(parent.position);
 		
-		origin.set(dimension.x / 2, dimension.y / 2);
-		bounds.set(0, 0, dimension.x, dimension.y);
-		
-		viewDirection = VIEW_DIRECTION.RIGHT;
-		
-		jumpState = JUMP_STATE.FALLING;
-		
 		applyCollisions = true;
-
 	}
 	
 	@Override
 	public void setVisible(boolean visible) {
 		super.setVisible(visible);
-		currentSpawnTime = MUSHROOM_SPAWN_TIME;
-		
-		terminalVelocity.set(0.0f, 1.3f);
-		acceleration.set(terminalVelocity);
-		momentumGain = new Vector2(terminalVelocity);
-		velocity.set(terminalVelocity);
+		currentSpawnTime = MUSHROOM_SPAWN_TIME;	
+		currentDelay = MUSHROOM_ANIMATION_DELAY;
 	}
 	
 	boolean sateSliding = false;
+	boolean spawnAnimShowed = false;
+	
 	@Override
 	public void update(float deltaTime) {
 		super.update(deltaTime);
 		if(isVisible()) {
-			currentSpawnTime -= deltaTime;
-			if(currentSpawnTime <= 0) {
-				if(!sateSliding) {
-					acceleration.set(0, -60.0f);
-					terminalVelocity.set(5.0f, 17.0f);
+			currentDelay -= deltaTime;
+			
+			if(currentDelay <= 0) {
+				
+				if(!spawnAnimShowed) {
+					terminalVelocity.set(0.0f, 1.3f);
+					acceleration.set(terminalVelocity);
 					momentumGain = new Vector2(terminalVelocity);
-					velocity.set(terminalVelocity.x, 0);
-					hasBody = true;
-					sateSliding = true;
+					velocity.set(terminalVelocity);
+					spawnAnimShowed = !spawnAnimShowed;
 				}
+				
+				currentSpawnTime -= deltaTime;
+				if(currentSpawnTime <= 0) {
+					if(!sateSliding) {
+						acceleration.set(0, -60.0f);
+						terminalVelocity.set(3.5f, 13.0f);
+						momentumGain = new Vector2(terminalVelocity);
+						velocity.set(terminalVelocity.x, 0);
+						hasBody = true;
+						sateSliding = !sateSliding;
+					}
+				}
+				setWalking((viewDirection == VIEW_DIRECTION.RIGHT)?true:false);
 			}
-			setWalking((viewDirection == VIEW_DIRECTION.RIGHT)?true:false);
 		}
 	}
 
@@ -77,7 +83,7 @@ public class GrowthMushroomBonus extends AbstractGameBonus{
 	public void render(SpriteBatch batch) {
 		super.render(batch);
 		
-		if(isVisible()) {
+		if(isVisible() && currentDelay <= 0) {
 			TextureRegion reg;
 			reg = regMushroom;
 			batch.draw(reg.getTexture(), position.x, position.y, origin.x, origin.y, dimension.x, dimension.y, scale.x,

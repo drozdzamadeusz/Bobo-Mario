@@ -1,12 +1,7 @@
 package com.bobo.game;
 
-import java.util.Arrays;
-
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.badlogic.gdx.utils.Array;
-import com.bobo.bonuses.AbstractGameBonus;
 import com.bobo.objects.AbstractGameObject;
 
 public class CollisionDetection {

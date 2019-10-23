@@ -1,8 +1,5 @@
 package com.bobo.objects;
 
-import com.bobo.objects.enemies.Enemy;
-import com.bobo.objects.enemies.KoopaTroopa;
-
 public abstract class AbstractRigidBodyObject extends AbstractGameObject {
 
 	public static final String TAG = AbstractRigidBodyObject.class.getCanonicalName();
@@ -32,6 +29,11 @@ public abstract class AbstractRigidBodyObject extends AbstractGameObject {
 		jumpState = JUMP_STATE.FALLING;
 
 		timeJumping = 0;
+		
+		origin.set(dimension.x / 2, dimension.y / 2);
+		bounds.set(0, 0, dimension.x, dimension.y);
+		
+		viewDirection = VIEW_DIRECTION.RIGHT;
 	}
 
 	@Override

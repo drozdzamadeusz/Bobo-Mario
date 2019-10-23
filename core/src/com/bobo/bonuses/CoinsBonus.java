@@ -47,11 +47,9 @@ public class CoinsBonus extends AbstractGameBonus {
 		dimension.set(0.35f, 0.5f);	
 		
 		terminalVelocity.set(0.0f, 3.0f);
-		friction.set(0, 3.0f);
+		friction.set(terminalVelocity);
 		momentumGain = new Vector2(terminalVelocity);
-		
-		velocity.y = terminalVelocity.y;
-		velocity.x = terminalVelocity.x;
+		velocity.set(terminalVelocity);
 		
 		font = Assets.instance.fonts.defaultNormal;
 		glyphTextures = HelpMethods.getFontRegions(String.valueOf(amout), font);

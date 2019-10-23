@@ -144,8 +144,9 @@ public class Level {
 				} else if (BLOCK_TYPE.BONUS_COINS_200.sameColor(currentPixel)) {
 					
 					obj = addBonusToUpperBlock(new GoldCoinAnim(), pixelX, baseHeight);
-					obj = addBonusToUpperBlock(new CoinsBonus(), pixelX, baseHeight);
+					bonuses.add(obj);
 					
+					obj = addBonusToUpperBlock(new CoinsBonus(), pixelX, baseHeight);
 					bonuses.add(obj);
 				} else if (BLOCK_TYPE.BONUS_GROWTH_MUSHROOM.sameColor(currentPixel)) {
 					obj = addBonusToUpperBlock(new GrowthMushroomBonus(), pixelX, baseHeight);
@@ -181,7 +182,6 @@ public class Level {
 		if(upperBlock != null) {
 			((AbstractGameBonus) bonus).parent = upperBlock;
 			bonus.init();
-			upperBlock.bonus = new Array<AbstractGameBonus>(1);
 			upperBlock.bonus.add((AbstractGameBonus) bonus);
 		}
 		return bonus;
