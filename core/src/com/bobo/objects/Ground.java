@@ -1,5 +1,6 @@
 package com.bobo.objects;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import com.bobo.bonuses.AbstractGameBonus;
@@ -19,6 +20,7 @@ public class Ground extends BlockGeneric {
 		
 		regGround = Assets.instance.tilesetAssets.ground;
 		reg = regGround;
+		
 		bumpFromBottomAnimation = false;
 	}
 	

@@ -125,13 +125,16 @@ public class CollisionDetection {
 		
 		
 		detectCollisionsObjectsForObjects(level.goombas, level.gorundBlocks);
-				
-		detectCollisionsObjectsForObjects(level.goombas, level.goombas);		
+		detectCollisionsObjectsForObjects(level.koopaTroopas, level.gorundBlocks);		
+		
+		detectCollisionsObjectsForObjects(level.goombas, level.goombas);
 		detectCollisionsObjectsForObjects(level.koopaTroopas, level.koopaTroopas);
+		
+		detectCollisionsObjectsForObjects(level.goombas, level.koopaTroopas);
 		detectCollisionsObjectsForObjects(level.koopaTroopas, level.goombas);
 		
 		
-		detectCollisionsObjectsForObjects(level.koopaTroopas, level.gorundBlocks);
+
 		
 		detectCollisionsObjectsForObjects(level.bonuses, level.gorundBlocks);
 		

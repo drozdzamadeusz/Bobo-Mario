@@ -10,7 +10,7 @@ public class BlockGeneric extends AbstractRigidBodyObject {
 
 	public static final String TAG = BlockGeneric.class.getCanonicalName();
 	
-	protected TextureRegion reg = null;
+	protected TextureRegion reg;
 	protected boolean bumpFromBottomAnimation = true;
 	
 	public BlockGeneric(){
@@ -44,9 +44,8 @@ public class BlockGeneric extends AbstractRigidBodyObject {
 		
 		super.update(deltaTime);
 		
-		position.y = Math.max(position.y, originPosition.y);
-		
-		if(playerBumpFromBottom && bumpFromBottomAnimation) {			
+		if(playerBumpFromBottom && bumpFromBottomAnimation) {		
+			position.y = Math.max(position.y, originPosition.y);
 			if(timeBumpingUp >= 0.0f) {
 				
 				terminalVelocity.set(0, 10.0f);

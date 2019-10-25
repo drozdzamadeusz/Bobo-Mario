@@ -114,14 +114,6 @@ public class Level {
 					((BlockGeneric)obj).originPosition = new Vector2(obj.position);
 					
 					gorundBlocks.add((BlockGeneric) obj);
-					// block
-				}else if (BLOCK_TYPE.BONUS_BLOCK.sameColor(currentPixel)) {
-					obj = new BonusBlock();
-					
-					obj.setPosition(pixelX, baseHeight + offsetHeight);
-					((BlockGeneric)obj).originPosition = new Vector2(obj.position);
-					
-					gorundBlocks.add((BlockGeneric) obj);
 				// palyer
 				}else if (BLOCK_TYPE.PLAYER.sameColor(currentPixel)) {
 					obj = new Player();
@@ -141,6 +133,13 @@ public class Level {
 					obj.setPosition(pixelX, baseHeight + offsetHeight);
 					
 					koopaTroopas.add((KoopaTroopa) obj);
+					}else if (BLOCK_TYPE.BONUS_BLOCK.sameColor(currentPixel)) {
+					obj = new BonusBlock();
+					
+					obj.setPosition(pixelX, baseHeight + offsetHeight);
+					((BlockGeneric)obj).originPosition = new Vector2(obj.position);
+					
+					gorundBlocks.add((BlockGeneric) obj);
 				} else if (BLOCK_TYPE.BONUS_COINS_200.sameColor(currentPixel)) {
 					
 					obj = addBonusToUpperBlock(new GoldCoinAnim(), pixelX, baseHeight);
@@ -221,19 +220,19 @@ public class Level {
 		}
 		
 		for (AbstractGameObject ground : gorundBlocks) {
-			if(objectInViewPort(ground))
+			//if(objectInViewPort(ground))
 				ground.render(batch);
 		}
 		
 		
 		for (AbstractGameObject koopa : koopaTroopas) {
-			if(objectInViewPort(koopa))
+			//if(objectInViewPort(koopa))
 				koopa.render(batch);
 		}
 		
 		
 		for (AbstractGameObject goomba : goombas) {
-			if(objectInViewPort(goomba))
+			//if(objectInViewPort(goomba))
 				goomba.render(batch);
 		}
 		

@@ -28,7 +28,7 @@ public class BonusBlock extends BlockGeneric {
 	}
 
 	@Override
-	public void render(SpriteBatch batch) {
+	public void render(SpriteBatch batch) {	
 		if(!outOfBonus)
 			reg = (TextureRegion) animation.getKeyFrame(stateTime, true);
 		else

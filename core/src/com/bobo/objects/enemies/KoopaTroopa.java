@@ -1,6 +1,5 @@
 package com.bobo.objects.enemies;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -10,7 +9,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.bobo.game.Assets;
 import com.bobo.objects.AbstractGameObject;
 import com.bobo.objects.AbstractRigidBodyObject;
-import com.bobo.objects.AbstractRigidBodyObject.VIEW_DIRECTION;
 
 public class KoopaTroopa extends AbstractRigidBodyObject implements Enemy {
 
@@ -108,10 +106,28 @@ public class KoopaTroopa extends AbstractRigidBodyObject implements Enemy {
 		
 	}
 	
+	boolean killedFromSide = false;
+	public float KILLED_FROM_SIDE_ANIMATION_JUMP_TIME = 0.0001f;
+	
 	
 	@Override
 	public void update(float deltaTime) {
 		super.update(deltaTime);
+		
+		if(killedFromSide) {
+			
+			if(KILLED_FROM_SIDE_ANIMATION_JUMP_TIME >= 0.0f) {
+				KILLED_FROM_SIDE_ANIMATION_JUMP_TIME -= deltaTime;
+				
+				terminalVelocity.set(13.0f, 25.0f);
+				friction.set(12.0f, 42.0f);
+				acceleration.set(-15f, -200.0f);
+				momentumGain = new Vector2(terminalVelocity);
+			}
+			
+			return;
+		}
+		
 		if(isAlive || slidingAfterHit) {
 			setWalking(viewDirection == VIEW_DIRECTION.RIGHT);
 		}else{
@@ -184,13 +200,14 @@ public class KoopaTroopa extends AbstractRigidBodyObject implements Enemy {
 
 	@Override
 	public void damageEnemyFromSide(AbstractGameObject collidedObjcet, boolean hitRightEdge) {
-		
+		isAlive = false;
+		killedFromSide = (collidedObjcet.isEnemy && collidedObjcet.getClass() == KoopaTroopa.class && ((KoopaTroopa)collidedObjcet).slidingAfterHit);
 	}
 
 	@Override
 	public boolean hasBody() {
 		// TODO Auto-generated method stub
-		return super.hasBody();
+		return !killedFromSide && (isAlive());
 	}
 	
 	

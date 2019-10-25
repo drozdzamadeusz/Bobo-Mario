@@ -49,9 +49,10 @@ public class GoldCoinAnim extends AbstractGameBonus{
 
 	@Override
 	public void update(float deltaTime) {
-		super.update(deltaTime);
-		if(isVisible())
-			coinCurrentAnimDuration -= deltaTime;	
+		if(isVisible()) {
+			super.update(deltaTime);
+			coinCurrentAnimDuration -= deltaTime;
+		}
 	}
 
 	@Override

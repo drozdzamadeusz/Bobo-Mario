@@ -1,6 +1,5 @@
 package com.bobo.objects.enemies;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -70,13 +69,20 @@ public class Goomba extends AbstractRigidBodyObject implements Enemy{
 	}
 
 	private float TIME_TO_SHOW_AFTER_DEAD = 0.4f;
+	boolean killedFromSide = false;
 	
 
-	boolean killedFromSide = false;
+	
+	public float KILLED_FROM_SIDE_ANIMATION_JUMP_TIME = 0.0001f;
+	public boolean killedFromSideSetJump = false;
 	
 	@Override
 	public void render(SpriteBatch batch) {
 		TextureRegion reg = null;
+		
+		if(killedFromSide) {
+			rotation = 180;
+		}
 		
 		if(isAlive || killedFromSide) {
 			reg = (TextureRegion) animation.getKeyFrame(stateTime, true);
@@ -91,19 +97,15 @@ public class Goomba extends AbstractRigidBodyObject implements Enemy{
 
 	}
 	
-	public float KILL_ANIMATION_JUMP_TIME = 0.0001f;
-	
 	
 	@Override
 	public void update(float deltaTime) {
-		
-		
 		super.update(deltaTime);
 		
 		if(killedFromSide) {
 			
-			if(KILL_ANIMATION_JUMP_TIME >= 0.0f) {
-				KILL_ANIMATION_JUMP_TIME -= deltaTime;
+			if(KILLED_FROM_SIDE_ANIMATION_JUMP_TIME >= 0.0f) {
+				KILLED_FROM_SIDE_ANIMATION_JUMP_TIME -= deltaTime;
 				
 				terminalVelocity.set(13.0f, 25.0f);
 				friction.set(12.0f, 42.0f);
