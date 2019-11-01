@@ -1,5 +1,6 @@
 package com.bobo.objects.enemies;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -70,7 +71,6 @@ public class Goomba extends AbstractRigidBodyObject implements Enemy{
 
 	private float TIME_TO_SHOW_AFTER_DEAD = 0.4f;
 	boolean killedFromSide = false;
-	
 
 	
 	public float KILLED_FROM_SIDE_ANIMATION_JUMP_TIME = 0.0001f;
@@ -80,12 +80,14 @@ public class Goomba extends AbstractRigidBodyObject implements Enemy{
 	public void render(SpriteBatch batch) {
 		TextureRegion reg = null;
 		
-		if(killedFromSide) {
+		if(killedFromSide)
 			rotation = 180;
-		}
 		
 		if(isAlive || killedFromSide) {
-			reg = (TextureRegion) animation.getKeyFrame(stateTime, true);
+			if(!killedFromSide)
+				reg = (TextureRegion) animation.getKeyFrame(stateTime, true);
+			else
+				reg = (TextureRegion) animation.getKeyFrame(0, true);
 		}else {
 			reg = regGoombaCrushed;
 		}
@@ -98,23 +100,27 @@ public class Goomba extends AbstractRigidBodyObject implements Enemy{
 	}
 	
 	
+	boolean setKilledFromSideJumpVelocity = true;
+	
 	@Override
 	public void update(float deltaTime) {
-		super.update(deltaTime);
-		
 		if(killedFromSide) {
-			
 			if(KILLED_FROM_SIDE_ANIMATION_JUMP_TIME >= 0.0f) {
 				KILLED_FROM_SIDE_ANIMATION_JUMP_TIME -= deltaTime;
-				
-				terminalVelocity.set(13.0f, 25.0f);
-				friction.set(12.0f, 42.0f);
-				acceleration.set(-15f, -200.0f);
-				momentumGain = new Vector2(terminalVelocity);
+				if(setKilledFromSideJumpVelocity) {
+					terminalVelocity.set(7.0f, 14.0f);
+					friction.set(10.0f, 0.0f);
+					acceleration.set(0f, -100.0f);
+					momentumGain = new Vector2();
+					velocity.set(terminalVelocity);
+					setKilledFromSideJumpVelocity = !setKilledFromSideJumpVelocity;
+				}
 			}
-			
-			return;
 		}
+		
+		super.update(deltaTime);
+		
+		if(killedFromSide) return;
 		
 		if(isAlive) {
 			setWalking((viewDirection == VIEW_DIRECTION.RIGHT)?true:false);

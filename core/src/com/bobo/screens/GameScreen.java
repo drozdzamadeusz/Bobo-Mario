@@ -21,8 +21,14 @@ public class GameScreen extends AbstractGameScreen {
 		super(game);
 	}
 
+	static int TICKS_PER_SECOND = 25;
+	static int SKIP_TICKS = 1000 / TICKS_PER_SECOND;
+	static int MAX_FRAMESKIP = 5;
+
+	
 	@Override
 	public void render(float deltaTime) {
+		
 		if(!paused) {
 			worldController.update(deltaTime);
 		}

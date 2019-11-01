@@ -110,23 +110,27 @@ public class KoopaTroopa extends AbstractRigidBodyObject implements Enemy {
 	public float KILLED_FROM_SIDE_ANIMATION_JUMP_TIME = 0.0001f;
 	
 	
+	boolean setKilledFromSideJumpVelocity = true;
+	
 	@Override
 	public void update(float deltaTime) {
-		super.update(deltaTime);
-		
 		if(killedFromSide) {
-			
 			if(KILLED_FROM_SIDE_ANIMATION_JUMP_TIME >= 0.0f) {
 				KILLED_FROM_SIDE_ANIMATION_JUMP_TIME -= deltaTime;
-				
-				terminalVelocity.set(13.0f, 25.0f);
-				friction.set(12.0f, 42.0f);
-				acceleration.set(-15f, -200.0f);
-				momentumGain = new Vector2(terminalVelocity);
+				if(setKilledFromSideJumpVelocity) {
+					terminalVelocity.set(7.0f, 14.0f);
+					friction.set(10.0f, 0.0f);
+					acceleration.set(0f, -100.0f);
+					momentumGain = new Vector2();
+					velocity.set(terminalVelocity);
+					setKilledFromSideJumpVelocity = !setKilledFromSideJumpVelocity;
+				}
 			}
-			
-			return;
 		}
+		
+		super.update(deltaTime);
+		
+		if(killedFromSide) return;
 		
 		if(isAlive || slidingAfterHit) {
 			setWalking(viewDirection == VIEW_DIRECTION.RIGHT);
@@ -173,6 +177,18 @@ public class KoopaTroopa extends AbstractRigidBodyObject implements Enemy {
 				slidingAfterHit = false;
 			}
 		}
+		if(killedFromSide) {
+			rotation = 180;
+			if(isAlive()) {
+				reg = (TextureRegion) animation.getKeyFrame(0, true);
+				dimension.set(1.0f, 1.5f);
+			}else {
+				reg = koopaTroopaCrushed;
+				dimension.set(1.0f, 1.0f);
+			}
+			viewDirection= VIEW_DIRECTION.LEFT;
+		}
+			
 		batch.draw(reg.getTexture(), position.x, position.y, origin.x, origin.y, dimension.x,
 					dimension.y, scale.x, scale.y, rotation, reg.getRegionX(), reg.getRegionY(),
 					reg.getRegionWidth(), reg.getRegionHeight(), viewDirection == VIEW_DIRECTION.RIGHT, false);
