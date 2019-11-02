@@ -2,10 +2,7 @@ package com.bobo.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.bobo.game.Assets;
 import com.bobo.game.WorldController;
 import com.bobo.game.WorldRenderer;
 

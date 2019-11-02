@@ -1,11 +1,13 @@
 package com.bobo.objects;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.bobo.bonuses.AbstractGameBonus;
-import com.bobo.bonuses.GrowthMushroomBonus;
 import com.bobo.game.Assets;
+import com.bobo.utils.Constants;
 
 public class Ground extends BlockGeneric {
 
@@ -15,6 +17,7 @@ public class Ground extends BlockGeneric {
 		init();
 	}
 
+	
 	public void init() {
 		super.init();
 		
@@ -22,6 +25,14 @@ public class Ground extends BlockGeneric {
 		reg = regGround;
 		
 		bumpFromBottomAnimation = false;
+	}
+	
+	
+	@Override
+	public void render(SpriteBatch batch) {
+		batch.draw(reg.getTexture(), position.x, position.y, origin.x, origin.y, dimension.x, dimension.y, scale.x,
+				scale.y, rotation, reg.getRegionX(), reg.getRegionY(), reg.getRegionWidth(), reg.getRegionHeight(),
+				false, false);
 	}
 	
 	@Override

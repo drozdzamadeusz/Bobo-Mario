@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g3d.Shader;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.bobo.game.Assets;
@@ -259,6 +261,9 @@ public class Player extends AbstractRigidBodyObject {
 
 	@Override
 	public void render(SpriteBatch batch) {
+		ShaderProgram s = batch.getShader();
+		batch.setShader(null);
+		
 		TextureRegion reg = null;
 
 		float dimCorrectionX = 0;
@@ -275,7 +280,8 @@ public class Player extends AbstractRigidBodyObject {
 		batch.draw(reg.getTexture(), position.x, position.y, origin.x, origin.y, dimension.x + dimCorrectionX,
 				dimension.y + dimCorrectionY, scale.x, scale.y, rotation, reg.getRegionX(), reg.getRegionY(),
 				reg.getRegionWidth(), reg.getRegionHeight(), viewDirection == VIEW_DIRECTION.LEFT, false);
-
+		batch.setShader(s);
+		
 	}
 
 }
