@@ -38,7 +38,7 @@ public class WorldRenderer implements Disposable {
 	
 	
     public void createTestShader() {
-        colorTable =  new Texture(Constants.getPath("worlds/colortables/world_1_1.png"));
+        colorTable =  new Texture(Constants.getPath("shaders/colorpalette.png"));
 
         currentPalette = 1;
         paletteIndex = (currentPalette + 0.5f) / colorTable.getHeight();
@@ -46,14 +46,14 @@ public class WorldRenderer implements Disposable {
         shaderVertIndexPalette = Gdx.files.internal(Constants.getPath("shaders/colorpalette.vert")).readString();
         shaderFragIndexPalette = Gdx.files.internal(Constants.getPath("shaders/colorpalette.frag")).readString();
 
-        ShaderProgram.pedantic = false;
+        //ShaderProgram.pedantic = false;
 
         shader = new ShaderProgram(shaderVertIndexPalette, shaderFragIndexPalette);
         if(!shader.isCompiled()) {
             System.out.println("Shader nie dziala");
         }
         else{
-        	batch.setShader(shader);
+        	//batch.setShader(shader);
             System.out.println("Shader dziala");
         }
     }
@@ -61,8 +61,7 @@ public class WorldRenderer implements Disposable {
 	
 	public void init() {
 		
-		batch = new SpriteBatch();
-		createTestShader();
+		batch = new SpriteBatch(); 
 		
 		camera = new OrthographicCamera(Constants.VIEWPORT_WIDTH, Constants.VIEWPORT_HEIGHT);
 		camera.position.set(0, 0, 0);
@@ -74,6 +73,8 @@ public class WorldRenderer implements Disposable {
 		// flip y-axis
 		cameraGUI.update();
 		
+		
+		createTestShader();
 		
 	}
 	
@@ -96,28 +97,28 @@ public class WorldRenderer implements Disposable {
         //the active unit is 0
         Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0); 
 		
+      
 		batch.begin();
 		
-        shader.setUniformi("colorTable", 1);
-        shader.setUniformf("paletteIndex", paletteIndex);
+		batch.setShader(shader);
+		shader.setUniformi("u_colorTable", 1);
+        shader.setUniformf("u_paletteIndex", paletteIndex);
         
 		worldController.level.render(batch);
 		
 		batch.end();
+		batch.setShader(null);
 	}
 
 
 	private void renderGui(SpriteBatch batch) {
 		batch.setProjectionMatrix(cameraGUI.combined);
-		ShaderProgram s = batch.getShader();
-		batch.setShader(null);
 		
 		batch.begin();
 		
 		renderGuiFpsCounter(batch);
 		
 		batch.end();
-		batch.setShader(s);
 		
 	}
 	

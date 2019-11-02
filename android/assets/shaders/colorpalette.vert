@@ -1,5 +1,4 @@
 // http://stackoverflow.com/questions/10145000/libgdx-shaders-basic-shader-but-screen-is-blank
-
 attribute vec4 a_position;
 attribute vec4 a_color;
 attribute vec2 a_texCoord0;
