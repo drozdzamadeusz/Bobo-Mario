@@ -1,14 +1,12 @@
 package com.bobo.utils;
 
-import com.badlogic.gdx.Application.ApplicationType;
-import com.badlogic.gdx.Gdx;
-
 public class Constants {
 
 	public static final String DESKTOP_PATH_PREFIX =  "../android/assets/";
 	
 	public static String getPath(String fileName) {
-		return  ((Gdx.app.getType() == ApplicationType.Desktop) ? DESKTOP_PATH_PREFIX: "") + fileName;
+		return fileName;
+		//return  ((Gdx.app.getType() == ApplicationType.Desktop) ? DESKTOP_PATH_PREFIX: "") + fileName;
 	}
 	
 	

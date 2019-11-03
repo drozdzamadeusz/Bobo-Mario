@@ -249,7 +249,7 @@ public class Player extends AbstractRigidBodyObject {
 	private boolean enemyKillerPlayer(AbstractGameObject collidedObject) {
 		if(collidedObject.isEnemy() && (collidedObject).isAlive()) {
 			health -= ((Enemy) collidedObject).getDealingDamage();
-			return true;
+			return ((Enemy) collidedObject).getDealingDamage() > 0;
 		}
 		return false;
 	}

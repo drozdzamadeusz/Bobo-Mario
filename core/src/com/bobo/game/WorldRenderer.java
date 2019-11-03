@@ -38,21 +38,20 @@ public class WorldRenderer implements Disposable {
 	
 	
     public void createTestShader() {
-        colorTable =  new Texture(Constants.getPath("shaders/colorpalette.png"));
+        colorTable =  new Texture(Constants.getPath("worlds/colorpalette.png"));
 
-        currentPalette = 1;
-        paletteIndex = (currentPalette + 0.5f) / colorTable.getHeight();
+        currentPalette = 0;
+        paletteIndex = (currentPalette) / colorTable.getHeight();
         
         shaderVertIndexPalette = Gdx.files.internal(Constants.getPath("shaders/colorpalette.vert")).readString();
         shaderFragIndexPalette = Gdx.files.internal(Constants.getPath("shaders/colorpalette.frag")).readString();
 
-        //ShaderProgram.pedantic = false;
+        ShaderProgram.pedantic = false;
 
         shader = new ShaderProgram(shaderVertIndexPalette, shaderFragIndexPalette);
         if(!shader.isCompiled()) {
             System.out.println("Shader nie dziala");
-        }
-        else{
+        }else{
         	//batch.setShader(shader);
             System.out.println("Shader dziala");
         }
@@ -75,7 +74,6 @@ public class WorldRenderer implements Disposable {
 		
 		
 		createTestShader();
-		
 	}
 	
 	
@@ -101,6 +99,7 @@ public class WorldRenderer implements Disposable {
 		batch.begin();
 		
 		batch.setShader(shader);
+		
 		shader.setUniformi("u_colorTable", 1);
         shader.setUniformf("u_paletteIndex", paletteIndex);
         
