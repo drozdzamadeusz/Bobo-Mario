@@ -88,6 +88,7 @@ public class KoopaTroopa extends AbstractRigidBodyObject implements Enemy {
 			if(slidingAfterHit) {
 				((Enemy) collidedObject).damageEnemyFromSide(this, hitRightEdge);
 			}else{
+				if(collidedObject.getClass() == KoopaTroopa.class && ((KoopaTroopa)collidedObject).slidingAfterHit) return;
 				((AbstractRigidBodyObject) collidedObject).viewDirection = (!hitRightEdge)?VIEW_DIRECTION.RIGHT:VIEW_DIRECTION.LEFT;
 			}
 		}
@@ -115,8 +116,6 @@ public class KoopaTroopa extends AbstractRigidBodyObject implements Enemy {
 
 	@Override
 	public void onHitFromSide(AbstractGameObject collidedObject, boolean hitRightEdge) {
-		if(collidedObject.isPlayer()) Gdx.app.debug(TAG, "b");
-		
 		if(!slidingAfterHit  || (slidingAfterHit && !collidedObject.isEnemy())) {
 			if (hitRightEdge) {
 				position.x = collidedObject.position.x + collidedObject.bounds.width;

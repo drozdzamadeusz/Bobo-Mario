@@ -261,9 +261,6 @@ public class Player extends AbstractRigidBodyObject {
 
 	@Override
 	public void render(SpriteBatch batch) {
-		ShaderProgram s = batch.getShader();
-		batch.setShader(null);
-		
 		TextureRegion reg = null;
 
 		float dimCorrectionX = 0;
@@ -280,7 +277,6 @@ public class Player extends AbstractRigidBodyObject {
 		batch.draw(reg.getTexture(), position.x, position.y, origin.x, origin.y, dimension.x + dimCorrectionX,
 				dimension.y + dimCorrectionY, scale.x, scale.y, rotation, reg.getRegionX(), reg.getRegionY(),
 				reg.getRegionWidth(), reg.getRegionHeight(), viewDirection == VIEW_DIRECTION.LEFT, false);
-		batch.setShader(s);
 		
 	}
 
