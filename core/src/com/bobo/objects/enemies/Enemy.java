@@ -6,7 +6,7 @@ public interface Enemy {
 	
 	public void damageEnemyFromTop();
 	
-	public void damageEnemyFromSide(AbstractGameObject collidedObjcet, boolean hitRightEdge);
+	public void damageEnemyFromSide(AbstractGameObject collidedObject, boolean hitRightEdge);
 	
 	public void damageEnemyFromBottom();
 	

@@ -140,9 +140,9 @@ public class Goomba extends AbstractRigidBodyObject implements Enemy{
 	
 	
 	@Override
-	public void damageEnemyFromSide(AbstractGameObject collidedObjcet, boolean hitRightEdge) {
+	public void damageEnemyFromSide(AbstractGameObject collidedObject, boolean hitRightEdge) {
 		isAlive = false;
-		killedFromSide = (collidedObjcet.isEnemy && collidedObjcet.getClass() == KoopaTroopa.class && ((KoopaTroopa)collidedObjcet).slidingAfterHit);
+		killedFromSide = (collidedObject.isEnemy && collidedObject.getClass() == KoopaTroopa.class && ((KoopaTroopa) collidedObject).slidingAfterHit);
 	}
 	
 	@Override

@@ -52,7 +52,7 @@ public abstract class AbstractGameObject {
 		
 		bounds = new Rectangle(0, 0, dimension.x, dimension.y);
 		
-		bonus = new Array<>();
+		bonus = new Array<AbstractGameBonus>();
 	}
 
 	public float stateTime;

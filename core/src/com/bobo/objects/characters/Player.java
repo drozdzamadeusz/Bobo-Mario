@@ -175,8 +175,7 @@ public class Player extends AbstractRigidBodyObject {
 		super.updateMotionX(deltaTime);
 	}
 
-	
-	
+
 	@Override
 	public void onHitFromBottom(AbstractGameObject collidedObject) {
 		
@@ -227,7 +226,7 @@ public class Player extends AbstractRigidBodyObject {
 		if(collidedObject.isEnemy() && (collidedObject).hasBody()) {
 			((Enemy) collidedObject).damageEnemyFromTop();
 			
-			if(collidedObject.getClass() == KoopaTroopa.class && ((KoopaTroopa) collidedObject).slidingAfterHit == true) {
+			if(collidedObject.getClass() == KoopaTroopa.class && ((KoopaTroopa) collidedObject).slidingAfterHit) {
 				float widthDifference = position.x - (collidedObject.position.x);
 				if(widthDifference < 0)
 					((KoopaTroopa) collidedObject).viewDirection = VIEW_DIRECTION.RIGHT;

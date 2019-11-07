@@ -1,4 +1,4 @@
-/*android {
+android {
     buildToolsVersion "29.0.1"
     compileSdkVersion 29
     sourceSets {
@@ -87,4 +87,4 @@ task run(type: Exec) {
 
     def adb = path + "/platform-tools/adb"
     commandLine "$adb", 'shell', 'am', 'start', '-n', 'com.bobo/com.bobo.AndroidLauncher'
-}*/
+}
