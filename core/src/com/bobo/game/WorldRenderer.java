@@ -19,8 +19,7 @@ public class WorldRenderer implements Disposable {
 	private OrthographicCamera cameraGUI;
 
 
-	public WorldRenderer() {
-		// TODO Auto-generated constructor stub
+	private WorldRenderer() {
 	}
 
 	public WorldRenderer(WorldController worldController) {

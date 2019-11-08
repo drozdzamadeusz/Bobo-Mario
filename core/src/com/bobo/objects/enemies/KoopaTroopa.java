@@ -255,7 +255,6 @@ public class KoopaTroopa extends AbstractRigidBodyObject implements Enemy {
 
 	@Override
 	public boolean hasBody() {
-		// TODO Auto-generated method stub
 		return !killedFromSide && (isAlive());
 	}
 	

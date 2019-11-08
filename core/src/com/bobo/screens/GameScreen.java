@@ -68,7 +68,6 @@ public class GameScreen extends AbstractGameScreen {
 	
 	@Override
 	public InputProcessor getInputProcessor() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	

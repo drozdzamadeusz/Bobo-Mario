@@ -56,7 +56,6 @@ public class BonusBlock extends BlockGeneric {
 	
 	@Override
 	public void update(float deltaTime) {
-		// TODO Auto-generated method stub
 		super.update(deltaTime);
 	}
 	
