@@ -190,7 +190,7 @@ public class KoopaTroopa extends AbstractRigidBodyObject implements Enemy {
 			
 			reg = koopaTroopaCrushed;
 			
-			if(TIME_TO_START_REBORN_ANIMATION <= 0.0f) {
+			if(TIME_TO_START_REBORN_ANIMATION <= 0.0f && !slidingAfterHit) {
 				if(animation != koopaTroopaCrushedReborn)
 					setAnimation(koopaTroopaCrushedReborn);
 				reg = (TextureRegion) animation.getKeyFrame(stateTime, true);

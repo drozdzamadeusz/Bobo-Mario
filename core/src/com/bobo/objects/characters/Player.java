@@ -53,7 +53,7 @@ public class Player extends AbstractRigidBodyObject {
 		terminalVelocity.set(8.0f, 15.0f);
 		friction.set(20.0f, 10.0f);
 		acceleration.set(0, -60.0f);
-		momentumGain = new Vector2(30,1);
+		momentumGain = new Vector2(27.5f,1);
 		
 		
 		// View direction
@@ -127,8 +127,6 @@ public class Player extends AbstractRigidBodyObject {
 			if (timeJumping <= JUMP_TIME_MAX) {
 				// Still jumping
 				velocity.y = terminalVelocity.y;
-			}else {
-				//Gdx.app.debug(TAG, "");
 			}
 			break;
 		case FALLING:

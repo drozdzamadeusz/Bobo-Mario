@@ -11,11 +11,11 @@ import com.bobo.objects.AbstractGameObject;
 
 public class CoinsBonus extends AbstractGameBonus {
 
-	public int amout;
+	private int amout;
 	
 	private float COIN_ANIMATION_DURATON = 0.7f;
 	private float currentDuration;
-	
+
 	private float COIN_ANIMATION_DELAY = 0.4f;
 	private float currentDelay;
 	
