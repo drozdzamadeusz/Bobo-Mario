@@ -33,7 +33,12 @@ public class Constants {
 	public static final String ENEMIES_TEXTURE_ATLAS_OBJECTS = "images/enemies.pack.atlas";
 
 	public static final String OBJECTS_TEXTURE_ATLAS_OBJECTS = "images/objects.pack.atlas";
-	
+
+	// Location of description file for skins
+	public static final String TEXTURE_ATLAS_LIBGDX_UI = "images/uiskin.atlas";
+
+	public static final String SKIN_LIBGDX_UI = "images/uiskin.json";
+
 	//Worlds
 	
 	public static final String WORLD_1_1 = "worlds/world_1_1.png";
