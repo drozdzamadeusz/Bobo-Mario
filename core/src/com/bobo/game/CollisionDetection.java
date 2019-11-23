@@ -24,39 +24,39 @@ public class CollisionDetection {
 	private Rectangle r2 = new Rectangle();
 	
 	
-	private void onCollisionAbstractGameObjectWithBlock(AbstractGameObject movingObject, AbstractGameObject block) {
-		float heightDifference = Math.abs(movingObject.position.y - (block.position.y + block.bounds.height));
-		float widthDifference = Math.abs(movingObject.position.x - (block.position.x));
+	private void onCollisionAbstractGameObjectWithBlock(AbstractGameObject aObject, AbstractGameObject bObject) {
+		float heightDifference = Math.abs(aObject.position.y - (bObject.position.y + bObject.bounds.height));
+		float widthDifference = Math.abs(aObject.position.x - (bObject.position.x));
 		
 		
-		/*if(movingObject.isMario == true && block.isEnemy()) {
+		/*if(aObject.isMario == true && bObject.isEnemy()) {
 			Gdx.app.debug(TAG, "heightDifference: "+heightDifference+" widthDifference: "+widthDifference);
 		}*/
 		
 		//hit from bottom
-		if (widthDifference < block.bounds.width * 0.6f && heightDifference > block.bounds.height * 1.5f) {
+		if (widthDifference < bObject.bounds.width * 0.6f && heightDifference > bObject.bounds.height * 1.5f) {
 			
-			block.movingObjectHitFromBottom(movingObject);
-			movingObject.onHitFromBottom(block);
+			bObject.movingObjectHitFromBottom(aObject);
+			aObject.onHitFromBottom(bObject);
 			
 			return;	
 		}
 		
 		//hit from right or left side
-		if (heightDifference > block.bounds.height * 0.45f) {
-			boolean hitRightEdge = movingObject.position.x > (block.position.x + block.bounds.width / 2.0f);
+		if (heightDifference > bObject.bounds.height * 0.45f) {
+			boolean hitRightEdge = aObject.position.x > (bObject.position.x + bObject.bounds.width / 2.0f);
 			
-			block.movingObjectHitFromSide(movingObject, hitRightEdge);
-			movingObject.onHitFromSide(block, hitRightEdge);
+			bObject.movingObjectHitFromSide(aObject, hitRightEdge);
+			aObject.onHitFromSide(bObject, hitRightEdge);
 			
 			return;
 			
 		}
 		//hit from top
-		if (widthDifference < block.bounds.width * 0.91f) {
+		if (widthDifference < bObject.bounds.width * 0.91f) {
 			
-			movingObject.onHitFromTop(block);
-			block.movingObjectHitFromTop(movingObject);
+			aObject.onHitFromTop(bObject);
+			bObject.movingObjectHitFromTop(aObject);
 		}
 		
 
@@ -132,10 +132,7 @@ public class CollisionDetection {
 		
 		detectCollisionsObjectsForObjects(level.goombas, level.koopaTroopas);
 		detectCollisionsObjectsForObjects(level.koopaTroopas, level.goombas);
-		
-		
 
-		
 		detectCollisionsObjectsForObjects(level.bonuses, level.gorundBlocks);
 		
 	}
